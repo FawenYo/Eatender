@@ -1,2 +1,2 @@
 # GourmetBot
-LINE Gourmet Bot.
+LINE Bot for recommend delicious restaurant
