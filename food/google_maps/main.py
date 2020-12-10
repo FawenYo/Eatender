@@ -4,7 +4,7 @@ import requests
 
 # 上層目錄import
 sys.path.append(".")
-from config import GOOGLE_MAPS_APIKEY, console
+from config import GOOGLE_MAPS_APIKEY
 
 
 class GM_Restaurant:
@@ -29,11 +29,4 @@ class GM_Restaurant:
         return self.parse_data(data=response)
 
     def parse_data(self, data):
-        console.log(data)
-
-
-if __name__ == "__main__":
-    latitude = 25.0305256
-    longitude = 121.5352392
-    keyword = "藏壽司"
-    GM_Restaurant().fetch_data(latitude=latitude, longitude=longitude, keyword=keyword)
+        return data
