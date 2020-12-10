@@ -4,7 +4,6 @@ import requests
 
 # 上層目錄import
 sys.path.append(".")
-from config import console
 
 
 class Weather:
@@ -64,10 +63,3 @@ class Weather:
         self.min_temperature = data["now"]["minT"]
         self.wx = data["now"]["wx"]
         self.aqi = data["aqi"]["content"]["aqiValue"]
-
-
-# Testing
-if __name__ == "__main__":
-    weather_data = Weather()
-    weather_data.fetch_data(lat=24.778289, lng=120.988108)
-    console.log(weather_data.__dict__)
