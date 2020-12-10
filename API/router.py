@@ -1,9 +1,10 @@
 import sys
 
-from flask import Blueprint, abort, current_app, request
 from flasgger import swag_from
-from weather.main import Weather
+from flask import Blueprint, abort, current_app, request
+
 from config import console
+from weather.main import Weather
 
 # 上層目錄import
 sys.path.append(".")
@@ -13,10 +14,10 @@ from food.google_maps.main import GM_Restaurant
 api = Blueprint("api", __name__)
 
 
-@api.route("/weather/?loc=<lat>,<lng>")
-@swag_from("../docs/weather_data.yml")
-def weather(lat, lng):
+@api.route("/weather/")
+def weather():
     try:
+        lat, lng = request.args.get("loc").split(",")
         weather_data = Weather()
         weather_data.fetch_data(lat=lat, lng=lng)
         console.log(weather_data.__dict__)
@@ -27,7 +28,6 @@ def weather(lat, lng):
 
 
 @api.route("/restaurant/")
-@swag_from("../docs/restaurant_data.yml")
 def restaurant():
     try:
         keyword = request.args.get("keyword")

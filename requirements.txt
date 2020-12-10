@@ -1,5 +1,4 @@
 flask
-flasgger
 gunicorn
 line-bot-sdk
 rich

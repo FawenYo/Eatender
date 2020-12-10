@@ -1,5 +1,0 @@
-Home page for Gourmet Bot.
----
-responses:
-  200:
-    description: HTML page for home page.
