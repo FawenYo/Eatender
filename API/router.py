@@ -36,8 +36,8 @@ def restaurant():
         result = restaurant_data.fetch_data(
             latitude=latitude, longitude=longitude, keyword=keyword
         )
-        console.log(result.__dict__)
-        return result.__dict__
+        console.log(result)
+        return result
     except KeyError:
         error_message = {"status": "error", "error_message": "Parameters value error."}
         return error_message
