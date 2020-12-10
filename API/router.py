@@ -1,6 +1,5 @@
 import sys
 
-from flasgger import swag_from
 from flask import Blueprint, abort, current_app, request
 
 from config import console
