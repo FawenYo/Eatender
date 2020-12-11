@@ -4,7 +4,8 @@ import requests
 
 # 上層目錄import
 sys.path.append(".")
-from config import GOOGLE_MAPS_APIKEY
+from config import GOOGLE_MAPS_APIKEY, GOOGLE_MAPS_REQUEST_FIELD, console
+from food.restaurant import Restaurant
 
 
 class GM_Restaurant:
@@ -29,4 +30,43 @@ class GM_Restaurant:
         return self.parse_data(data=response)
 
     def parse_data(self, data):
-        return data
+        for each in data["results"][:5]:
+            place_id = each["place_id"]
+            detail = self.place_detail(place_id=place_id)
+            photo_reference = each["photos"][0]["photo_reference"]
+            photo_url = self.place_photo(photo_reference=photo_reference)
+            name = each["name"]
+            location = each["geometry"]["location"]
+            open_now = each["opening_hours"]["open_now"]
+            rating = each["rating"]
+            operating_time = detail["opening_hours"]
+            address = detail["formatted_address"]
+            phone_number = detail["formatted_phone_number"]
+            reviews = detail["reviews"]
+
+            restaurant = Restaurant(
+                name=name,
+                photo_url=photo_url,
+                open_now=open_now,
+                operating_time=operating_time,
+                location=location,
+                address=address,
+                rating=rating,
+                phone_number=phone_number,
+                reviews=reviews,
+            )
+            self.restaurants.append(restaurant)
+
+    def place_detail(self, place_id):
+        fileds_data = ",".join(GOOGLE_MAPS_REQUEST_FIELD)
+        response = requests.get(
+            f"https://maps.googleapis.com/maps/api/place/details/json?language=zh-TW&place_id={place_id}&fields={fileds_data}&key={GOOGLE_MAPS_APIKEY}"
+        ).json()
+        console.log(response)
+        return response["result"]
+
+    def place_photo(self, photo_reference, max_width=400):
+        photo_url = requests.get(
+            f"https://maps.googleapis.com/maps/api/place/photo?maxwidth={max_width}&photoreference={photo_reference}&key={GOOGLE_MAPS_APIKEY}"
+        ).url
+        return photo_url

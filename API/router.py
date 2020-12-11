@@ -1,6 +1,7 @@
 import sys
+from datetime import datetime
 
-from flask import Blueprint, abort, current_app, request
+from flask import Blueprint, request
 
 from config import console
 from weather.main import Weather
@@ -28,16 +29,17 @@ def weather():
 
 @api.route("/restaurant/")
 def restaurant():
+    start = datetime.now()
     try:
         keyword = request.args.get("keyword")
         latitude, longitude = request.args.get("loc").split(",")
         restaurant_data = GM_Restaurant()
-        # FIXME: 還沒parse，目前是直接返回結果
-        result = restaurant_data.fetch_data(
+        restaurant_data.fetch_data(
             latitude=latitude, longitude=longitude, keyword=keyword
         )
-        console.log(result)
-        return result
+        console.log(restaurant_data.__dict__)
+        end = datetime.now()
+        return f"Total Process Time: {end - start}."
     except KeyError:
         error_message = {"status": "error", "error_message": "Parameters value error."}
         return error_message
