@@ -15,6 +15,7 @@ class Restaurant:
         self.name = name
         self.photo_url = photo_url
         self.open_now = open_now
+        self.operating_time = operating_time
         self.next_open_time = ""
         self.location = location
         self.address = address
