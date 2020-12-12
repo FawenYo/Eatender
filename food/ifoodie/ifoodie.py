@@ -3,6 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 class Ifoodie:
 
     def __init__(self, user_search):
@@ -10,7 +11,6 @@ class Ifoodie:
         self.restaurant_url = self.restaurant_url()
         self.info = self.get_info()
         self.comments = self.get_comments()
-
 
     def restaurant_url(self):
         # 搜尋'台北公館站'附近的餐廳
@@ -67,7 +67,7 @@ class Ifoodie:
                         if raw_string[m:n].isdigit():
                             rating_candidate.append(raw_string[m:n].strip(" "))
                 info[keys[i]] = max(rating_candidate)
-        
+
         # 取正確的時間到營業時間中
         if len(info["現正營業"]) > len(info["今日營業"]):
             info["營業時間"] = info["現正營業"]
@@ -79,7 +79,7 @@ class Ifoodie:
         info.pop("現正營業")
         info.pop("今日營業")
         return (info)
-    
+
     def get_comments(self) -> list():
         response = requests.get(self.restaurant_url)
         response.encoding = "utf-8"
@@ -89,5 +89,5 @@ class Ifoodie:
         comments = []
         for each in content_sel:
             comments.append(each.text)
-        
+
         return (comments)
