@@ -1,6 +1,7 @@
 import os
 
 from rich.console import Console
+import pymongo
 
 console = Console()
 
@@ -18,3 +19,11 @@ GOOGLE_MAPS_REQUEST_FIELD = [
     "price_level",
     "review",
 ]
+
+# MongoDB
+MONGO_USER = os.environ.get("MONGO_USER")
+MONGO_PWD = os.environ.get("MONGO_PWD")
+client = pymongo.MongoClient(
+    f"mongodb+srv://{MONGO_USER}:{MONGO_PWD}@cluster0.urrvn.mongodb.net/db?retryWrites=true&w=majority"
+)
+db = client.db

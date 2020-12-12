@@ -1,11 +1,13 @@
 import sys
+import threading
 
 import requests
 
 # 上層目錄import
 sys.path.append(".")
-from config import GOOGLE_MAPS_APIKEY, GOOGLE_MAPS_REQUEST_FIELD, console
+from config import GOOGLE_MAPS_APIKEY, GOOGLE_MAPS_REQUEST_FIELD
 from food.restaurant import Restaurant
+import MongoDB.operation as database
 
 
 class GM_Restaurant:
@@ -30,7 +32,7 @@ class GM_Restaurant:
         return self.parse_data(data=response)
 
     def parse_data(self, data):
-        for each in data["results"][:5]:
+        for each in data["results"]:
             place_id = each["place_id"]
             detail = self.place_detail(place_id=place_id)
             photo_reference = each["photos"][0]["photo_reference"]
@@ -56,13 +58,17 @@ class GM_Restaurant:
                 reviews=reviews,
             )
             self.restaurants.append(restaurant)
+            # Add to MongoDB
+            thread = threading.Thread(
+                target=database.add_restaurant(restaurant=restaurant)
+            )
+            thread.start()
 
     def place_detail(self, place_id):
         fileds_data = ",".join(GOOGLE_MAPS_REQUEST_FIELD)
         response = requests.get(
             f"https://maps.googleapis.com/maps/api/place/details/json?language=zh-TW&place_id={place_id}&fields={fileds_data}&key={GOOGLE_MAPS_APIKEY}"
         ).json()
-        console.log(response)
         return response["result"]
 
     def place_photo(self, photo_reference, max_width=400):

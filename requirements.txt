@@ -1,4 +1,6 @@
 flask
 gunicorn
 line-bot-sdk
+pymongo[srv]
+pytz
 rich
