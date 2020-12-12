@@ -8,15 +8,8 @@ class Ifoodie:
     def __init__(self, user_search):
         self.user_search = user_search  # 欲搜尋的餐廳名稱，如"巷子口食堂"
         self.restaurant_url = self.restaurant_url()
-        self.info = {
-            "現正營業": str(),
-            "店家地址": str(),
-            "聯絡電話": str(),
-            "均消價位": str()
-        }
-        self.get_info()
-        self.comments = []
-        self.get_comments()
+        self.info = self.get_info()
+        self.comments = self.get_comments()
 
 
     def restaurant_url(self):
@@ -39,40 +32,62 @@ class Ifoodie:
 
         return (url)
 
-    def get_info(self):
+    def get_info(self) -> dict():
         response = requests.get(self.restaurant_url)
         response.encoding = "utf-8"
         soup = BeautifulSoup(response.text, "html.parser")
         sel = soup.select("div.jsx-558709029.info")
 
-        temp_data = sel[0].text
-        keys = list(self.info.keys())
+        info = {
+            "營業時間": str(),
+            "現正營業": str(),  # temp
+            "今日營業": str(),  # temp
+            "店家地址": str(),
+            "聯絡電話": str(),
+            "均消價位": str()
+        }
+        raw_info = sel[0].text
+        keys = list(info.keys())
 
         for i in range(len(keys)):
             if (i < len(keys) - 1 and
-                    keys[i] in temp_data and
-                    keys[i + 1] in temp_data):
-                start = temp_data.find(keys[i]) + len(keys[i]) + 1
-                end = temp_data.find(keys[i + 1])
-                self.info[keys[i]] = temp_data[start:end].strip(" ")
+                    keys[i] in raw_info and
+                    keys[i + 1] in raw_info):
+                start = raw_info.find(keys[i]) + len(keys[i]) + 1
+                end = raw_info.find(keys[i + 1])
+                info[keys[i]] = raw_info[start:end].strip(" ")
             else:
-                # to deal with avg. price
-                start = temp_data.find(keys[i]) + len(keys[i]) + 1
+                # 將均消的資訊分出來
+                start = raw_info.find(keys[i]) + len(keys[i]) + 1
                 end = start + 10
-                raw_string = temp_data[start:end]
-                # sanitize raw string
-                sanitize_candidate = []
+                raw_string = raw_info[start:end]
+                rating_candidate = []
                 for m in range(len(raw_string)):
                     for n in range(m, len(raw_string)):
                         if raw_string[m:n].isdigit():
-                            sanitize_candidate.append(raw_string[m:n].strip(" "))
-                self.info[keys[i]] = max(sanitize_candidate)
+                            rating_candidate.append(raw_string[m:n].strip(" "))
+                info[keys[i]] = max(rating_candidate)
+        
+        # 取正確的時間到營業時間中
+        if len(info["現正營業"]) > len(info["今日營業"]):
+            info["營業時間"] = info["現正營業"]
+        elif len(info["現正營業"]) < len(info["今日營業"]):
+            info["營業時間"] = info["今日營業"]
+        else:
+            info["營業時間"] = "尚無營業時間資訊"
+
+        info.pop("現正營業")
+        info.pop("今日營業")
+        return (info)
     
-    def get_comments(self):
+    def get_comments(self) -> list():
         response = requests.get(self.restaurant_url)
         response.encoding = "utf-8"
         soup = BeautifulSoup(response.text, "html.parser")
         content_sel = soup.select("div.jsx-2738468548.message")
 
+        comments = []
         for each in content_sel:
-            self.comments.append(each.text)
+            comments.append(each.text)
+        
+        return (comments)
