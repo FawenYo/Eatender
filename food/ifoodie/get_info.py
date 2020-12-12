@@ -3,6 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+# user_search 是欲搜尋的餐廳名稱，如"巷子口食堂"
 def ifoodie_info(user_search: str) -> str:
   
   # 搜尋'台北公館站'附近的餐廳
