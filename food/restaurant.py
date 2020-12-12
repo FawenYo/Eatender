@@ -23,6 +23,7 @@ class Restaurant:
         self.price = price
         self.phone_number = phone_number
         self.keywords = []
+        self.reviews = reviews
         self.find_operating_time(operating_time=operating_time)
         self.find_keywords(reviews=reviews)
 
