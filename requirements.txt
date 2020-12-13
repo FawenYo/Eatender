@@ -1,3 +1,4 @@
+beautifulsoup4
 flask
 gunicorn
 line-bot-sdk
