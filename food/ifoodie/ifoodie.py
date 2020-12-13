@@ -6,8 +6,9 @@ from bs4 import BeautifulSoup
 
 class Ifoodie:
 
-    def __init__(self, user_search):
+    def __init__(self, user_search, user_loc):
         self.user_search = user_search  # 欲搜尋的餐廳名稱，如"巷子口食堂"
+        self.user_loc = user_loc
         self.restaurant_url = self.restaurant_url()
         self.info = self.get_info()
         self.comments = self.get_comments()
