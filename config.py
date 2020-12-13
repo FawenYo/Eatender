@@ -15,6 +15,7 @@ GOOGLE_MAPS_REQUEST_FIELD = [
     "formatted_address",
     "url",
     "formatted_phone_number",
+    "website",
     "opening_hours",
     "price_level",
     "review",

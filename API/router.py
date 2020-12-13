@@ -9,7 +9,7 @@ from weather.main import Weather
 # 上層目錄import
 sys.path.append(".")
 import config
-from food.google_maps.main import GM_Restaurant
+from food.main import Restaurant_data
 
 api = Blueprint("api", __name__)
 
@@ -33,10 +33,10 @@ def restaurant():
     try:
         keyword = request.args.get("keyword")
         latitude, longitude = request.args.get("loc").split(",")
-        restaurant_data = GM_Restaurant()
-        restaurant_data.fetch_data(
+        restaurant_data = Restaurant_data(
             latitude=latitude, longitude=longitude, keyword=keyword
         )
+        restaurant_data.get_info()
         console.log(restaurant_data.__dict__)
         end = datetime.now()
         return f"Total Process Time: {end - start}."

@@ -3,21 +3,17 @@ from bs4 import BeautifulSoup
 
 
 class Ifoodie:
-    def __init__(self, restaurant_name, restaurant_address):
+    def __init__(self, restaurant_name, latitude, longitude):
         self.restaurant_name = restaurant_name  # 欲搜尋的餐廳名稱，如"巷子口食堂"
-        self.restaurant_address = restaurant_address
+        self.latitude = latitude
+        self.longitude = longitude
         self.restaurant_url = self.restaurant_url()
         self.info = self.get_info()
         self.comments = self.get_comments()
 
     def restaurant_url(self):
         # 搜尋'餐廳地址前三個字'附近的餐廳(待進一步修正)
-        search_url = (
-            "https://ifoodie.tw/explore/list/"
-            + self.restaurant_name
-            + "?poi="
-            + self.restaurant_address[:3]
-        )
+        search_url = f"https://ifoodie.tw/explore/list/{self.restaurant_name}?range=5.0&latlng={self.latitude},{self.longitude}"
 
         response = requests.get(search_url)
         response.encoding = "utf-8"
@@ -91,6 +87,3 @@ class Ifoodie:
             comments.append(each.text)
 
         return comments
-
-
-print(Ifoodie("巷子口食堂", "台北市").__dict__)

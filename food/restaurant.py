@@ -8,9 +8,11 @@ class Restaurant:
         location: dict,
         address: str,
         rating: float,
+        website: str,
         price: int = 0,
         phone_number: str = "無",
         reviews: list = [""],
+        ifoodie_url: str = "https://ifoodie.tw/",
     ):
         self.name = name
         self.photo_url = photo_url
@@ -20,10 +22,12 @@ class Restaurant:
         self.location = location
         self.address = address
         self.rating = rating
+        self.website = website
         self.price = price
         self.phone_number = phone_number
         self.keywords = []
         self.reviews = reviews
+        self.ifoodie_url = ifoodie_url
         self.find_operating_time(operating_time=operating_time)
         self.find_keywords(reviews=reviews)
 

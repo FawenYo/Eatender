@@ -12,7 +12,7 @@ from weather.main import Weather
 sys.path.append(".")
 import config
 import MongoDB.operation as database
-from food.google_maps.main import GM_Restaurant
+from food.main import Restaurant_data
 from line.templates import Template
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -90,8 +90,8 @@ def handle_message(event):
         thread.start()
         # TODO: 讓使用者能自己設定餐廳類別
         keyword = "餐廳"
-        restaurants = GM_Restaurant()
-        restaurants.fetch_data(latitude=lat, longitude=lng, keyword=keyword)
+        restaurants = Restaurant_data(latitude=lat, longitude=lng)
+        restaurants.get_info()
         # Show first five restaurant
         message = Template().show_nearby_restaurant(
             restaurants=restaurants.restaurants[:5]
