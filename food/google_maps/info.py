@@ -7,7 +7,6 @@ import requests
 sys.path.append(".")
 from config import GOOGLE_MAPS_APIKEY, GOOGLE_MAPS_REQUEST_FIELD
 from food.restaurant import Restaurant
-import MongoDB.operation as database
 
 
 class GM_Restaurant:
@@ -69,11 +68,6 @@ class GM_Restaurant:
                     reviews=reviews,
                 )
                 self.restaurants.append(restaurant)
-                # Add to MongoDB
-                thread = threading.Thread(
-                    target=database.add_restaurant(restaurant=restaurant)
-                )
-                thread.start()
             except KeyError:
                 pass
 

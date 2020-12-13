@@ -65,6 +65,9 @@ def restaurant_carousel(
     }
     star_list = int(rating) * [star] + (5 - int(rating)) * [grey_star]
 
+    if price == 0:
+        price = "N/A"
+
     # TODO: 確切時間
     if open_now:
         operate_status = {

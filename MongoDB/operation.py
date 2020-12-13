@@ -1,6 +1,7 @@
-from datetime import datetime
-import pytz
 import sys
+from datetime import datetime
+
+import pytz
 
 sys.path.append(".")
 from config import db
@@ -28,15 +29,19 @@ def record_user_location(user_id: str, lat: float, lng: float):
 
 def add_restaurant(restaurant):
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
-    data = {
-        "name": restaurant.name,
-        "photo_url": restaurant.photo_url,
-        "operating_time": restaurant.operating_time,
-        "location": restaurant.location,
-        "address": restaurant.address,
-        "rating": restaurant.rating,
-        "phone_number": restaurant.phone_number,
-        "reviews": restaurant.reviews,
-        "time": now,
-    }
-    db.restaurant.insert_one(data)
+    if not db.restaurant.find_one({"name": restaurant.name}):
+        data = {
+            "name": restaurant.name,
+            "photo_url": restaurant.photo_url,
+            "operating_time": restaurant.operating_time,
+            "location": restaurant.location,
+            "address": restaurant.address,
+            "rating": restaurant.rating,
+            "website": restaurant.website,
+            "price": restaurant.price,
+            "phone_number": restaurant.phone_number,
+            "reviews": restaurant.reviews,
+            "ifoodie_url": restaurant.ifoodie_url,
+            "time": now,
+        }
+        db.restaurant.insert_one(data)

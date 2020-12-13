@@ -1,7 +1,7 @@
 import os
 
-from rich.console import Console
 import pymongo
+from rich.console import Console
 
 console = Console()
 

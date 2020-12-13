@@ -1,17 +1,36 @@
+import sys
+import threading
+import typing
+
 from .google_maps.info import GM_Restaurant
 from .ifoodie.ifoodie import Ifoodie
+from .restaurant import Restaurant
+
+# 上層目錄import
+sys.path.append(".")
+import MongoDB.operation as database
 
 
 class Restaurant_data:
     def __init__(self, latitude, longitude, keyword=""):
-        self.restaurants = []
+        self.restaurants: list(typing.Type(Restaurant)) = []
         self.latitude = latitude
         self.longitude = longitude
         self.keyword = keyword
 
     def get_info(self):
+        threads = []
         self.get_google_maps_data()
         self.get_ifoodie_data()
+
+        # Add to MongoDB
+        for restaurant in self.restaurants:
+            thread = threading.Thread(
+                target=database.add_restaurant(restaurant=restaurant)
+            )
+            threads.append(thread)
+        for thread in threads:
+            thread.join()
 
     def get_google_maps_data(self):
         restaurants = GM_Restaurant()

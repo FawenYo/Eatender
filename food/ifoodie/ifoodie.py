@@ -65,7 +65,7 @@ class Ifoodie:
                                 if raw_string[m:n].isdigit():
                                     phone_candidate.append(raw_string[m:n].strip(" "))
                         info[keys[i]] = max(phone_candidate, key=len)
-                        
+
                     elif keys[i] == "均消價位":
                         rating_candidate = []
                         raw_string = raw_info[start:]
@@ -74,7 +74,7 @@ class Ifoodie:
                                 if raw_string[m:n].isdigit():
                                     rating_candidate.append(raw_string[m:n].strip(" "))
                         info[keys[i]] = max(rating_candidate, key=len)
-        
+
         # 取正確的時間到營業時間中
         info["營業時間"] = info.pop("營業")
 
