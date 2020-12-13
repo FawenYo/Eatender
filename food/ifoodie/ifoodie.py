@@ -6,18 +6,18 @@ from bs4 import BeautifulSoup
 
 class Ifoodie:
 
-    def __init__(self, user_search, user_loc):
+    def __init__(self, user_search, restaurant_addr):
         self.user_search = user_search  # 欲搜尋的餐廳名稱，如"巷子口食堂"
-        self.user_loc = user_loc
+        self.restaurant_addr = restaurant_addr
         self.restaurant_url = self.restaurant_url()
         self.info = self.get_info()
         self.comments = self.get_comments()
 
     def restaurant_url(self):
-        # 搜尋'台北公館站'附近的餐廳
+        # 搜尋'餐廳地址前三個字'附近的餐廳(待進一步修正)
         search_url = "https://ifoodie.tw/explore/list/" + \
                     self.user_search + \
-                    "?poi=%E5%8F%B0%E5%8C%97%E5%85%AC%E9%A4%A8%E7%AB%99"
+                    "?poi=" + self.restaurant_addr[0:3]
 
         response = requests.get(search_url)
         response.encoding = "utf-8"
