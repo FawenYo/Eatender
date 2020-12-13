@@ -53,6 +53,7 @@ class Ifoodie:
                     if i < j and keys[j] in raw_info[start:]:
                         next_keyword_index = raw_info.find(keys[j])
                         break
+
                 if next_keyword_index != -1:
                     info[keys[i]] = raw_info[start:next_keyword_index].strip("")
                 else:
