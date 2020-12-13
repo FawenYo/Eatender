@@ -37,43 +37,47 @@ class Ifoodie:
         sel = soup.select("div.jsx-558709029.info")
 
         info = {
-            "營業時間": str,
-            "現正營業": str,  # temp
-            "今日營業": str,  # temp
-            "店家地址": str,
-            "聯絡電話": str,
-            "均消價位": str,
+            "營業": "尚無營業時間資訊",  # temp
+            "店家地址": "尚無店家地址資訊",
+            "聯絡電話": "尚無聯絡電話資訊",
+            "均消價位": "尚無均消價位資訊",
         }
         raw_info = sel[0].text
         keys = list(info.keys())
 
         for i in range(len(keys)):
-            if i < len(keys) - 1 and keys[i] in raw_info and keys[i + 1] in raw_info:
+            if keys[i] in raw_info:
                 start = raw_info.find(keys[i]) + len(keys[i]) + 1
-                end = raw_info.find(keys[i + 1])
-                info[keys[i]] = raw_info[start:end].strip(" ")
-            else:
-                # 將均消的資訊分出來
-                start = raw_info.find(keys[i]) + len(keys[i]) + 1
-                end = start + 10
-                raw_string = raw_info[start:end]
-                rating_candidate = []
-                for m in range(len(raw_string)):
-                    for n in range(m, len(raw_string)):
-                        if raw_string[m:n].isdigit():
-                            rating_candidate.append(raw_string[m:n].strip(" "))
-                info[keys[i]] = max(rating_candidate)
+                next_keyword_index = -1
+                for j in range(len(keys)):
+                    if i < j and keys[j] in raw_info[start:]:
+                        next_keyword_index = raw_info.find(keys[j])
+                        break
 
+                if next_keyword_index != -1:
+                    info[keys[i]] = raw_info[start:next_keyword_index].strip("")
+                else:
+                    if keys[i] == "聯絡電話":
+                        phone_candidate = []
+                        raw_string = raw_info[start:]
+                        for m in range(len(raw_string)):
+                            for n in range(m, len(raw_string)):
+                                if raw_string[m:n].isdigit():
+                                    phone_candidate.append(raw_string[m:n].strip(" "))
+                        info[keys[i]] = max(phone_candidate, key=len)
+                        
+                    elif keys[i] == "均消價位":
+                        rating_candidate = []
+                        raw_string = raw_info[start:]
+                        for m in range(len(raw_string)):
+                            for n in range(m, len(raw_string)):
+                                if raw_string[m:n].isdigit():
+                                    rating_candidate.append(raw_string[m:n].strip(" "))
+                        info[keys[i]] = max(rating_candidate, key=len)
+        
         # 取正確的時間到營業時間中
-        if len(info["現正營業"]) > len(info["今日營業"]):
-            info["營業時間"] = info["現正營業"]
-        elif len(info["現正營業"]) < len(info["今日營業"]):
-            info["營業時間"] = info["今日營業"]
-        else:
-            info["營業時間"] = "尚無營業時間資訊"
+        info["營業時間"] = info.pop("營業")
 
-        info.pop("現正營業")
-        info.pop("今日營業")
         return info
 
     def get_comments(self) -> list:
