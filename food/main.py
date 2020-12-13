@@ -30,7 +30,7 @@ class Restaurant_data:
             )
             threads.append(thread)
         for thread in threads:
-            thread.join()
+            thread.start()
 
     def get_google_maps_data(self):
         restaurants = GM_Restaurant()
