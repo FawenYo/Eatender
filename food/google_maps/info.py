@@ -49,7 +49,6 @@ class GM_Restaurant:
 
     def get_place_data(self, place):
         try:
-            google_id = place["id"]
             place_id = place["place_id"]
             detail = self.place_detail(place_id=place_id)
             photo_reference = place["photos"][0]["photo_reference"]
@@ -68,7 +67,7 @@ class GM_Restaurant:
             reviews = detail["reviews"]
 
             restaurant = Restaurant(
-                google_id=google_id,
+                place_id=place_id,
                 name=name,
                 photo_url=photo_url,
                 open_now=open_now,

@@ -7,7 +7,7 @@ class Template:
     def show_restaurant(self, restaurants):
         show_list = []
         for each in restaurants:
-            google_id = each.google_id
+            place_id = each.place_id
             restaurant_name = each.name
             photo_url = each.photo_url
             website = each.website
@@ -20,7 +20,7 @@ class Template:
             lat = each.location["lat"]
             lng = each.location["lng"]
             card = restaurant_carousel(
-                google_id=google_id,
+                place_id=place_id,
                 restaurant_name=restaurant_name,
                 photo_url=photo_url,
                 website=website,
@@ -43,7 +43,7 @@ class Template:
 
 
 def restaurant_carousel(
-    google_id: str,
+    place_id: str,
     restaurant_name: str,
     photo_url: str,
     website: str,
@@ -272,7 +272,7 @@ def restaurant_carousel(
                     "action": {
                         "type": "postback",
                         "label": "收藏",
-                        "data": f"favorite_{google_id}",
+                        "data": f"favorite_{place_id}",
                     },
                     "color": "#3F67C6",
                 },

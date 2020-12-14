@@ -119,9 +119,7 @@ def handle_postback(event):
     if "_" in postback_data:
         action, restaurant_id = postback_data.split("_")
         if action == "favorite":
-            restaurant_data = config.db.restaurant.find_one(
-                {"google_id": restaurant_id}
-            )
+            restaurant_data = config.db.restaurant.find_one({"place_id": restaurant_id})
             user = config.db.user.find_one({"user_id": user_id})
             if restaurant_data not in user["favorite"]:
                 # update user favorite list

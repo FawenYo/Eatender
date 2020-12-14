@@ -31,7 +31,7 @@ def add_restaurant(restaurant):
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     if not db.restaurant.find_one({"name": restaurant.name}):
         data = {
-            "google_id": restaurant.google_id,
+            "place_id": restaurant.place_id,
             "name": restaurant.name,
             "photo_url": restaurant.photo_url,
             "operating_time": restaurant.operating_time,

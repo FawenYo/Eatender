@@ -1,7 +1,7 @@
 class Restaurant:
     def __init__(
         self,
-        google_id: str,
+        place_id: str,
         name: str,
         photo_url: str,
         open_now: bool,
@@ -15,7 +15,7 @@ class Restaurant:
         reviews: list = [""],
         ifoodie_url: str = "https://ifoodie.tw/",
     ):
-        self.google_id = google_id
+        self.place_id = place_id
         self.name = name
         self.photo_url = photo_url
         self.open_now = open_now
