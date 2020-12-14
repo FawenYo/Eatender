@@ -77,8 +77,17 @@ def handle_message(event):
     reply_token = event.reply_token
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
-        # 測試階段，直接回覆使用者輸入內容
-        message = TextSendMessage(text=user_message)
+
+        if user_message == "我的最愛":
+            user_data = config.db.user.find_one({"user_id": user_id})
+            if len(user_data["favorite"]) > 0:
+                message = Template().show_restaurant(
+                    restaurants=user_data["favorite"][:10]
+                )
+            else:
+                message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
+        else:
+            message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
         line_bot_api.reply_message(reply_token, message)
     elif isinstance(event.message, LocationMessage):
         lat = event.message.latitude
@@ -88,12 +97,38 @@ def handle_message(event):
             target=database.record_user_location, args=(user_id, lat, lng)
         )
         thread.start()
-        # TODO: 讓使用者能自己設定餐廳類別
-        keyword = "餐廳"
+
         restaurants = Restaurant_data(latitude=lat, longitude=lng)
         restaurants.get_info()
         # Show first five restaurant
-        message = Template().show_nearby_restaurant(
-            restaurants=restaurants.restaurants[:5]
-        )
+        message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
         line_bot_api.reply_message(reply_token, message)
+
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    """事件 - Postback
+
+    Args:
+        event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#postback-event
+    """
+    user_id = event.source.user_id
+    reply_token = event.reply_token
+    postback_data = event.postback.data
+
+    if "_" in postback_data:
+        action, restaurant_id = postback_data.split("_")
+        if action == "favorite":
+            restaurant_data = config.db.restaurant.find_one(
+                {"google_id": restaurant_id}
+            )
+            user = config.db.user.find_one({"user_id": user_id})
+            if restaurant_data not in user["favorite"]:
+                # update user favorite list
+                user["favorite"].append(restaurant_data)
+                config.db.user.update_one({"user_id": user_id}, {"$set": user})
+                # reply message
+                message = TextSendMessage(text=f"已將{restaurant_data['name']}加入最愛！")
+            else:
+                message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
+            line_bot_api.reply_message(reply_token, message)

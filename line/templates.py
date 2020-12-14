@@ -4,9 +4,10 @@ true = True
 
 
 class Template:
-    def show_nearby_restaurant(self, restaurants):
+    def show_restaurant(self, restaurants):
         show_list = []
         for each in restaurants:
+            google_id = each.google_id
             restaurant_name = each.name
             photo_url = each.photo_url
             website = each.website
@@ -19,6 +20,7 @@ class Template:
             lat = each.location["lat"]
             lng = each.location["lng"]
             card = restaurant_carousel(
+                google_id=google_id,
                 restaurant_name=restaurant_name,
                 photo_url=photo_url,
                 website=website,
@@ -41,6 +43,7 @@ class Template:
 
 
 def restaurant_carousel(
+    google_id: str,
     restaurant_name: str,
     photo_url: str,
     website: str,
@@ -127,7 +130,7 @@ def restaurant_carousel(
                     + [
                         {
                             "type": "text",
-                            "text": "4.0",
+                            "text": str(rating),
                             "size": "sm",
                             "color": "#999999",
                             "margin": "sm",
@@ -266,7 +269,11 @@ def restaurant_carousel(
                 },
                 {
                     "type": "button",
-                    "action": {"type": "message", "label": "收藏", "text": "已經加入你的收藏了~"},
+                    "action": {
+                        "type": "postback",
+                        "label": "收藏",
+                        "data": f"favorite_{google_id}",
+                    },
                     "color": "#3F67C6",
                 },
             ],
