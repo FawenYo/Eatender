@@ -36,6 +36,7 @@ def add_restaurant(restaurant):
             "photo_url": restaurant.photo_url,
             "operating_time": restaurant.operating_time,
             "location": restaurant.location,
+            "loc": [restaurant.location["lng"], restaurant.location["lat"]],
             "address": restaurant.address,
             "rating": restaurant.rating,
             "website": restaurant.website,

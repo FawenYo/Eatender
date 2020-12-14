@@ -9,7 +9,7 @@ from weather.main import Weather
 # 上層目錄import
 sys.path.append(".")
 import config
-from food.main import Restaurant_data
+from food.main import Nearby_restaurant
 
 api = Blueprint("api", __name__)
 
@@ -33,7 +33,7 @@ def restaurant():
     try:
         keyword = request.args.get("keyword")
         latitude, longitude = request.args.get("loc").split(",")
-        restaurant_data = Restaurant_data(
+        restaurant_data = Nearby_restaurant(
             latitude=latitude, longitude=longitude, keyword=keyword
         )
         restaurant_data.get_info()

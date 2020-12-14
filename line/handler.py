@@ -12,7 +12,7 @@ from weather.main import Weather
 sys.path.append(".")
 import config
 import MongoDB.operation as database
-from food.main import Restaurant_data
+from food.main import Nearby_restaurant
 from line.templates import Template
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -98,8 +98,7 @@ def handle_message(event):
         )
         thread.start()
 
-        restaurants = Restaurant_data(latitude=lat, longitude=lng)
-        restaurants.get_info()
+        restaurants = Nearby_restaurant(latitude=lat, longitude=lng)
         # Show first five restaurant
         message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
         line_bot_api.reply_message(reply_token, message)

@@ -10,11 +10,17 @@ from food.restaurant import Restaurant
 
 
 class GM_Restaurant:
-    def __init__(self):
+    def __init__(self, speed_mode=True):
         self.restaurants = []
+        self.speed_mode = speed_mode
 
     def fetch_data(
-        self, latitude, longitude, keyword="", radius=2000, search_type="restaurant"
+        self,
+        latitude,
+        longitude,
+        keyword="",
+        radius=2000,
+        search_type="restaurant",
     ):
         """Google Maps 餐廳資料
 
@@ -37,7 +43,11 @@ class GM_Restaurant:
 
     def parse_data(self, data):
         threads = []
-        for place in data["results"][:6]:
+        if self.speed_mode:
+            filter_results = data["results"][:6]
+        else:
+            filter_results = data["results"]
+        for place in filter_results:
             thread = threading.Thread(target=self.get_place_data, args=(place,))
             threads.append(thread)
 
