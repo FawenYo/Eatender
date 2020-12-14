@@ -131,8 +131,11 @@ dmypy.json
 # VSCode related files
 .vscode/
 
+# Pycharm related files
+.idea/
+
 # MacOS related files
-.DS_Store
+**/.DS_Store
 
 # Project secret files
 mac_initial.sh
