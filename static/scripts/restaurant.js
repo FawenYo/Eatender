@@ -1,5 +1,8 @@
-"use strict";
 $(document).ready(function () {
+  main();
+});
+
+function main() {
   var tinderContainer = document.querySelector(".tinder");
   var allCards = document.querySelectorAll(".tinder--card");
   var nope = document.getElementById("nope");
@@ -33,7 +36,6 @@ $(document).ready(function () {
 
       tinderContainer.classList.toggle("tinder_love", event.deltaX > 0);
       tinderContainer.classList.toggle("tinder_nope", event.deltaX < 0);
-
       var xMulti = event.deltaX * 0.03;
       var yMulti = event.deltaY / 80;
       var rotate = xMulti * yMulti;
@@ -61,6 +63,11 @@ $(document).ready(function () {
       if (keep) {
         event.target.style.transform = "";
       } else {
+        if (event.deltaX > 0) {
+          love_restaurant(event);
+        } else {
+          not_love_restaurant(event);
+        }
         var endX = Math.max(
           Math.abs(event.velocityX) * moveOutWidth,
           moveOutWidth
@@ -97,9 +104,11 @@ $(document).ready(function () {
       card.classList.add("removed");
 
       if (love) {
+        love_restaurant(event);
         card.style.transform =
           "translate(" + moveOutWidth + "px, -100px) rotate(-30deg)";
       } else {
+        not_love_restaurant(event);
         card.style.transform =
           "translate(-" + moveOutWidth + "px, -100px) rotate(30deg)";
       }
@@ -115,4 +124,12 @@ $(document).ready(function () {
 
   nope.addEventListener("click", nopeListener);
   love.addEventListener("click", loveListener);
-});
+}
+
+function love_restaurant(event) {
+  console.log(event);
+}
+
+function not_love_restaurant(event) {
+  console.log(event);
+}
