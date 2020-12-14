@@ -50,7 +50,7 @@ body {
   transform: scale(1);
 }
 
-.tinder_nope .fa-remove {
+.tinder_nope .fa-times {
   opacity: 0.7;
   transform: scale(1);
 }
