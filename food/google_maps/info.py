@@ -36,40 +36,51 @@ class GM_Restaurant:
         return self.parse_data(data=response)
 
     def parse_data(self, data):
-        for each in data["results"][:6]:
-            try:
-                place_id = each["place_id"]
-                detail = self.place_detail(place_id=place_id)
-                photo_reference = each["photos"][0]["photo_reference"]
-                photo_url = self.place_photo(photo_reference=photo_reference)
-                name = each["name"]
-                location = each["geometry"]["location"]
-                open_now = each["opening_hours"]["open_now"]
-                rating = each["rating"]
-                operating_time = detail["opening_hours"]
-                address = detail["formatted_address"]
-                phone_number = detail["formatted_phone_number"]
-                if "website" in detail:
-                    website = detail["website"]
-                else:
-                    website = each["url"]
-                reviews = detail["reviews"]
+        threads = []
+        for place in data["results"][:6]:
+            thread = threading.Thread(target=self.get_place_data, args=(place,))
+            threads.append(thread)
 
-                restaurant = Restaurant(
-                    name=name,
-                    photo_url=photo_url,
-                    open_now=open_now,
-                    operating_time=operating_time,
-                    location=location,
-                    address=address,
-                    rating=rating,
-                    website=website,
-                    phone_number=phone_number,
-                    reviews=reviews,
-                )
-                self.restaurants.append(restaurant)
-            except KeyError:
-                pass
+        for thread in threads:
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+    def get_place_data(self, place):
+        try:
+            place_id = place["place_id"]
+            detail = self.place_detail(place_id=place_id)
+            photo_reference = place["photos"][0]["photo_reference"]
+            photo_url = self.place_photo(photo_reference=photo_reference)
+            name = place["name"]
+            location = place["geometry"]["location"]
+            open_now = place["opening_hours"]["open_now"]
+            rating = place["rating"]
+            operating_time = detail["opening_hours"]
+            address = detail["formatted_address"]
+            phone_number = detail["formatted_phone_number"]
+            if "website" in detail:
+                website = detail["website"]
+            else:
+                website = place["url"]
+            reviews = detail["reviews"]
+
+            restaurant = Restaurant(
+                name=name,
+                photo_url=photo_url,
+                open_now=open_now,
+                operating_time=operating_time,
+                location=location,
+                address=address,
+                rating=rating,
+                website=website,
+                phone_number=phone_number,
+                reviews=reviews,
+            )
+            self.restaurants.append(restaurant)
+        except KeyError:
+            pass
 
     def place_detail(self, place_id):
         fileds_data = ",".join(GOOGLE_MAPS_REQUEST_FIELD)
