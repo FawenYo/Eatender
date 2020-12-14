@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>{專案名稱}</title>
-    <meta property="og:title" content="{專案名稱 - 英文}"/>
+    <title>Eatender</title>
+    <meta property="og:title" content="Eatender"/>
     <meta property="og:description" content="{專案簡介}"/>
     <meta property="og:type" content="product"/>
-    <meta property="og:url" content="https://line-gourmet.herokuapp.com/"/>
+    <meta property="og:url" content="https://eatender.herokuapp.com/"/>
     <meta property="og:image" content="{{url_for('static', filename='images/logo.png')}}"/>
     <meta name="HandheldFriendly" content="true">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -15,29 +15,13 @@
     <link href="{{url_for('static', filename='css/animate.css')}}" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="{{url_for('static', filename='scripts/jquery-3.3.1.min.js')}}" language="javascript"></script>
     <link href="{{url_for('static', filename='css/landing.css')}}" rel="stylesheet" type="text/css">
-    <!-- Include a polyfill for ES6 Promises (optional) for IE11 -->
-    <script src="{{url_for('static', filename='scripts/polyfill.js')}}"></script>
     <link rel="shortcut icon" href="{{url_for('static', filename='images/logo.png')}}">
-    <script>
-        function go_android(){
-            window.location.replace("https://google.com.tw");
-		}
-
-		function is_line() {
-            var userAgent = navigator.userAgent;
-            if (/Line/.test(userAgent)) {
-                return true;
-            }
-
-            return false;
-		}
-    </script>
 </head>
 <body>
 
 <div id="header">
     <div class="max-container cf">
-        <a href="/" id="header-logo"><img src="{{url_for('static', filename='images/logo.png')}}" alt="我們ㄉ名稱" id="header-logo-img"><img src="{{url_for('static', filename='images/logo.png')}}" id="header-logo-img-small" style="display:none;"></a>
+        <a href="/" id="header-logo"><img src="{{url_for('static', filename='images/logo.png')}}" alt="Eatender" id="header-logo-img"><img src="{{url_for('static', filename='images/logo.png')}}" id="header-logo-img-small" style="display:none;"></a>
         <ul id="header-nav">
             <li class="header-nav-item ct1"><a href="/test" target="_blank">測試</a></li>
         </ul>
@@ -54,13 +38,10 @@
         <div id="hero-container" class="cf animated fadeInUp">
             <div id="hero-content">
                 <img src="{{url_for('static', filename='images/logo.png')}}" width="72" height="72" id="hero-icon" style="border-radius:50px;">
-                <h1 id="hero-title" class="ct1">{專案名稱}</h1>
+                <h1 id="hero-title" class="ct1">Eatender</h1>
                 <p id="hero-message" class="ct1">{簡介 Line 1}<br/>{簡介 Line 2}</p>
                 <div id="hero-stores">
-                    <a href="javascript:go_android();"><img src="{{url_for('static', filename='images/google_store_badge.png')}}" alt="Get it on Google Play" class="hero-store-badge" width="181"></a>
-                </div>
-                <div id="hero-stores">
-                    <a href="javascript:go_ios();"><img src="{{url_for('static', filename='images/app_store_badge.png')}}" alt="Get it on App Store" class="hero-store-badge" width="181"></a>
+                    <a href="https://lin.ee/0nShEox"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png" alt="加入好友" class="hero-store-badge" width="181"></a>
                 </div>
             </div>
             <div id="hero-device">

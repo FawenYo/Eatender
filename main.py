@@ -18,6 +18,11 @@ def index():
     return render_template("home.html")
 
 
+@app.route("/eatender")
+def eatender():
+    return render_template("restaurant.html")
+
+
 if __name__ == "__main__":
     console.log("[bold magenta]Server Staring![/bold magenta] :fire: :fire:")
     app.run(threaded=True, port=5000)

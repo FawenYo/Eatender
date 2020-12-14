@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Eatender</title>
+    <meta property="og:title" content="Eatender"/>
+    <meta property="og:description" content="{專案簡介}"/>
+    <meta property="og:type" content="product"/>
+    <meta property="og:url" content="https://eatender.herokuapp.com/"/>
+    <meta property="og:image" content="{{url_for('static', filename='images/logo.png')}}"/>
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/logo.png')}}">
+    <link href="{{url_for('static', filename='css/fontawesome-all.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{url_for('static', filename='css/restaurant.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <!-- Jquery -->
+  <script src="{{url_for('static', filename='scripts/jquery-3.3.1.min.js')}}"></script>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='scripts/restaurant.js')}}"></script>
+  <div class="tinder">
+    <div class="tinder--status">
+      <i class="fa fa-remove"></i>
+      <i class="fa fa-heart"></i>
+    </div>
+  
+    <div class="tinder--cards">
+      <div class="tinder--card">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipNryD4YXyuE1VaUZvY53M89Z5e1GLkQZ89HH7lW=s1600-w400">
+        <h3>亞廬意大利窯烤吃到飽餐廳</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipMjsm8TnvyPzYvJb0uRJfGFwZlGOOb9mYrAJmRr=s1600-w400">
+        <h3>馬辣頂級麻辣鴛鴦火鍋</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipNNe9_-NZV-n2SQcqdwhtiyOjfNbAbFPYZ0tpv2=s1600-w400">
+        <h3>the Diner 樂子瑞安店</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipNvzKCAC3pAImC-hptrlprqNcAjJBMJRL_-nBlx=s1600-w400">
+        <h3>Kitchen66</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipMZ02QIVsAxEMqaSLU1KBnFwDeKIyIhlRJZ1qg0=s1600-w400">
+        <h3>POST霞飛驛歐法點餐</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+    </div>
+  
+    <div class="tinder--buttons">
+      <button id="nope"><i class="fa fa-times"></i></button>
+      <button id="love"><i class="fa fa-heart"></i></button>
+    </div>
+  </div>
+</body></html>
