@@ -1,8 +1,7 @@
 import jieba
-from collections import Counter
 
 stop_words = []
-with open("stop_words.txt", "r", encoding="UTF-8") as file:
+with open("food/stop_words.txt", "r", encoding="UTF-8") as file:
     for data in file.readlines():
         data = data.strip()
         stop_words.append(data)
