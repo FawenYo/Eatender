@@ -9,6 +9,7 @@ class Template:
         for each in restaurants:
             place_id = each.place_id
             restaurant_name = each.name
+            keywords = each.keywords
             photo_url = each.photo_url
             website = each.website
             ifoodie_url = each.ifoodie_url
@@ -22,6 +23,7 @@ class Template:
             card = restaurant_card_info(
                 place_id=place_id,
                 restaurant_name=restaurant_name,
+                keywords=keywords,
                 photo_url=photo_url,
                 website=website,
                 ifoodie_url=ifoodie_url,
@@ -45,6 +47,7 @@ class Template:
 def restaurant_card_info(
     place_id: str,
     restaurant_name: str,
+    keywords: list,
     photo_url: str,
     website: str,
     ifoodie_url: str,
@@ -138,8 +141,7 @@ def restaurant_card_info(
                         },
                         {
                             "type": "text",
-                            # TODO: 關鍵詞列表
-                            "text": "關鍵字",
+                            "text": f"關鍵字：{'、'.join(keywords)}",
                             "margin": "md",
                             "size": "sm",
                             "color": "#999999",
