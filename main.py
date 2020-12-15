@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 
 from API.router import api
-
 from line.handler import line_app
 
 app = Flask(__name__, static_url_path="/static/")
