@@ -1,3 +1,13 @@
+import jieba
+from collections import Counter
+
+stop_words = []
+with open("stop_words.txt", "r", encoding="UTF-8") as file:
+    for data in file.readlines():
+        data = data.strip()
+        stop_words.append(data)
+
+
 class Restaurant:
     def __init__(
         self,
@@ -27,14 +37,31 @@ class Restaurant:
         self.website = website
         self.price = price
         self.phone_number = phone_number
-        self.keywords = []
         self.reviews = reviews
+        self.keywords = self.find_keywords(name=name, reviews=reviews)
         self.ifoodie_url = ifoodie_url
         self.find_operating_time(operating_time=operating_time)
-        self.find_keywords(reviews=reviews)
 
-    def find_keywords(self, reviews):
-        pass
+    def find_keywords(self, name, reviews):
+        keyword_data = {}
+        keywords = []
+        for review in reviews:
+            segments = jieba.cut(review, use_paddle=True)
+            remainder_words = list(
+                filter(
+                    lambda a: a not in stop_words and a is not name and a != "\n",
+                    segments,
+                )
+            )
+            for word in remainder_words:
+                if word in keyword_data:
+                    keyword_data[word] += 1
+                else:
+                    keyword_data[word] = 1
+        most_frequent = sorted(keyword_data.items(), key=lambda x: -x[1])
+        for each in most_frequent[:3]:
+            keywords.append(each[0])
+        return keywords
 
     def find_operating_time(self, operating_time):
         pass
