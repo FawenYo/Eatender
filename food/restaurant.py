@@ -51,6 +51,7 @@ class Restaurant:
                     lambda a: a not in stop_words
                     and a is not name
                     and a != "\n"
+                    and a.strip(" ")
                     and a.replace(" ", "") != "",
                     segments,
                 )
