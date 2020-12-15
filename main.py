@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 from API.router import api
-from config import console
+
 from line.handler import line_app
 
 app = Flask(__name__, static_url_path="/static/")
@@ -23,6 +23,12 @@ def eatender():
     return render_template("restaurant.html")
 
 
+@app.route("/_ah/warmup")
+def warmup():
+    # TODO: Handle warmup logic here.
+    return "", 200, {}
+
+
 if __name__ == "__main__":
-    console.log("[bold magenta]Server Staring![/bold magenta] :fire: :fire:")
-    app.run(threaded=True, port=5000)
+    # Used only when running locally.
+    app.run(threaded=True, port=5000, debug=True)
