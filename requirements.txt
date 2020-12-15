@@ -1,6 +1,7 @@
 beautifulsoup4
 flask
 gunicorn
+jieba
 line-bot-sdk
 pymongo[srv]
 pytz

@@ -43,6 +43,7 @@ def add_restaurant(restaurant):
             "price": restaurant.price,
             "phone_number": restaurant.phone_number,
             "reviews": restaurant.reviews,
+            "keywords": restaurant.keywords,
             "ifoodie_url": restaurant.ifoodie_url,
             "time": now,
         }

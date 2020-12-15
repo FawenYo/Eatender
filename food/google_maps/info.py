@@ -19,7 +19,6 @@ class GM_Restaurant:
         latitude,
         longitude,
         keyword="",
-        radius=2000,
         search_type="restaurant",
     ):
         """Google Maps 餐廳資料
@@ -28,9 +27,9 @@ class GM_Restaurant:
             latitude (float): 緯度
             longitude (float): 經度
             keyword (str): 關鍵字列表，以 " " 分割
-            radius (int, optional): 限制範圍(單位：公尺). Defaults to 2000.
             search_type (str, optional): 限制類別. Defaults to "restaurant".
         """
+        radius = 1000 if self.speed_mode else 50000
         if keyword:
             response = requests.get(
                 f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?language=zh-TW&location={latitude},{longitude}&radius={radius}&type={search_type}&keyword={keyword}&key={GOOGLE_MAPS_APIKEY}"
@@ -74,7 +73,10 @@ class GM_Restaurant:
                 website = detail["website"]
             else:
                 website = place["url"]
-            reviews = detail["reviews"]
+            reviews = []
+            for each in detail["reviews"]:
+                content = each["text"]
+                reviews.append(content)
 
             restaurant = Restaurant(
                 place_id=place_id,
