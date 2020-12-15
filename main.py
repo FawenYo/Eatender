@@ -25,4 +25,4 @@ def eatender():
 
 if __name__ == "__main__":
     # Used only when running locally.
-    app.run(threaded=True, port=5000, debug=True)
+    app.run(threaded=True, port=8001, debug=True)
