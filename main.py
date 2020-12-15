@@ -23,12 +23,6 @@ def eatender():
     return render_template("restaurant.html")
 
 
-@app.route("/_ah/warmup")
-def warmup():
-    # TODO: Handle warmup logic here.
-    return "", 200, {}
-
-
 if __name__ == "__main__":
     # Used only when running locally.
     app.run(threaded=True, port=5000, debug=True)
