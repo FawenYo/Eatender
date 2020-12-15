@@ -48,7 +48,10 @@ class Restaurant:
             segments = jieba.cut(review, use_paddle=True)
             remainder_words = list(
                 filter(
-                    lambda a: a not in stop_words and a is not name and a != "\n",
+                    lambda a: a not in stop_words
+                    and a is not name
+                    and a != "\n"
+                    and a.replace(" ", "") != "",
                     segments,
                 )
             )
