@@ -1,4 +1,8 @@
+var total_restaurant = 0;
+var current_index = 0;
+
 $(document).ready(function () {
+  total_restaurant = $("#restaurant_count").val();
   main();
 });
 
@@ -128,8 +132,16 @@ function main() {
 
 function love_restaurant(event) {
   console.log(event);
+  current_index += 1;
+  if (current_index == total_restaurant) {
+    Swal.fire("到底了！");
+  }
 }
 
 function not_love_restaurant(event) {
   console.log(event);
+  current_index += 1;
+  if (current_index == total_restaurant) {
+    Swal.fire("到底了！");
+  }
 }

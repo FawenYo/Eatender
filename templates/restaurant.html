@@ -18,7 +18,9 @@
   <!-- Jquery -->
   <script src="{{url_for('static', filename='scripts/jquery-3.3.1.min.js')}}"></script>
   <script src="{{url_for('static', filename='scripts/hammer.min.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script type="text/javascript" src="{{url_for('static', filename='scripts/restaurant.js')}}"></script>
+  <input id="restaurant_count" type="hidden" value={{ data|length }} />
   <div class="tinder">
     <div class="tinder--status">
       <i class="fa fa-times"></i>
@@ -30,7 +32,7 @@
       <div class="tinder--card">
         <img src="{{ i.url }}">
         <h3>{{ i.name }}</h3>
-        <p>This is a demo for restaurant data cards</p>
+        <p>{{ i }}</p>
       </div>
       {% endfor %}
     </div>
