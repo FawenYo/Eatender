@@ -25,7 +25,7 @@ class Nearby_restaurant:
 
     def get_info(self):
         result = []
-        """config.db.restaurant.create_index([("loc", GEOSPHERE)])
+        config.db.restaurant.create_index([("loc", GEOSPHERE)])
         query = {
             "loc": {
                 "$near": SON(
@@ -42,10 +42,11 @@ class Nearby_restaurant:
                         ("$maxDistance", 2000),
                     ]
                 )
-            }
+            },
+            "category": self.keyword,
         }
         for each in config.db.restaurant.find(query):
-            result.append(each)"""
+            result.append(each)
         if len(result) >= 5:
             for each in result:
                 restaurant = Restaurant(
@@ -120,7 +121,7 @@ class Nearby_restaurant:
         # Add to MongoDB
         for restaurant in self.restaurants:
             thread = threading.Thread(
-                target=database.add_restaurant, args=(restaurant,)
+                target=database.add_restaurant, args=(restaurant, self.keyword)
             )
             threads.append(thread)
         for thread in threads:

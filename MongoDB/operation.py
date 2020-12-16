@@ -1,5 +1,6 @@
 import sys
 from datetime import datetime
+from pymongo import results
 import pytz
 
 sys.path.append(".")
@@ -26,9 +27,10 @@ def record_user_location(user_id: str, lat: float, lng: float):
     db.history.insert_one(data)
 
 
-def add_restaurant(restaurant):
+def add_restaurant(restaurant, keyword):
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
-    if not db.restaurant.find_one({"name": restaurant.name}):
+    result = db.restaurant.find_one({"name": restaurant.name})
+    if not result:
         data = {
             "place_id": restaurant.place_id,
             "name": restaurant.name,
@@ -46,7 +48,13 @@ def add_restaurant(restaurant):
             "ifoodie_url": restaurant.ifoodie_url,
             "time": now,
         }
+        if keyword:
+            data["category"] = [keyword]
         db.restaurant.insert_one(data)
+    else:
+        if keyword not in result["category"]:
+            result["category"].append(keyword)
+            db.restaurant.update_one({"name": restaurant.name}, {"$set": result})
 
 
 def create_vote(vote_id, restaurants):
