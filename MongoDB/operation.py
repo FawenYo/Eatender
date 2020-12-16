@@ -1,6 +1,5 @@
 import sys
 from datetime import datetime
-
 import pytz
 
 sys.path.append(".")
@@ -48,3 +47,14 @@ def add_restaurant(restaurant):
             "time": now,
         }
         db.restaurant.insert_one(data)
+
+
+def create_vote(vote_id, restaurants):
+    now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
+    if not db.vote_pull.find_one({"_id": vote_id}):
+        data = {
+            "_id": vote_id,
+            "restaurants": restaurants,
+            "create_time": now,
+        }
+        db.vote_pull.insert_one(data)
