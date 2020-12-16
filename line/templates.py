@@ -200,6 +200,7 @@ def restaurant_card_info(
                             "style": "normal",
                             "flex": 0,
                             "wrap": true,
+                            "maxLines": 1,
                         }
                     ],
                 },

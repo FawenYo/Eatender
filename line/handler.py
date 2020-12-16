@@ -98,9 +98,22 @@ def handle_message(event):
         )
         thread.start()
 
-        restaurants = Nearby_restaurant(latitude=lat, longitude=lng)
-        # Show first five restaurant
-        message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
+        restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩"]
+        quick_reply_items = [
+            QuickReplyButton(
+                action=PostbackAction(
+                    label=category,
+                    display_text=category,
+                    data=f"search_{lat},{lng}_{category}",
+                )
+            )
+            for category in restaurant_category
+        ]
+
+        message = TextSendMessage(
+            text="請選擇餐廳類別",
+            quick_reply=QuickReply(items=quick_reply_items),
+        )
         line_bot_api.reply_message(reply_token, message)
 
 
@@ -116,8 +129,10 @@ def handle_postback(event):
     postback_data = event.postback.data
 
     if "_" in postback_data:
-        action, restaurant_id = postback_data.split("_")
+        postback_args = postback_data.split("_")
+        action = postback_args[0]
         if action == "favorite":
+            restaurant_id = postback_data[1]
             restaurant_data = config.db.restaurant.find_one({"place_id": restaurant_id})
             user = config.db.user.find_one({"user_id": user_id})
             if restaurant_data not in user["favorite"]:
@@ -128,4 +143,17 @@ def handle_postback(event):
                 message = TextSendMessage(text=f"已將{restaurant_data['name']}加入最愛！")
             else:
                 message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
+            line_bot_api.reply_message(reply_token, message)
+        elif action == "search":
+            latitude, longitude = [float(i) for i in postback_args[1].split(",")]
+            keyword = postback_args[2]
+            if keyword == "隨便":
+                keyword = ""
+            restaurants = Nearby_restaurant(
+                latitude=latitude, longitude=longitude, keyword=keyword
+            )
+            # Show first five restaurant
+            message = Template().show_restaurant(
+                restaurants=restaurants.restaurants[:5]
+            )
             line_bot_api.reply_message(reply_token, message)

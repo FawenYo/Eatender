@@ -25,7 +25,7 @@ class Nearby_restaurant:
 
     def get_info(self):
         result = []
-        config.db.restaurant.create_index([("loc", GEOSPHERE)])
+        """config.db.restaurant.create_index([("loc", GEOSPHERE)])
         query = {
             "loc": {
                 "$near": SON(
@@ -45,11 +45,9 @@ class Nearby_restaurant:
             }
         }
         for each in config.db.restaurant.find(query):
-            result.append(each)
-        start = datetime.now()
+            result.append(each)"""
         if len(result) >= 5:
             for each in result:
-                start = datetime.now()
                 restaurant = Restaurant(
                     place_id=each["place_id"],
                     name=each["name"],
