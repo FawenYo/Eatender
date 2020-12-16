@@ -81,7 +81,7 @@ def handle_message(event):
         if user_message == "我的最愛":
             user_data = config.db.user.find_one({"user_id": user_id})
             if len(user_data["favorite"]) > 0:
-                message = Template().show_restaurant(
+                message = Template().show_favorite(
                     restaurants=user_data["favorite"][:10]
                 )
             else:

@@ -4,6 +4,46 @@ true = True
 
 
 class Template:
+    def show_favorite(self, restaurants):
+        show_list = []
+        for each in restaurants:
+            place_id = each["place_id"]
+            restaurant_name = each["name"]
+            keywords = each["keywords"]
+            photo_url = each["photo_url"]
+            website = each["website"]
+            ifoodie_url = each["ifoodie_url"]
+            rating = each["rating"]
+            price = each["price"]
+            address = each["address"]
+            phone_number = each["phone_number"]
+            lat = each["location"]["lat"]
+            lng = each["location"]["lng"]
+            # TODO: 營業狀況
+            open_now = False
+            card = restaurant_card_info(
+                place_id=place_id,
+                restaurant_name=restaurant_name,
+                keywords=keywords,
+                photo_url=photo_url,
+                website=website,
+                ifoodie_url=ifoodie_url,
+                rating=rating,
+                price=price,
+                address=address,
+                open_now=open_now,
+                phone_number=phone_number,
+                lat=lat,
+                lng=lng,
+            )
+            show_list.append(card)
+        contents = {
+            "type": "carousel",
+            "contents": show_list,
+        }
+        message = FlexSendMessage(alt_text="最愛列表", contents=contents)
+        return message
+
     def show_restaurant(self, restaurants):
         show_list = []
         for each in restaurants:
@@ -73,38 +113,76 @@ def restaurant_card_info(
 
     if price == 0:
         price = "N/A"
+    comments = []
+    for each in keywords:
+        data = {
+            "type": "text",
+            "text": each,
+            "flex": 0,
+            "margin": "xl",
+            "size": "sm",
+            "color": "#999999",
+        }
+        comments.append(data)
 
-    # TODO: 確切時間
     if open_now:
         operate_status = {
             "type": "text",
             "text": "營業中",
-            "margin": "md",
-            "size": "sm",
-            "color": "#5ba709",
+            "size": "xs",
+            "color": "#ffffff",
+            "align": "center",
+            "gravity": "center",
         }
+        operate_color = "#9ACD32"
     else:
         operate_status = {
             "type": "text",
             "text": "休息中",
-            "margin": "md",
-            "size": "sm",
-            "color": "#ff0000",
+            "size": "xs",
+            "color": "#ffffff",
+            "align": "center",
+            "gravity": "center",
         }
+        operate_color = "#FF6347"
     card = {
         "type": "bubble",
-        "hero": {
-            "type": "image",
-            "url": photo_url,
-            "position": "relative",
-            "gravity": "top",
-            "size": "full",
-            "aspectRatio": "20:13",
-            "aspectMode": "cover",
-            "offsetTop": "md",
-            "offsetStart": "none",
-            "offsetEnd": "none",
-            "offsetBottom": "none",
+        "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "horizontal",
+                    "contents": [
+                        {
+                            "type": "image",
+                            "url": photo_url,
+                            "size": "full",
+                            "aspectMode": "cover",
+                            "aspectRatio": "20:13",
+                            "position": "relative",
+                        },
+                        {
+                            "type": "box",
+                            "layout": "horizontal",
+                            "contents": [operate_status],
+                            "position": "absolute",
+                            "flex": 0,
+                            "width": "55px",
+                            "height": "25px",
+                            "backgroundColor": operate_color,
+                            "cornerRadius": "100px",
+                            "offsetTop": "18px",
+                            "offsetStart": "18px",
+                            "paddingAll": "2px",
+                            "paddingStart": "4px",
+                            "paddingEnd": "4px",
+                        },
+                    ],
+                }
+            ],
+            "paddingAll": "0px",
         },
         "body": {
             "type": "box",
@@ -121,8 +199,8 @@ def restaurant_card_info(
                             "weight": "bold",
                             "style": "normal",
                             "flex": 0,
-                        },
-                        operate_status,
+                            "wrap": true,
+                        }
                     ],
                 },
                 {
@@ -137,14 +215,6 @@ def restaurant_card_info(
                             "size": "sm",
                             "color": "#999999",
                             "margin": "sm",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": f"關鍵字：{'、'.join(keywords)}",
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
                             "flex": 0,
                         },
                     ],
@@ -189,18 +259,31 @@ def restaurant_card_info(
                             "decoration": "underline",
                         },
                     ],
-                    "offsetTop": "sm",
+                    "offsetTop": "md",
+                },
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "評論",
+                            "size": "sm",
+                            "color": "#999999",
+                            "flex": 0,
+                        }
+                    ]
+                    + comments,
+                    "offsetTop": "md",
+                    "margin": "lg",
                 },
                 {
                     "type": "box",
                     "layout": "vertical",
-                    "margin": "lg",
-                    "spacing": "sm",
                     "contents": [
                         {
                             "type": "box",
                             "layout": "baseline",
-                            "spacing": "sm",
                             "contents": [
                                 {
                                     "type": "text",
@@ -220,6 +303,7 @@ def restaurant_card_info(
                             ],
                             "offsetTop": "lg",
                             "borderWidth": "bold",
+                            "spacing": "sm",
                         },
                         {
                             "type": "box",
@@ -244,287 +328,73 @@ def restaurant_card_info(
                             ],
                             "borderWidth": "bold",
                             "spacing": "sm",
-                            "offsetTop": "md",
+                            "offsetBottom": "lg",
+                            "offsetTop": "sm",
+                            "position": "relative",
                         },
                     ],
+                    "spacing": "sm",
+                    "margin": "lg",
                 },
             ],
         },
         "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "none",
-            "contents": [
-                {
-                    "type": "button",
-                    "action": {"type": "message", "label": "喜歡", "text": "要不要考慮前往用餐呢~"},
-                    "color": "#3F67C6",
-                },
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "uri",
-                        "label": "前往",
-                        "uri": f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking",
-                    },
-                    "color": "#000000",
-                },
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "postback",
-                        "label": "收藏",
-                        "data": f"favorite_{place_id}",
-                    },
-                    "color": "#3F67C6",
-                },
-            ],
-            "backgroundColor": "#FFFACD",
-            "offsetTop": "sm",
-            "paddingAll": "md",
-        },
-    }
-    return card
-
-
-def favorite_info(
-    place_id: str,
-    restaurant_name: str,
-    photo_url: str,
-    website: str,
-    ifoodie_url: str,
-    rating: float,
-    price: int,
-    address: str,
-    open_now: bool,
-    phone_number: str,
-    lat: float,
-    lng: float,
-):
-    star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-    }
-    grey_star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-    }
-    star_list = int(rating) * [star] + (5 - int(rating)) * [grey_star]
-
-    if price == 0:
-        price = "N/A"
-
-    # TODO: 確切時間
-    if open_now:
-        operate_status = {
-            "type": "text",
-            "text": "營業中",
-            "margin": "md",
-            "size": "sm",
-            "color": "#5ba709",
-        }
-    else:
-        operate_status = {
-            "type": "text",
-            "text": "休息中",
-            "margin": "md",
-            "size": "sm",
-            "color": "#ff0000",
-        }
-    card = {
-        "type": "bubble",
-        "hero": {
-            "type": "image",
-            "url": photo_url,
-            "position": "relative",
-            "gravity": "top",
-            "size": "full",
-            "aspectRatio": "20:13",
-            "aspectMode": "cover",
-            "offsetTop": "md",
-            "offsetStart": "none",
-            "offsetEnd": "none",
-            "offsetBottom": "none",
-        },
-        "body": {
             "type": "box",
             "layout": "vertical",
+            "spacing": "none",
             "contents": [
                 {
                     "type": "box",
-                    "layout": "baseline",
+                    "layout": "horizontal",
                     "contents": [
                         {
-                            "type": "text",
-                            "text": restaurant_name,
-                            "size": "xl",
-                            "weight": "bold",
-                            "style": "normal",
-                            "flex": 0,
-                        },
-                        operate_status,
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "margin": "md",
-                    "contents": star_list
-                    + [
-                        {
-                            "type": "text",
-                            "text": str(rating),
-                            "size": "sm",
-                            "color": "#999999",
-                            "margin": "sm",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            # TODO: 關鍵詞列表
-                            "text": "關鍵字",
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        },
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": f"${price}",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "餐廳網站",
+                            "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "action",
-                                "uri": website,
+                                "label": "前往",
+                                "uri": f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking",
                             },
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                            "flex": 0,
+                            "offsetBottom": "md",
                         },
                         {
-                            "type": "text",
-                            "text": "愛食記",
+                            "type": "button",
                             "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": ifoodie_url,
+                                "type": "postback",
+                                "label": "收藏",
+                                "data": f"favorite_{place_id}",
                             },
-                            "flex": 0,
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
+                            "offsetBottom": "md",
                         },
                     ],
-                    "offsetTop": "sm",
+                    "spacing": "none",
+                    "margin": "none",
+                    "height": "40px",
                 },
                 {
                     "type": "box",
                     "layout": "vertical",
-                    "margin": "lg",
-                    "spacing": "sm",
                     "contents": [
                         {
-                            "type": "box",
-                            "layout": "baseline",
-                            "spacing": "sm",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "地點",
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 2,
-                                },
-                                {
-                                    "type": "text",
-                                    "text": address,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "wrap": true,
-                                    "flex": 6,
-                                },
-                            ],
-                            "offsetTop": "lg",
-                            "borderWidth": "bold",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "電話",
-                                    "flex": 2,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "contents": [],
-                                },
-                                {
-                                    "type": "text",
-                                    "flex": 6,
-                                    "text": phone_number,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "wrap": true,
-                                },
-                            ],
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                            "offsetTop": "md",
-                        },
+                            "type": "button",
+                            "action": {
+                                "type": "uri",
+                                "label": "加入投票",
+                                "uri": "http://linecorp.com/",
+                            },
+                            "color": "#000000",
+                        }
                     ],
+                    "backgroundColor": "#fdbe29",
+                    "cornerRadius": "100px",
+                    "margin": "none",
+                    "alignItems": "center",
+                    "justifyContent": "space-evenly",
+                    "position": "relative",
+                    "width": "200px",
+                    "height": "50px",
+                    "offsetStart": "40px",
                 },
             ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "none",
-            "contents": [
-                {
-                    "type": "button",
-                    "action": {"type": "message", "label": "喜歡", "text": "要不要考慮前往用餐呢~"},
-                    "color": "#3F67C6",
-                },
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "uri",
-                        "label": "前往",
-                        "uri": f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking",
-                    },
-                    "color": "#000000",
-                },
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "postback",
-                        "label": "收藏",
-                        "data": f"favorite_{place_id}",
-                    },
-                    "color": "#3F67C6",
-                },
-            ],
-            "backgroundColor": "#FFFACD",
-            "offsetTop": "sm",
-            "paddingAll": "md",
         },
     }
     return card
