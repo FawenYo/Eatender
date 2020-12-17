@@ -83,6 +83,7 @@ class Nearby_restaurant:
 
     def get_ifoodie_data(self):
         for restaurant in self.restaurants:
+            config.restaurants[restaurant.place_id] = restaurant.__dict__
             try:
                 data = Ifoodie(
                     restaurant_name=restaurant.name,

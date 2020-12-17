@@ -41,6 +41,7 @@ def add_restaurant(restaurant, keyword):
             "address": restaurant.address,
             "rating": restaurant.rating,
             "website": restaurant.website,
+            "google_url": restaurant.google_url,
             "price": restaurant.price,
             "phone_number": restaurant.phone_number,
             "reviews": restaurant.reviews,

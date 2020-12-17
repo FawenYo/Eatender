@@ -30,3 +30,16 @@ client = pymongo.MongoClient(
 )
 
 db = client.db
+
+# Global vars
+restaurants = {}
+
+
+def init_restaurants():
+    db_results = db.restaurants.find({})
+    for each in db_results:
+        place_id = each["place_id"]
+        restaurants[place_id] = each
+
+
+init_restaurants()

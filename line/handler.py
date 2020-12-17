@@ -1,6 +1,5 @@
 import sys
 import threading
-import time
 
 from flask import Blueprint, abort, current_app, request
 from linebot import LineBotApi, WebhookHandler
@@ -135,6 +134,8 @@ def handle_postback(event):
         if action == "favorite":
             restaurant_id = postback_args[1]
             restaurant_data = config.db.restaurant.find_one({"place_id": restaurant_id})
+            if not restaurant_data:
+                restaurant_data = config.restaurants[restaurant_id]
             user = config.db.user.find_one({"user_id": user_id})
             if restaurant_data not in user["favorite"]:
                 # update user favorite list
