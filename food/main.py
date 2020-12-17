@@ -1,3 +1,4 @@
+import re
 import sys
 import threading
 from datetime import datetime
@@ -53,8 +54,9 @@ class Nearby_restaurant:
                     place_id=each["place_id"],
                     name=each["name"],
                     photo_url=each["photo_url"],
-                    # FIXME: 營業中?
-                    open_now=False,
+                    open_now=find_operating_status(
+                        data=each["operating_time"]["weekday_text"]
+                    ),
                     operating_time=each["operating_time"],
                     location=each["location"],
                     address=each["address"],
@@ -129,3 +131,22 @@ class Nearby_restaurant:
         for thread in threads:
             thread.join()
         print("Silent update done.")
+
+
+def find_operating_status(data):
+    now = datetime.now()
+    weekday = now.weekday()
+    time = now.strftime("%H:%M")
+
+    opening_now = False
+    today_open = data[weekday - 1].split(",")
+    for each in today_open:
+        temp = re.findall(r"\d{2}\:\d{2}", each)
+        start = datetime.strptime(temp[0], "%H:%M")
+        end = datetime.strptime(temp[1], "%H:%M")
+        current = datetime.strptime(time, "%H:%M")
+
+        if start <= current <= end:
+            opening_now = True
+            return opening_now
+    return opening_now

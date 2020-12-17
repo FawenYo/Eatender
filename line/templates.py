@@ -1,3 +1,6 @@
+import re
+from datetime import datetime
+
 from linebot.models import FlexSendMessage
 
 true = True
@@ -19,8 +22,10 @@ class Template:
             phone_number = each["phone_number"]
             lat = each["location"]["lat"]
             lng = each["location"]["lng"]
-            # TODO: 營業狀況
-            open_now = False
+            open_now = find_operating_status(
+                data=each["operating_time"]["weekday_text"]
+            )
+
             card = restaurant_card_info(
                 place_id=place_id,
                 restaurant_name=restaurant_name,
@@ -82,6 +87,25 @@ class Template:
         }
         message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
         return message
+
+
+def find_operating_status(data):
+    now = datetime.now()
+    weekday = now.weekday()
+    time = now.strftime("%H:%M")
+
+    opening_now = False
+    today_open = data[weekday - 1].split(",")
+    for each in today_open:
+        temp = re.findall(r"\d{2}\:\d{2}", each)
+        start = datetime.strptime(temp[0], "%H:%M")
+        end = datetime.strptime(temp[1], "%H:%M")
+        current = datetime.strptime(time, "%H:%M")
+
+        if start <= current <= end:
+            opening_now = True
+            return opening_now
+    return opening_now
 
 
 def restaurant_card_info(
