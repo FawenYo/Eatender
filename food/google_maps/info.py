@@ -73,6 +73,7 @@ class GM_Restaurant:
                 website = detail["website"]
             else:
                 website = place["url"]
+            google_url = detail["url"]
             reviews = []
             for each in detail["reviews"]:
                 content = each["text"]
@@ -88,6 +89,7 @@ class GM_Restaurant:
                 address=address,
                 rating=rating,
                 website=website,
+                google_url=google_url,
                 phone_number=phone_number,
                 reviews=reviews,
             )

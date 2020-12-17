@@ -19,6 +19,7 @@ class Restaurant:
         address: str,
         rating: float,
         website: str,
+        google_url: str,
         price: int = 0,
         phone_number: str = "無",
         reviews: list = [""],
@@ -34,12 +35,12 @@ class Restaurant:
         self.address = address
         self.rating = rating
         self.website = website
+        self.google_url = google_url
         self.price = price
         self.phone_number = phone_number
         self.reviews = reviews
         self.keywords = self.find_keywords(name=name, reviews=reviews)
         self.ifoodie_url = ifoodie_url
-        self.find_operating_time(operating_time=operating_time)
 
     def find_keywords(self, name, reviews):
         keyword_data = {}
@@ -65,5 +66,5 @@ class Restaurant:
             keywords.append(each[0])
         return keywords
 
-    def find_operating_time(self, operating_time):
+    def real_keyword(self):
         pass

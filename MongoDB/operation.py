@@ -46,10 +46,11 @@ def add_restaurant(restaurant, keyword):
             "reviews": restaurant.reviews,
             "keywords": restaurant.keywords,
             "ifoodie_url": restaurant.ifoodie_url,
+            "category": [],
             "time": now,
         }
         if keyword:
-            data["category"] = [keyword]
+            data["category"].append(keyword)
         db.restaurant.insert_one(data)
     else:
         if keyword not in result["category"]:

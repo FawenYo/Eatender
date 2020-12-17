@@ -49,6 +49,7 @@ class Nearby_restaurant:
         for each in config.db.restaurant.find(query):
             result.append(each)
         if len(result) >= 5:
+            print("load from db.")
             for each in result:
                 restaurant = Restaurant(
                     place_id=each["place_id"],
