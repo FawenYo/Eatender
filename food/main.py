@@ -138,15 +138,15 @@ def find_operating_status(data):
     weekday = now.weekday()
     time = now.strftime("%H:%M")
 
-    opening_now = False
     today_open = data[weekday - 1].split(",")
     for each in today_open:
+        if "休息" in each:
+            return False
         temp = re.findall(r"\d{2}\:\d{2}", each)
         start = datetime.strptime(temp[0], "%H:%M")
         end = datetime.strptime(temp[1], "%H:%M")
         current = datetime.strptime(time, "%H:%M")
 
         if start <= current <= end:
-            opening_now = True
-            return opening_now
-    return opening_now
+            return True
+    return False
