@@ -1,7 +1,7 @@
 import sys
 
-from flask import Blueprint
-
+import requests
+from flask import Blueprint, request
 
 # 上層目錄import
 sys.path.append(".")
@@ -18,3 +18,30 @@ def pull_data(pull_id):
     else:
         message = {"status": "error", "error_message": "Vote pull not found."}
     return message
+
+
+@vote.route("/SaveTimes.php", methods=["POST"])
+def route_savetimes():
+    post_data = request.form
+    response = requests.post(
+        "https://www.when2meet.com/SaveTimes.php", data=post_data
+    ).text
+    return response
+
+
+@vote.route("/ProcessLogin.php", methods=["POST"])
+def route_process_login():
+    post_data = request.form
+    response = requests.post(
+        "https://www.when2meet.com/ProcessLogin.php", data=post_data
+    ).text
+    return response
+
+
+@vote.route("/AvailabilityGrids.php", methods=["POST"])
+def route_availability_grids():
+    post_data = request.form
+    response = requests.post(
+        "https://www.when2meet.com/AvailabilityGrids.php", data=post_data
+    ).text
+    return response
