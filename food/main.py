@@ -49,6 +49,7 @@ class Nearby_restaurant:
         for each in config.db.restaurant.find(query):
             result.append(each)
         if len(result) >= 5:
+            print("load from db.")
             for each in result:
                 restaurant = Restaurant(
                     place_id=each["place_id"],
@@ -74,14 +75,14 @@ class Nearby_restaurant:
         thread.start()
 
     def get_google_maps_data(self):
-        restaurants = GM_Restaurant()
-        restaurants.fetch_data(
+        restaurants = GM_Restaurant(
             latitude=self.latitude, longitude=self.longitude, keyword=self.keyword
         )
         self.restaurants = restaurants.restaurants
 
     def get_ifoodie_data(self):
         for restaurant in self.restaurants:
+            config.restaurants[restaurant.place_id] = restaurant.__dict__
             try:
                 data = Ifoodie(
                     restaurant_name=restaurant.name,
@@ -99,11 +100,11 @@ class Nearby_restaurant:
     def silent_update(self):
         threads = []
         # Google Maps
-        restaurants = GM_Restaurant(speed_mode=False)
-        restaurants.fetch_data(
+        restaurants = GM_Restaurant(
             latitude=self.latitude,
             longitude=self.longitude,
             keyword=self.keyword,
+            speed_mode=False,
         )
         # Ifoodie
         for restaurant in restaurants.restaurants:
@@ -138,15 +139,15 @@ def find_operating_status(data):
     weekday = now.weekday()
     time = now.strftime("%H:%M")
 
-    opening_now = False
     today_open = data[weekday - 1].split(",")
     for each in today_open:
+        if "休息" in each:
+            return False
         temp = re.findall(r"\d{2}\:\d{2}", each)
         start = datetime.strptime(temp[0], "%H:%M")
         end = datetime.strptime(temp[1], "%H:%M")
         current = datetime.strptime(time, "%H:%M")
 
         if start <= current <= end:
-            opening_now = True
-            return opening_now
-    return opening_now
+            return True
+    return False

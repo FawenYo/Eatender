@@ -3,7 +3,7 @@ import threading
 
 from flask import Blueprint, abort, current_app, request
 from linebot import LineBotApi, WebhookHandler
-from linebot.exceptions import InvalidSignatureError
+from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
 
 from weather.main import Weather
@@ -132,8 +132,10 @@ def handle_postback(event):
         postback_args = postback_data.split("_")
         action = postback_args[0]
         if action == "favorite":
-            restaurant_id = postback_data[1]
+            restaurant_id = postback_args[1]
             restaurant_data = config.db.restaurant.find_one({"place_id": restaurant_id})
+            if not restaurant_data:
+                restaurant_data = config.restaurants[restaurant_id]
             user = config.db.user.find_one({"user_id": user_id})
             if restaurant_data not in user["favorite"]:
                 # update user favorite list
@@ -152,8 +154,15 @@ def handle_postback(event):
             restaurants = Nearby_restaurant(
                 latitude=latitude, longitude=longitude, keyword=keyword
             )
-            # Show first five restaurant
-            message = Template().show_restaurant(
-                restaurants=restaurants.restaurants[:5]
-            )
-            line_bot_api.reply_message(reply_token, message)
+            if len(restaurants.restaurants) == 0:
+                message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
+            else:
+                # Show first five restaurant
+                message = Template().show_restaurant(
+                    restaurants=restaurants.restaurants[:5]
+                )
+            try:
+                line_bot_api.reply_message(reply_token, message)
+            # 搜尋超時
+            except LineBotApiError:
+                line_bot_api.push_message(user_id, message)

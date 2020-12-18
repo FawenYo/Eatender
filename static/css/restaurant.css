@@ -1,3 +1,7 @@
+.checked {
+  color: orange;
+}
+
 *, *:before, *:after {
   box-sizing: border-box;
   padding: 0;
@@ -103,7 +107,7 @@ body {
 
 .tinder--card p {
   margin-top: 24px;
-  font-size: 20px;
+  font-size: 25px;
   padding: 0 16px;
   pointer-events: none;
 }

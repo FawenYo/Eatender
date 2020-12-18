@@ -35,6 +35,11 @@ def test():
     return render_template("test.html", name="test")
 
 
+@app.route("/card")
+def card():
+    return render_template("card.html")
+
+
 if __name__ == "__main__":
     # Used only when running locally.
     app.run(threaded=True, port=8001, debug=True)
