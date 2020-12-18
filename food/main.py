@@ -40,7 +40,7 @@ class Nearby_restaurant:
                                 ]
                             ),
                         ),
-                        ("$maxDistance", 2000),
+                        ("$maxDistance", 1000),
                     ]
                 )
             },
