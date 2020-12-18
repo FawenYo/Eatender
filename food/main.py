@@ -75,8 +75,7 @@ class Nearby_restaurant:
         thread.start()
 
     def get_google_maps_data(self):
-        restaurants = GM_Restaurant()
-        restaurants.fetch_data(
+        restaurants = GM_Restaurant(
             latitude=self.latitude, longitude=self.longitude, keyword=self.keyword
         )
         self.restaurants = restaurants.restaurants
@@ -101,11 +100,11 @@ class Nearby_restaurant:
     def silent_update(self):
         threads = []
         # Google Maps
-        restaurants = GM_Restaurant(speed_mode=False)
-        restaurants.fetch_data(
+        restaurants = GM_Restaurant(
             latitude=self.latitude,
             longitude=self.longitude,
             keyword=self.keyword,
+            speed_mode=False,
         )
         # Ifoodie
         for restaurant in restaurants.restaurants:

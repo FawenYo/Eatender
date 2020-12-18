@@ -10,50 +10,78 @@ from food.restaurant import Restaurant
 
 
 class GM_Restaurant:
-    def __init__(self, speed_mode=True):
+    def __init__(
+        self,
+        latitude: float,
+        longitude: float,
+        keyword: str = "",
+        search_type: str = "restaurant",
+        speed_mode=True,
+    ):
+        """初始化
+
+        Args:
+            latitude (float): 緯度.
+            longitude (float): 經度.
+            keyword (str): 關鍵字列表，以 " " 分割.
+            search_type (str, optional): 限制類別. Defaults to "restaurant".
+            speed_mode(bool): 限制搜尋.
+        """
         self.restaurants = []
+        self.threads = []
+
+        self.latitude = latitude
+        self.longitude = longitude
+        self.keyword = keyword
+        self.search_type = search_type
         self.speed_mode = speed_mode
+
+        self.fetch_data()
 
     def fetch_data(
         self,
-        latitude,
-        longitude,
-        keyword="",
-        search_type="restaurant",
+        pagetoken: str = "",
     ):
         """Google Maps 餐廳資料
 
         Args:
-            latitude (float): 緯度
-            longitude (float): 經度
-            keyword (str): 關鍵字列表，以 " " 分割
-            search_type (str, optional): 限制類別. Defaults to "restaurant".
+            pagetoken (str): Google Maps search page token.
+
         """
         radius = 1000 if self.speed_mode else 50000
-        if keyword:
-            response = requests.get(
-                f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?language=zh-TW&location={latitude},{longitude}&radius={radius}&type={search_type}&keyword={keyword}&key={GOOGLE_MAPS_APIKEY}"
-            ).json()
-        else:
-            response = requests.get(
-                f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?language=zh-TW&location={latitude},{longitude}&radius={radius}&type={search_type}&key={GOOGLE_MAPS_APIKEY}"
-            ).json()
-        return self.parse_data(data=response)
+        param_data = {
+            "language": "zh-TW",
+            "location": f"{self.latitude},{self.longitude}",
+            "radius": radius,
+            "type": self.search_type,
+            "keyword": self.keyword,
+            "pagetoken": pagetoken,
+            "key": GOOGLE_MAPS_APIKEY,
+        }
+        response = requests.get(
+            f"https://maps.googleapis.com/maps/api/place/nearbysearch/json",
+            params=param_data,
+        )
+        return self.parse_data(data=response.json())
 
     def parse_data(self, data):
-        threads = []
         if self.speed_mode:
             filter_results = data["results"][:6]
         else:
             filter_results = data["results"]
         for place in filter_results:
             thread = threading.Thread(target=self.get_place_data, args=(place,))
-            threads.append(thread)
+            self.threads.append(thread)
+        if self.speed_mode or "next_page_token" not in data:
+            self.start_thread()
+        else:
+            self.fetch_data(pagetoken=data["next_page_token"])
 
-        for thread in threads:
+    def start_thread(self):
+        for thread in self.threads:
             thread.start()
 
-        for thread in threads:
+        for thread in self.threads:
             thread.join()
 
     def get_place_data(self, place):
