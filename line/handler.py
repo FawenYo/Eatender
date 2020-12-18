@@ -78,8 +78,8 @@ def handle_message(event):
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
             if pending:
-                latitude = pending[user_id]["latitude"]
-                longitude = pending[user_id]["longitude"]
+                latitude = pending["latitude"]
+                longitude = pending["longitude"]
                 message = find_nearby(
                     latitude=latitude, longitude=longitude, keyword=user_message
                 )
