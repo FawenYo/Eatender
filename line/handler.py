@@ -18,8 +18,6 @@ handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 line_app = Blueprint("line_app", __name__)
 
-pending = {}
-
 
 @line_app.route("/callback", methods=["POST"])
 def callback():
@@ -78,12 +76,14 @@ def handle_message(event):
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
         try:
-            if user_id in pending:
+            pending = config.db.pending.find_one({"user_id": user_id})
+            if pending:
                 latitude = pending[user_id]["latitude"]
                 longitude = pending[user_id]["longitude"]
                 message = find_nearby(
                     latitude=latitude, longitude=longitude, keyword=user_message
                 )
+                config.db.pending.delete_one({"user_id": user_id})
             else:
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
@@ -174,7 +174,12 @@ def handle_postback(event):
                 latitude, longitude = [float(i) for i in postback_args[1].split(",")]
                 keyword = postback_args[2]
                 if keyword == "其他":
-                    pending[user_id] = {"latitude": latitude, "longitude": longitude}
+                    data = {
+                        "user_id": user_id,
+                        "latitude": latitude,
+                        "longitude": longitude,
+                    }
+                    config.db.pending.insert_one(data)
                     message = TextSendMessage(text=f"請輸入餐廳類別或名稱")
                 else:
                     message = find_nearby(
