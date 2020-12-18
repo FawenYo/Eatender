@@ -154,5 +154,4 @@ def find_operating_status(data):
 
     if start <= current <= end:
         return True
-
     return False
