@@ -84,6 +84,14 @@ def handle_message(event):
                     )
                 else:
                     message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
+            elif user_message == "投票":
+                user_data = config.db.user.find_one({"user_id": user_id})
+                if len(user_data["vote"]) > 0:
+                    message = Template().show_favorite(
+                        restaurants=user_data["vote"][:10]
+                    )
+                else:
+                    message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
             else:
                 message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
         except Exception as error:
@@ -134,6 +142,7 @@ def handle_postback(event):
         if "_" in postback_data:
             postback_args = postback_data.split("_")
             action = postback_args[0]
+            # 加入收藏名單
             if action == "favorite":
                 restaurant_id = postback_args[1]
                 restaurant_data = config.db.restaurant.find_one(
@@ -151,6 +160,7 @@ def handle_postback(event):
                 else:
                     message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
                 line_bot_api.reply_message(reply_token, message)
+            # 搜尋餐廳
             elif action == "search":
                 latitude, longitude = [float(i) for i in postback_args[1].split(",")]
                 keyword = postback_args[2]
@@ -171,6 +181,22 @@ def handle_postback(event):
                 # 搜尋超時
                 except LineBotApiError:
                     line_bot_api.push_message(user_id, message)
+            # 加入投票池
+            elif action == "vote":
+                restaurant_id = postback_args[1]
+                user = config.db.user.find_one({"user_id": user_id})
+                restaurant_data = config.db.restaurant.find_one(
+                    {"place_id": restaurant_id}
+                )
+                if not restaurant_data:
+                    restaurant_data = config.restaurants[restaurant_id]
+                if restaurant_id not in user["vote"]:
+                    user["vote"].append(restaurant_data)
+                    config.db.user.update_one({"user_id": user_id}, {"$set": user})
+                    message = TextSendMessage(text=f"已將{restaurant_data['name']}加入投票池！")
+                else:
+                    message = TextSendMessage(text=f"餐廳已經在投票池內囉！")
+                line_bot_api.reply_message(reply_token, message)
     except Exception as error:
         message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)
