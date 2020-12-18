@@ -10,7 +10,7 @@ from config import db
 
 def new_user(user_id: str):
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
-    data = {"user_id": user_id, "add_time": now, "favorite": []}
+    data = {"user_id": user_id, "add_time": now, "favorite": [], "vote": []}
     db.user.insert_one(data)
 
 

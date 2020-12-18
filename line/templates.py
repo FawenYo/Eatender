@@ -402,9 +402,9 @@ def restaurant_card_info(
                         {
                             "type": "button",
                             "action": {
-                                "type": "uri",
+                                "type": "postback",
                                 "label": "加入投票",
-                                "uri": "http://linecorp.com/",
+                                "data": f"vote_{place_id}",
                             },
                             "color": "#000000",
                         }

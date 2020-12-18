@@ -40,7 +40,7 @@ class Nearby_restaurant:
                                 ]
                             ),
                         ),
-                        ("$maxDistance", 2000),
+                        ("$maxDistance", 1000),
                     ]
                 )
             },
@@ -63,6 +63,7 @@ class Nearby_restaurant:
                     address=each["address"],
                     rating=each["rating"],
                     website=each["website"],
+                    google_url=each["google_url"],
                     phone_number=each["phone_number"],
                     reviews=each["reviews"],
                 )
