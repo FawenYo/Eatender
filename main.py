@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from os import name
+from flask import Flask, render_template, request
 
 from API.router import api
 from line.handler import line_app
@@ -20,24 +21,37 @@ def index():
     return render_template("home.html")
 
 
-@app.route("/eatender")
-@app.route("/eatender/<pull_id>")
-def eatender(pull_id=""):
+@app.route("/vote")
+def vote():
+    pull_id = request.args.get("id")
+    user_name = request.args.get("name")
+    if not pull_id and not user_name:
+        state = request.args.get("liff.state")
+        state = state.replace("?", "")
+        args = state.split("&")
+        for each in args:
+            key, value = each.split("=")
+            if key == "id":
+                pull_id = value
+            elif key == "name":
+                user_name = value
     message = pull_data(pull_id=pull_id)
     if message["status"] == "success":
-        return render_template("restaurant.html", data=message["restaurants"])
+        return render_template(
+            "restaurant.html", data=message["restaurants"], name=user_name
+        )
     else:
         return message
 
 
-@app.route("/test")
-def test():
-    return render_template("test.html", name="test")
+@app.route("/create")
+def create():
+    return render_template("create.html")
 
 
-@app.route("/card")
-def card():
-    return render_template("card.html")
+@app.route("/choose")
+def choose():
+    return render_template("choose.html", name="test")
 
 
 if __name__ == "__main__":

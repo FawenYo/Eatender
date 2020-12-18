@@ -20,6 +20,12 @@ def pull_data(pull_id):
     return message
 
 
+@vote.route("/vote/save", methods=["POST"])
+def vote_save():
+    # TODO: 和前端溝通
+    return False
+
+
 @vote.route("/SaveTimes.php", methods=["POST"])
 def route_savetimes():
     post_data = request.form

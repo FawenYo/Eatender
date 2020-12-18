@@ -12,6 +12,7 @@ import config
 import MongoDB.operation as database
 from food.main import Nearby_restaurant
 from line.templates import Template
+from vote.main import create_event
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
@@ -101,9 +102,24 @@ def handle_message(event):
                         )
                     else:
                         message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
+                elif user_message == "測試":
+                    message = TextSendMessage(
+                        text="請選擇餐廳類別",
+                        quick_reply=QuickReply(
+                            items=[
+                                QuickReplyButton(
+                                    action=PostbackAction(
+                                        label="創建",
+                                        data=f"create",
+                                    )
+                                )
+                            ]
+                        ),
+                    )
                 else:
                     message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
         except Exception as error:
+            config.console.print_exception()
             message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)
     elif isinstance(event.message, LocationMessage):
@@ -175,6 +191,7 @@ def handle_postback(event):
                 keyword = postback_args[2]
                 if keyword == "其他":
                     data = {
+                        "action": "search",
                         "user_id": user_id,
                         "latitude": latitude,
                         "longitude": longitude,
@@ -206,6 +223,27 @@ def handle_postback(event):
                 else:
                     message = TextSendMessage(text=f"餐廳已經在投票池內囉！")
                 line_bot_api.reply_message(reply_token, message)
+        else:
+            if postback_data == "create":
+                message = TextSendMessage(
+                    text=f"請設定投票截止日期",
+                    quick_reply=QuickReply(
+                        items=[
+                            QuickReplyButton(
+                                action=DatetimePickerAction(
+                                    label="截止日期",
+                                    data="endDate",
+                                    mode="date",
+                                )
+                            ),
+                        ]
+                    ),
+                )
+            elif postback_data == "endDate":
+                end_date = event.postback.params["date"]
+                # TODO: when2meet
+                message = TextSendMessage(text=f"請至xxx進行投票日期設定")
+            line_bot_api.reply_message(reply_token, message)
     except Exception as error:
         message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)

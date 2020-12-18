@@ -1,45 +1,104 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Eatender</title>
-    <meta property="og:title" content="Eatender"/>
-    <meta property="og:description" content="{專案簡介}"/>
-    <meta property="og:type" content="product"/>
-    <meta property="og:url" content="https://eatender.herokuapp.com/"/>
-    <meta property="og:image" content="{{url_for('static', filename='images/logo.png')}}"/>
-    <meta name="HandheldFriendly" content="true">
-    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="shortcut icon" href="{{url_for('static', filename='images/logo.png')}}">
-    <link href="{{url_for('static', filename='css/fontawesome-all.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{url_for('static', filename='css/restaurant.css')}}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="https://static.line-scdn.net/line_flexible_msg/172927b9b3c/css/sp/main.css?26802858">
-    <style type="text/css">.fxC1 { color: #666666 !important; } .fxC0 { color: #999999 !important; } .LyGi { width: 100%; max-width: 500px; min-width: 0;} .LyMe { width: 100%; max-width: 300px; min-width: 0;} .LyKi { width: 100%; max-width: 260px; min-width: 0;} .LyMi { width: 100%; max-width: 160px; min-width: 0;} .LyNa { width: 100%; max-width: 120px; min-width: 0;} </style>
-</head>
-<body>
-  <!-- Jquery -->
-  <script src="{{url_for('static', filename='scripts/jquery-3.3.1.min.js')}}"></script>
-  <script src="{{url_for('static', filename='scripts/hammer.min.js')}}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script type="text/javascript" src="{{url_for('static', filename='scripts/restaurant.js')}}"></script>
-  <input id="restaurant_count" type="hidden" value={{ data|length }} />
-  <div class="tinder">
-    <div class="tinder--status">
-      <i class="fa fa-times"></i>
-      <i class="fa fa-heart"></i>
-    </div>
-  
-    <div id="cardWrapper" class="tinder--cards">
-      {% for i in data %}
-      <div class="tinder--card">
-        <div class="T1 fxLTR" dir="ltr"><div class="t1Header"><div class="MdBx vr" id="c094fb22-6182-4043-abb2-d400ef6d93a0" style="padding:0px;"><div class="MdBx hr" id="3597a100-966b-44fb-af78-b77c028eb859"><div class="ExCover MdImg ExFull" id="263387a8-50ac-40bf-b894-4d2e915c65af"><div><a style="padding-bottom:65%;"><span style="background-image:url('https://i.ibb.co/7VzZ6CH/no-name-photo.jpg');"></span></a></div></div></div></div></div><div class="t1Body"><div class="MdBx vr" id="1fda9292-af3b-4627-9554-d78ce07018af"><div class="MdBx hr bl" id="86904268-2f02-4209-8b3e-5ca08313f6f8"><div class="MdTxt ExFntStyNml ExXl fl0 ExWrap ExWB" id="a94e623d-d782-4473-a067-831995e5dd46"><p>NoName 無名咖哩</p></div></div><div class="MdBx hr bl ExMgnTMd" id="a9d5ac1a-60b1-4915-8182-fb761866d538"><div class="MdIco fl0 ExSm" id="cef3d90f-ba7f-40e2-80ef-e0e86e9b309e"><div><span style="background-image:url('https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png'); width:1em;"></span></div></div><div class="MdIco fl0 ExSm" id="d5d4334b-5d13-4302-b343-65a4cc9db723"><div><span style="background-image:url('https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png'); width:1em;"></span></div></div><div class="MdIco fl0 ExSm" id="0e9e72b4-80dc-4512-8723-fe5a621e564f"><div><span style="background-image:url('https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png'); width:1em;"></span></div></div><div class="MdIco fl0 ExSm" id="b696dc56-525d-4e1c-b7e8-dcadbf8b9d37"><div><span style="background-image:url('https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png'); width:1em;"></span></div></div><div class="MdIco fl0 ExSm" id="6a77ef00-b598-4ccc-b09b-929e2a1eb62a"><div><span style="background-image:url('https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png'); width:1em;"></span></div></div><div class="MdTxt ExMgnLSm fl0 ExSm fxC0" id="ba4a5b42-ea82-4d17-ab35-9f7f25f468ac"><p>4.0</p></div></div><div class="MdBx hr bl ExTMd" id="bd009df3-8386-445b-a04a-9173a4bf2d0b"><div class="MdTxt fl0 ExSm fxC0" id="58559b36-e69e-4866-abc5-0375cd49462b"><p>$200</p></div><div class="ExTxtDecUl MdTxt ExMgnLMd fl0 ExSm fxC0" id="9f0b8ab3-4e63-4e74-b3f2-9b8caec62553"><p>餐廳網站</p></div><div class="ExTxtDecUl MdTxt ExMgnLMd fl0 ExSm fxC0" id="1e98b492-dd5a-4768-8e46-a4783ae4ee7f"><p>愛食記</p></div></div><div class="MdBx hr bl ExTMd ExMgnTLg" id="d605a63d-2c8b-476b-8c22-63e47512de58"><div class="MdTxt fl0 ExSm fxC0" id="e29c559f-501e-441e-9cf0-3e70550dbced"><p>評論</p></div><div class="MdTxt fl0 ExSm fxC0 ExMgnLXl" id="ca57e29d-36d8-4f80-8725-6b1395d7244e"><p>關鍵字1</p></div><div class="MdTxt ExMgnLMd fl0 ExSm fxC0" id="d6439f41-9b48-4871-bbcf-d30afee7b011"><p>關鍵字2</p></div><div class="MdTxt ExMgnLMd fl0 ExSm fxC0" id="00edcb82-1249-4d46-948b-0b0012683e2a"><p>關鍵字3</p></div></div><div class="spcSm MdBx vr ExMgnTLg" id="80101d47-1462-4ac9-888a-f13d3dce8fbc"><div class="spcSm ExTLg MdBx hr bl ExBdrWdtBld" id="75874ad3-91dc-47f9-9f13-912708046b86"><div class="fxC1 MdTxt ExSm fl2" id="83f54c05-9881-4dbc-b271-5bd0953ad882"><p>地點</p></div><div class="fxC1 MdTxt ExSm ExWrap" id="61075378-3de4-4f99-b1fb-b4fd86a4d132" style="-webkit-box-flex:6; flex-grow:6;"><p>臺北市大安區新生南路三段68之2號</p></div></div><div class="spcSm MdBx ExBLg hr bl ExBdrWdtBld ExTSm" id="84e71f96-a0e6-4bf7-9d3f-be55f0cdecf8"><div class="fxC1 MdTxt ExSm fl2" id="afe644ed-20ba-4d3c-90cd-48d7b5e81cc3"><p>電話</p></div><div class="fxC1 MdTxt ExSm ExWrap" id="27cef090-3857-47b9-81ca-416cb600220a" style="-webkit-box-flex:6; flex-grow:6;"><p>02 2369 1703</p></div></div></div></div></div></div>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Eatender</title>
+      <meta property="og:title" content="Eatender"/>
+      <meta property="og:description" content="{專案簡介}"/>
+      <meta property="og:type" content="product"/>
+      <meta property="og:url" content="https://eatender.herokuapp.com/"/>
+      <meta property="og:image" content="{{url_for('static', filename='images/logo.png')}}"/>
+      <meta name="HandheldFriendly" content="true">
+      <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+      <link rel="shortcut icon" href="{{url_for('static', filename='images/logo.png')}}">
+      <link href="{{url_for('static', filename='css/fontawesome-all.min.css')}}" rel="stylesheet" type="text/css">
+      <link href="{{url_for('static', filename='css/restaurant.css')}}" rel="stylesheet" type="text/css">
+      <style type="text/css">.fxC3 { color: #666666 !important; } .fxC2 { color: #999999 !important; } .fxC1 { color: #ff0000 !important; } .fxC0 { color: #00ff00 !important; } .LyGi { width: 100%; max-width: 500px; min-width: 0;} .LyMe { width: 100%; max-width: 300px; min-width: 0;} .LyKi { width: 100%; max-width: 260px; min-width: 0;} .LyMi { width: 100%; max-width: 160px; min-width: 0;} .LyNa { width: 100%; max-width: 120px; min-width: 0;} </style>
+      <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+   </head>
+   <body>
+      <!-- Jquery -->
+      <script src="{{url_for('static', filename='scripts/jquery-3.3.1.min.js')}}"></script>
+      <script src="{{url_for('static', filename='scripts/hammer.min.js')}}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+      <script type="text/javascript" src="{{url_for('static', filename='scripts/restaurant.js')}}"></script>
+      <input id="restaurant_count" type="hidden" value={{ data|length }} />
+      <input id="user_name" type="hidden" value={{ name }} />
+      <div class="tinder">
+         <div class="tinder--status">
+            <i class="fa fa-times"></i>
+            <i class="fa fa-heart"></i>
+         </div>
+         <div id="cardWrapper" class="tinder--cards">
+            {% for i in data %}
+            <div class="tinder--card">
+               <div class="T1 fxLTR" dir="ltr">
+                  <div class="t1Header">
+                     <div class="MdBx vr" id="7f6b6d4c-a7d1-4c00-ad27-3dc10640e659" style="padding:0px;">
+                        <div class="MdBx hr" id="981434e3-d9af-4e42-9c68-82c1247c7e76">
+                           <div class="ExCover MdImg ExFull" id="4a92bd98-dc4d-4623-9426-b78972cfd8b7">
+                              <div><a style="padding-bottom:65%;"><span style="background-image:url('{{i.photo_url}}');"></span></a></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="t1Body">
+                     <div class="MdBx vr" id="a4f7f781-23b9-48c6-a019-161f3b4d2b90">
+                        <div class="MdBx hr bl" id="0cb132a1-0dc2-4d6e-bd54-c0caaa38161a">
+                           <div class="MdTxt ExFntStyNml ExXl fl0 ExWrap ExWB" id="b0e7f56f-2a7e-4953-856f-07a7ca1b9c50">
+                              <p>{{i.name}}</p>
+                           </div>
+                        </div>
+                        <div class="MdBx hr bl ExTMd" id="0b7e4af2-1e8e-471c-87ed-f33abd48476a">
+                           <div class="MdTxt fl0 ExSm fxC0" id="b778ae34-fff4-4575-aeb2-17bdc82a0de1">
+                              <p>評價: {{i.rating}}</p>
+                           </div>
+                           <div class="fxC1 MdTxt ExMgnLMd fl0 ExSm" id="55474180-3979-4d02-bf60-f55bfe0e092f">
+                              <p>平均價位: ${{i.price}}</p>
+                           </div>
+                        </div>
+                        <div class="MdBx hr bl ExTMd ExMgnTLg" id="03575cf1-e437-46de-bac1-30389a037ccf">
+                           <div class="fxC2 MdTxt fl0 ExSm" id="2378b2fc-6c8e-40c9-91f6-0609a7af4abc">
+                              <p>評論</p>
+                           </div>
+                           <div class="fxC2 MdTxt fl0 ExSm ExMgnLXl" id="1c520d53-4206-4f0f-bbc5-4d1f121e2196">
+                              <p>{{i.keywords[0]}}</p>
+                           </div>
+                           <div class="fxC2 MdTxt ExMgnLMd fl0 ExSm" id="22108ab6-f36f-4999-ab14-dc4b2cdc42c0">
+                              <p>{{i.keywords[1]}}</p>
+                           </div>
+                           <div class="fxC2 MdTxt ExMgnLMd fl0 ExSm" id="315ffc1c-813f-45a9-baf6-effab38d8773">
+                              <p>{{i.keywords[2]}}</p>
+                           </div>
+                        </div>
+                        <div class="spcSm MdBx vr ExMgnTLg" id="9a0dcf56-1454-46e1-9a21-a3b6d1f38f5c">
+                           <div class="spcSm ExTLg MdBx hr bl ExBdrWdtBld" id="c270e5a6-2010-4629-b167-0755619690c1">
+                              <div class="MdTxt fxC3 ExSm fl2" id="6c85a12a-6d49-4001-8773-921f263e52d6">
+                                 <p>地點</p>
+                              </div>
+                              <div class="MdTxt fxC3 ExSm ExWrap" id="ced78b13-d57e-467a-bc9d-5808597545d4" style="-webkit-box-flex:6; flex-grow:6;">
+                                 <p>{{i.address}}</p>
+                              </div>
+                           </div>
+                           <div class="spcSm MdBx ExBLg hr bl ExBdrWdtBld ExTSm" id="028fe3c0-74d7-4d8f-ab5a-463215095a15">
+                              <div class="MdTxt fxC3 ExSm fl2" id="bbe15a22-7e7c-4dee-bc34-95cfc5588c80">
+                                 <p>電話</p>
+                              </div>
+                              <div class="MdTxt fxC3 ExSm ExWrap" id="83f9b9b6-3c9d-4011-9df4-9df44be5e250" style="-webkit-box-flex:6; flex-grow:6;">
+                                 <p>{{i.phone_number}}</p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            {% endfor %}
+         </div>
+         <div class="tinder--buttons">
+            <button id="nope"><i class="fa fa-times"></i></button>
+            <button id="love"><i class="fa fa-heart"></i></button>
+         </div>
       </div>
-      {% endfor %}
-    </div>
-  
-    <div class="tinder--buttons">
-      <button id="nope"><i class="fa fa-times"></i></button>
-      <button id="love"><i class="fa fa-heart"></i></button>
-    </div>
-  </div>
-</body></html>
+   </body>
+</html>

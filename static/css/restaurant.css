@@ -10,6 +10,7 @@
 
 body {
   background: #CCFBFE;
+  background-color: #CCFBFE !important;
   overflow: hidden;
   font-family: sans-serif;
 }
@@ -93,24 +94,6 @@ body {
   cursor: grabbing;
 }
 
-.tinder--card img {
-  max-width: 100%;
-  pointer-events: none;
-}
-
-.tinder--card h3 {
-  margin-top: 32px;
-  font-size: 32px;
-  padding: 0 16px;
-  pointer-events: none;
-}
-
-.tinder--card p {
-  margin-top: 24px;
-  font-size: 25px;
-  padding: 0 16px;
-  pointer-events: none;
-}
 
 .tinder--buttons {
   flex: 0 0 100px;

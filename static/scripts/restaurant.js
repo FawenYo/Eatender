@@ -1,3 +1,4 @@
+var user_id = "";
 var total_restaurant = 0;
 var current_index = 0;
 
