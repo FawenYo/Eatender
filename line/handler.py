@@ -18,6 +18,8 @@ handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 line_app = Blueprint("line_app", __name__)
 
+pending = {}
+
 
 @line_app.route("/callback", methods=["POST"])
 def callback():
@@ -76,24 +78,31 @@ def handle_message(event):
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
         try:
-            if user_message == "我的最愛":
-                user_data = config.db.user.find_one({"user_id": user_id})
-                if len(user_data["favorite"]) > 0:
-                    message = Template().show_favorite(
-                        restaurants=user_data["favorite"][:10]
-                    )
-                else:
-                    message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
-            elif user_message == "投票":
-                user_data = config.db.user.find_one({"user_id": user_id})
-                if len(user_data["vote"]) > 0:
-                    message = Template().show_favorite(
-                        restaurants=user_data["vote"][:10]
-                    )
-                else:
-                    message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
+            if user_id in pending:
+                latitude = pending[user_id]["latitude"]
+                longitude = pending[user_id]["longitude"]
+                message = find_nearby(
+                    latitude=latitude, longitude=longitude, keyword=user_message
+                )
             else:
-                message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
+                if user_message == "我的最愛":
+                    user_data = config.db.user.find_one({"user_id": user_id})
+                    if len(user_data["favorite"]) > 0:
+                        message = Template().show_favorite(
+                            restaurants=user_data["favorite"][:10]
+                        )
+                    else:
+                        message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
+                elif user_message == "投票":
+                    user_data = config.db.user.find_one({"user_id": user_id})
+                    if len(user_data["vote"]) > 0:
+                        message = Template().show_favorite(
+                            restaurants=user_data["vote"][:10]
+                        )
+                    else:
+                        message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
+                else:
+                    message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
         except Exception as error:
             message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)
@@ -107,7 +116,7 @@ def handle_message(event):
             )
             thread.start()
 
-            restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩"]
+            restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩", "其他"]
             quick_reply_items = [
                 QuickReplyButton(
                     action=PostbackAction(
@@ -164,17 +173,12 @@ def handle_postback(event):
             elif action == "search":
                 latitude, longitude = [float(i) for i in postback_args[1].split(",")]
                 keyword = postback_args[2]
-                if keyword == "隨便":
-                    keyword = ""
-                restaurants = Nearby_restaurant(
-                    latitude=latitude, longitude=longitude, keyword=keyword
-                )
-                if len(restaurants.restaurants) == 0:
-                    message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
+                if keyword == "其他":
+                    pending[user_id] = {"latitude": latitude, "longitude": longitude}
+                    message = TextSendMessage(text=f"請輸入餐廳類別或名稱")
                 else:
-                    # Show first five restaurant
-                    message = Template().show_restaurant(
-                        restaurants=restaurants.restaurants[:5]
+                    message = find_nearby(
+                        latitude=latitude, longitude=longitude, keyword=keyword
                     )
                 try:
                     line_bot_api.reply_message(reply_token, message)
@@ -200,3 +204,21 @@ def handle_postback(event):
     except Exception as error:
         message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)
+
+
+def find_nearby(
+    latitude,
+    longitude,
+    keyword,
+):
+    if keyword == "隨便":
+        keyword = ""
+    restaurants = Nearby_restaurant(
+        latitude=latitude, longitude=longitude, keyword=keyword
+    )
+    if len(restaurants.restaurants) == 0:
+        message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
+    else:
+        # Show first five restaurant
+        message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
+    return message
