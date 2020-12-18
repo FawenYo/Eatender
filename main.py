@@ -1,9 +1,9 @@
-from MongoDB.operation import create_vote
 from flask import Flask, render_template
 
 from API.router import api
 from line.handler import line_app
-from vote.view import vote, pull_data
+from MongoDB.operation import create_vote
+from vote.view import pull_data, vote
 
 app = Flask(__name__, static_url_path="/static/")
 # Disable auto sort JSON data when API return values

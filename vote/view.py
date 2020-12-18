@@ -2,7 +2,6 @@ import sys
 
 from flask import Blueprint
 
-
 # 上層目錄import
 sys.path.append(".")
 import config

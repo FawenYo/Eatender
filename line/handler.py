@@ -6,8 +6,6 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
 
-from weather.main import Weather
-
 # 上層目錄import
 sys.path.append(".")
 import config
@@ -77,43 +75,48 @@ def handle_message(event):
     reply_token = event.reply_token
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
-
-        if user_message == "我的最愛":
-            user_data = config.db.user.find_one({"user_id": user_id})
-            if len(user_data["favorite"]) > 0:
-                message = Template().show_favorite(
-                    restaurants=user_data["favorite"][:10]
-                )
+        try:
+            if user_message == "我的最愛":
+                user_data = config.db.user.find_one({"user_id": user_id})
+                if len(user_data["favorite"]) > 0:
+                    message = Template().show_favorite(
+                        restaurants=user_data["favorite"][:10]
+                    )
+                else:
+                    message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
             else:
-                message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
-        else:
-            message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
+                message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
+        except Exception as error:
+            message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)
     elif isinstance(event.message, LocationMessage):
-        lat = event.message.latitude
-        lng = event.message.longitude
-        # 記錄使用者位置
-        thread = threading.Thread(
-            target=database.record_user_location, args=(user_id, lat, lng)
-        )
-        thread.start()
-
-        restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩"]
-        quick_reply_items = [
-            QuickReplyButton(
-                action=PostbackAction(
-                    label=category,
-                    display_text=category,
-                    data=f"search_{lat},{lng}_{category}",
-                )
+        try:
+            lat = event.message.latitude
+            lng = event.message.longitude
+            # 記錄使用者位置
+            thread = threading.Thread(
+                target=database.record_user_location, args=(user_id, lat, lng)
             )
-            for category in restaurant_category
-        ]
+            thread.start()
 
-        message = TextSendMessage(
-            text="請選擇餐廳類別",
-            quick_reply=QuickReply(items=quick_reply_items),
-        )
+            restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩"]
+            quick_reply_items = [
+                QuickReplyButton(
+                    action=PostbackAction(
+                        label=category,
+                        display_text=category,
+                        data=f"search_{lat},{lng}_{category}",
+                    )
+                )
+                for category in restaurant_category
+            ]
+
+            message = TextSendMessage(
+                text="請選擇餐廳類別",
+                quick_reply=QuickReply(items=quick_reply_items),
+            )
+        except Exception as error:
+            message = TextSendMessage(text=f"發生錯誤！\n{error}")
         line_bot_api.reply_message(reply_token, message)
 
 
@@ -127,42 +130,47 @@ def handle_postback(event):
     user_id = event.source.user_id
     reply_token = event.reply_token
     postback_data = event.postback.data
-
-    if "_" in postback_data:
-        postback_args = postback_data.split("_")
-        action = postback_args[0]
-        if action == "favorite":
-            restaurant_id = postback_args[1]
-            restaurant_data = config.db.restaurant.find_one({"place_id": restaurant_id})
-            if not restaurant_data:
-                restaurant_data = config.restaurants[restaurant_id]
-            user = config.db.user.find_one({"user_id": user_id})
-            if restaurant_data not in user["favorite"]:
-                # update user favorite list
-                user["favorite"].append(restaurant_data)
-                config.db.user.update_one({"user_id": user_id}, {"$set": user})
-                # reply message
-                message = TextSendMessage(text=f"已將{restaurant_data['name']}加入最愛！")
-            else:
-                message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
-            line_bot_api.reply_message(reply_token, message)
-        elif action == "search":
-            latitude, longitude = [float(i) for i in postback_args[1].split(",")]
-            keyword = postback_args[2]
-            if keyword == "隨便":
-                keyword = ""
-            restaurants = Nearby_restaurant(
-                latitude=latitude, longitude=longitude, keyword=keyword
-            )
-            if len(restaurants.restaurants) == 0:
-                message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
-            else:
-                # Show first five restaurant
-                message = Template().show_restaurant(
-                    restaurants=restaurants.restaurants[:5]
+    try:
+        if "_" in postback_data:
+            postback_args = postback_data.split("_")
+            action = postback_args[0]
+            if action == "favorite":
+                restaurant_id = postback_args[1]
+                restaurant_data = config.db.restaurant.find_one(
+                    {"place_id": restaurant_id}
                 )
-            try:
+                if not restaurant_data:
+                    restaurant_data = config.restaurants[restaurant_id]
+                user = config.db.user.find_one({"user_id": user_id})
+                if restaurant_data not in user["favorite"]:
+                    # update user favorite list
+                    user["favorite"].append(restaurant_data)
+                    config.db.user.update_one({"user_id": user_id}, {"$set": user})
+                    # reply message
+                    message = TextSendMessage(text=f"已將{restaurant_data['name']}加入最愛！")
+                else:
+                    message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
                 line_bot_api.reply_message(reply_token, message)
-            # 搜尋超時
-            except LineBotApiError:
-                line_bot_api.push_message(user_id, message)
+            elif action == "search":
+                latitude, longitude = [float(i) for i in postback_args[1].split(",")]
+                keyword = postback_args[2]
+                if keyword == "隨便":
+                    keyword = ""
+                restaurants = Nearby_restaurant(
+                    latitude=latitude, longitude=longitude, keyword=keyword
+                )
+                if len(restaurants.restaurants) == 0:
+                    message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
+                else:
+                    # Show first five restaurant
+                    message = Template().show_restaurant(
+                        restaurants=restaurants.restaurants[:5]
+                    )
+                try:
+                    line_bot_api.reply_message(reply_token, message)
+                # 搜尋超時
+                except LineBotApiError:
+                    line_bot_api.push_message(user_id, message)
+    except Exception as error:
+        message = TextSendMessage(text=f"發生錯誤！\n{error}")
+        line_bot_api.reply_message(reply_token, message)
