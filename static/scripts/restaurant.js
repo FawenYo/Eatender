@@ -43,8 +43,10 @@ function main() {
       var xMulti = event.deltaX * 0.03;
       var yMulti = event.deltaY / 80;
       var rotate = xMulti * yMulti;
+      var cards = document.querySelectorAll(".tinder--card:not(.removed)");
+      var card = cards[0];
 
-      event.target.style.transform =
+      card.style.transform =
         "translate(" +
         event.deltaX +
         "px, " +
@@ -61,11 +63,13 @@ function main() {
 
       var moveOutWidth = document.body.clientWidth;
       var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
+      var cards = document.querySelectorAll(".tinder--card:not(.removed)");
+      var card = cards[0];
 
-      event.target.classList.toggle("removed", !keep);
+      card.classList.toggle("removed", !keep);
 
       if (keep) {
-        event.target.style.transform = "";
+        card.style.transform = "";
       } else {
         if (event.deltaX > 0) {
           love_restaurant(event);
@@ -83,7 +87,7 @@ function main() {
         var yMulti = event.deltaY / 80;
         var rotate = xMulti * yMulti;
 
-        event.target.style.transform =
+        card.style.transform =
           "translate(" +
           toX +
           "px, " +
