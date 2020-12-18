@@ -6,3 +6,4 @@ line-bot-sdk
 pymongo[srv]
 pytz
 rich
+uwsgi
