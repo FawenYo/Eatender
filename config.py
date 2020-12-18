@@ -1,4 +1,5 @@
 import os
+import threading
 
 import pymongo
 from rich.console import Console
@@ -42,4 +43,4 @@ def init_restaurants():
         restaurants[place_id] = each
 
 
-init_restaurants()
+threading.Thread(target=init_restaurants).start()
