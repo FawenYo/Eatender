@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -8,32 +9,33 @@ class Ifoodie:
         self.latitude = latitude
         self.longitude = longitude
         self.restaurant_url = self.restaurant_url()
+        self.response = requests.get(self.restaurant_url)
+        self.response.encoding = "utf-8"
         self.info = self.get_info()
         self.comments = self.get_comments()
 
     def restaurant_url(self):
-        # 搜尋'餐廳地址前三個字'附近的餐廳(待進一步修正)
-        search_url = f"https://ifoodie.tw/explore/list/{self.restaurant_name}?range=5.0&latlng={self.latitude},{self.longitude}"
-
+        # 將經緯度的精度限制在小數點後第5位之內，以便愛食記搜尋
+        # 找到範圍1.5公里內的店家就好
+        search_url = f"https://ifoodie.tw/explore/list/{self.restaurant_name}?range=1.5&latlng={self.latitude:.5f},{self.longitude:.5f}"
+        print(search_url)
         response = requests.get(search_url)
         response.encoding = "utf-8"
         soup = BeautifulSoup(response.text, "html.parser")
-        sel = str(soup.select("div.title a")).split(" ")
-        fragment_url = ""
-        for i in range(len(sel)):
-            if "href=" in sel[i]:
-                temp = sel[i].split("=")
-                fragment_url = temp[1].strip('"')
-                break
 
+        # 找到範圍1.5公里內，第一家符合名稱的店家(搜尋順序是愛食記的搜尋結果)
+        sel = soup.select("a.jsx-2133253768.title-text")
+        fragment_url = ""
+        for each in sel:
+            if self.restaurant_name in each.text:
+                fragment_url = re.findall(r'href=\"(.*)\" target', str(each))[0]
+                break
         url = "https://ifoodie.tw" + fragment_url
 
         return url
 
     def get_info(self) -> dict:
-        response = requests.get(self.restaurant_url)
-        response.encoding = "utf-8"
-        soup = BeautifulSoup(response.text, "html.parser")
+        soup = BeautifulSoup(self.response.text, "html.parser")
         sel = soup.select("div.jsx-558709029.info")
 
         info = {
@@ -81,9 +83,7 @@ class Ifoodie:
         return info
 
     def get_comments(self) -> list:
-        response = requests.get(self.restaurant_url)
-        response.encoding = "utf-8"
-        soup = BeautifulSoup(response.text, "html.parser")
+        soup = BeautifulSoup(self.response.text, "html.parser")
         content_sel = soup.select("div.jsx-2738468548.message")
 
         comments = []
