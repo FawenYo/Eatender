@@ -78,12 +78,12 @@ def handle_message(event):
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
             if pending:
+                config.db.pending.delete_one({"user_id": user_id})
                 latitude = pending["latitude"]
                 longitude = pending["longitude"]
                 message = find_nearby(
                     latitude=latitude, longitude=longitude, keyword=user_message
                 )
-                config.db.pending.delete_one({"user_id": user_id})
             else:
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
