@@ -79,12 +79,16 @@ def handle_message(event):
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
             if pending:
-                config.db.pending.delete_one({"user_id": user_id})
-                latitude = pending["latitude"]
-                longitude = pending["longitude"]
-                message = find_nearby(
-                    latitude=latitude, longitude=longitude, keyword=user_message
-                )
+                if pending["action"] == "search":
+                    config.db.pending.delete_one({"user_id": user_id})
+                    latitude = pending["latitude"]
+                    longitude = pending["longitude"]
+                    message = find_nearby(
+                        latitude=latitude, longitude=longitude, keyword=user_message
+                    )
+                else:
+                    # TODO: 投票資訊
+                    pass
             else:
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
@@ -97,25 +101,26 @@ def handle_message(event):
                 elif user_message == "投票":
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["vote"]) > 0:
-                        message = Template().show_favorite(
-                            restaurants=user_data["vote"][:10]
-                        )
+                        message = [
+                            Template().show_favorite(
+                                restaurants=user_data["vote"][:10]
+                            ),
+                            TextSendMessage(
+                                text="請確認投票名單是否正確",
+                                quick_reply=QuickReply(
+                                    items=[
+                                        QuickReplyButton(
+                                            action=PostbackAction(
+                                                label="創建",
+                                                data=f"create",
+                                            )
+                                        )
+                                    ]
+                                ),
+                            ),
+                        ]
                     else:
                         message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
-                elif user_message == "測試":
-                    message = TextSendMessage(
-                        text="請選擇餐廳類別",
-                        quick_reply=QuickReply(
-                            items=[
-                                QuickReplyButton(
-                                    action=PostbackAction(
-                                        label="創建",
-                                        data=f"create",
-                                    )
-                                )
-                            ]
-                        ),
-                    )
                 else:
                     message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
         except Exception as error:
@@ -241,8 +246,15 @@ def handle_postback(event):
                 )
             elif postback_data == "endDate":
                 end_date = event.postback.params["date"]
-                # TODO: when2meet
-                message = TextSendMessage(text=f"請至xxx進行投票日期設定")
+                data = {
+                    "action": "create_event",
+                    "user_id": user_id,
+                    "end_date": end_date,
+                }
+                config.db.pending.insert_one(data)
+                message = TextSendMessage(
+                    text=f"請依據 '投票名稱/投票日期(%Y-%m-%d, 多日期之間以 '|' 連結)/最早時間(小時, 24小時制)/最晚時間(小時, 24小時制)' 格式輸入投票資訊"
+                )
             line_bot_api.reply_message(reply_token, message)
     except Exception as error:
         message = TextSendMessage(text=f"發生錯誤！\n{error}")

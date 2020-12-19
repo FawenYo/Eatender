@@ -43,11 +43,6 @@ def vote():
         return message
 
 
-@app.route("/create")
-def create():
-    return render_template("create.html")
-
-
 @app.route("/choose")
 def choose():
     return render_template("choose.html", name="test")
