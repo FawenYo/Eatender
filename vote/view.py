@@ -13,9 +13,11 @@ vote = Blueprint("vote", __name__)
 
 @vote.route("/login")
 def login():
-    try:
+    if "liff.state" in request.args:
         pull_id = request.args.get("liff.state")[1:]
-    except TypeError:
+    elif "id" in request.args:
+        pull_id = request.args.get("id")
+    else:
         pull_id = ""
     return render_template("login.html", pull_id=pull_id)
 

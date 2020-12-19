@@ -119,7 +119,7 @@ def handle_message(event):
                             end_date=pending["end_date"],
                         )
                         message = TextSendMessage(
-                            text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?{vote_id} 投票！"
+                            text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票！"
                         )
                     else:
                         message = TextSendMessage(text="抱歉，格式有誤，請重新輸入！")
@@ -316,7 +316,7 @@ def find_nearby(
         message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
     return message
 
-                                              
+
 def parse_string(message):
     # default
     status = True
@@ -340,7 +340,6 @@ def parse_string(message):
             daytime_constraint.append(int(each))
         else:
             event_name = each
-
 
     if not date_candidates:
         # 沒有輸入日期
@@ -369,9 +368,7 @@ def parse_string(message):
     else:
         no_earlier = min(daytime_constraint)
         no_later = max(daytime_constraint)
-        if (no_earlier < 0 or 
-                no_later > 24 or
-                no_earlier == no_later):
+        if no_earlier < 0 or no_later > 24 or no_earlier == no_later:
             # 時間限制格式錯誤
             status = False
             pass
