@@ -69,5 +69,6 @@ def create_vote(vote_id, vote_link, restaurants, end_date):
             "end_date": end_date,
             "restaurants": restaurants,
             "create_time": now,
+            "participants": {},
         }
         db.vote_pull.insert_one(data)

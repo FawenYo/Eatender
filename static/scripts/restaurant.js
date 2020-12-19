@@ -1,8 +1,13 @@
+var pull_id = "";
 var user_id = "";
 var total_restaurant = 0;
 var current_index = 0;
+var choose_result = { love: [], hate: [] };
+var vote_link = "";
 
 $(document).ready(function () {
+  pull_id = $("#pull_id").val();
+  user_id = $("#user_name").val();
   total_restaurant = $("#restaurant_count").val();
   main();
 });
@@ -73,9 +78,9 @@ function main() {
         card.style.transform = "";
       } else {
         if (event.deltaX > 0) {
-          love_restaurant(event);
+          love_restaurant();
         } else {
-          not_love_restaurant(event);
+          not_love_restaurant();
         }
         var endX = Math.max(
           Math.abs(event.velocityX) * moveOutWidth,
@@ -113,11 +118,11 @@ function main() {
       card.classList.add("removed");
 
       if (love) {
-        love_restaurant(event);
+        love_restaurant();
         card.style.transform =
           "translate(" + moveOutWidth + "px, -100px) rotate(-30deg)";
       } else {
-        not_love_restaurant(event);
+        not_love_restaurant();
         card.style.transform =
           "translate(-" + moveOutWidth + "px, -100px) rotate(30deg)";
       }
@@ -135,18 +140,68 @@ function main() {
   love.addEventListener("click", loveListener);
 }
 
-function love_restaurant(event) {
-  console.log(event);
+function love_restaurant() {
+  choose_result["love"].push(current_index);
   current_index += 1;
   if (current_index == total_restaurant) {
-    Swal.fire("到底了！");
+    save_results();
   }
 }
 
-function not_love_restaurant(event) {
-  console.log(event);
+function not_love_restaurant() {
+  choose_result["hate"].push(current_index);
   current_index += 1;
   if (current_index == total_restaurant) {
-    Swal.fire("到底了！");
+    save_results();
   }
+}
+
+function save_results() {
+  // 請求資料
+  const sendData = {
+    pull_id: pull_id,
+    user_id: user_id,
+    choose_result: choose_result,
+  };
+  console.log(sendData);
+
+  // 請求伺服器
+  $.ajax({
+    url: "/api/save/restaurants",
+    contentType: "application/json",
+    method: "post",
+    dataType: "json",
+    data: JSON.stringify(sendData),
+    success: function (data) {
+      if (data.status == "success") {
+        vote_link = data.vote_link;
+        Swal.fire({
+          type: "success",
+          title: "儲存成功！",
+          text: "將在1秒後轉往日期投票...",
+          timer: 1000,
+        });
+        setTimeout(redirect, 1700);
+        expire_days = 365; // 過期日期(天)
+        var d = new Date();
+        d.setTime(d.getTime() + expire_days * 24 * 60 * 60 * 1000);
+        var expires = "; expires=" + d.toGMTString();
+        document.cookie = "uid=" + $("#uid").val() + expires + "; path=/";
+      } else {
+        Swal.fire({
+          type: "error",
+          title: "很抱歉！",
+          text: data.result,
+          confirmButtonText: "確認",
+        });
+      }
+    },
+    error: function () {
+      init();
+    },
+  });
+}
+
+function redirect() {
+  location.replace(vote_link);
 }

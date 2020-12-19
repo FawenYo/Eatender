@@ -29,7 +29,10 @@ def vote_page():
     message = get_pull_data(pull_id=pull_id)
     if message["status"] == "success":
         return render_template(
-            "restaurant.html", data=message["restaurants"], name=user_name
+            "restaurant.html",
+            data=message["restaurants"],
+            name=user_name,
+            pull_id=pull_id,
         )
     else:
         return message
@@ -45,10 +48,25 @@ def get_pull_data(pull_id):
     return message
 
 
-@vote.route("/vote/save", methods=["POST"])
+@vote.route("/api/save/restaurants", methods=["POST"])
 def vote_save():
-    # TODO: 和前端溝通
-    return False
+    request_data = json.loads(request.data)
+    pull_id = request_data["pull_id"]
+    user_id = request_data["user_id"]
+    choose_result = request_data["choose_result"]
+    pull_data = config.db.vote_pull.find_one({"_id": pull_id})
+    if pull_data:
+        pull_data["participants"][user_id] = choose_result
+        config.db.vote_pull.update_one({"user_id": user_id}, {"$set": pull_data})
+        message = {"status": "success", "vote_link": pull_data["vote_link"]}
+    else:
+        message = {"status": "error", "error_message": "查無投票！"}
+    return message
+
+
+@vote.route("/choose")
+def choose():
+    return render_template("choose.html", name="test")
 
 
 @vote.route("/SaveTimes.php", methods=["POST"])

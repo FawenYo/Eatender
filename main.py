@@ -19,11 +19,6 @@ def index():
     return render_template("home.html")
 
 
-@app.route("/choose")
-def choose():
-    return render_template("choose.html", name="test")
-
-
 if __name__ == "__main__":
     # Used only when running locally.
     app.run(threaded=True, port=8001, debug=True)
