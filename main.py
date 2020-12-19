@@ -1,4 +1,3 @@
-from os import name
 from flask import Flask, render_template, request
 
 from API.router import api

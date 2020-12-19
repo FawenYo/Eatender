@@ -1,5 +1,6 @@
-import requests
 import re
+
+import requests
 from bs4 import BeautifulSoup
 
 
@@ -18,20 +19,19 @@ class Ifoodie:
         # 將經緯度的精度限制在小數點後第5位之內，以便愛食記搜尋
         # 找到範圍1.5公里內的店家就好
         search_url = f"https://ifoodie.tw/explore/list/{self.restaurant_name}?range=1.5&latlng={self.latitude:.5f},{self.longitude:.5f}"
-        print(search_url)
         response = requests.get(search_url)
         response.encoding = "utf-8"
         soup = BeautifulSoup(response.text, "html.parser")
 
         # 找到範圍1.5公里內，第一家符合名稱的店家(搜尋順序是愛食記的搜尋結果)
+        results = soup.find_all("jsx-2133253768 click-tracker")
         sel = soup.select("a.jsx-2133253768.title-text")
         fragment_url = ""
         for each in sel:
             if self.restaurant_name in each.text:
-                fragment_url = re.findall(r'href=\"(.*)\" target', str(each))[0]
+                fragment_url = re.findall(r"href=\"(.*)\" target", str(each))[0]
                 break
         url = "https://ifoodie.tw" + fragment_url
-
         return url
 
     def get_info(self) -> dict:
