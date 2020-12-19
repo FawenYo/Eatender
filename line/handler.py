@@ -1,5 +1,6 @@
 import sys
 import threading
+from datetime import datetime
 
 from flask import Blueprint, abort, current_app, request
 from linebot import LineBotApi, WebhookHandler
@@ -288,9 +289,59 @@ def find_nearby(
 
 
 def parse_string(message):
+    # default
     status = False
     event_name = ""
     available_dates = ""
     no_earlier = 0
-    no_later = 0
+    no_later = 24
+
+    if not message:
+        # input是空字串，回傳預設值
+        return status, event_name, available_dates, no_earlier, no_later
+
+    temp = message.split("/")
+    daytime_constraint = []
+    for each in temp:
+        if "-" in each:
+            date_candidates = each
+        elif each.isdigit():
+            daytime_constraint.append(int(each))
+        else:
+            event_name = each
+
+    if not date_candidates:
+        # 沒有輸入日期
+        pass
+    else:
+        correct_date = None
+        dates = date_candidates.split("|")
+        for date in dates:
+            try:
+                new_date = datetime.strptime(date, "%Y-%m-%d")
+                correct_date = True
+            except ValueError:
+                correct_date = False
+    if correct_date:
+        available_dates = date_candidates
+    else:
+        # 日期輸入格式錯誤
+        pass
+
+    if not daytime_constraint:
+        # 沒有輸入時間限制
+        pass
+    else:
+        no_earlier = min(daytime_constraint)
+        no_later = max(daytime_constraint)
+        if (no_earlier < 0 or 
+                no_later > 24 or
+                no_earlier == no_later):
+            # 時間限制格式錯誤
+            pass
+
+    if not event_name:
+        # 沒有輸入事件名稱
+        pass
+
     return status, event_name, available_dates, no_earlier, no_later
