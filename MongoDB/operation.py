@@ -65,6 +65,8 @@ def create_vote(vote_id, vote_link, restaurants, end_date):
     if not db.vote_pull.find_one({"_id": vote_id}):
         data = {
             "_id": vote_id,
+            "vote_link": vote_link,
+            "end_date": end_date,
             "restaurants": restaurants,
             "create_time": now,
         }
