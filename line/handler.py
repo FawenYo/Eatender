@@ -316,10 +316,10 @@ def find_nearby(
         message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
     return message
 
-
+                                              
 def parse_string(message):
     # default
-    status = False
+    status = True
     event_name = ""
     available_dates = ""
     no_earlier = 0
@@ -327,6 +327,7 @@ def parse_string(message):
 
     if not message:
         # input是空字串，回傳預設值
+        status = False
         return status, event_name, available_dates, no_earlier, no_later
 
     temp = message.split("/")
@@ -340,8 +341,10 @@ def parse_string(message):
         else:
             event_name = each
 
+
     if not date_candidates:
         # 沒有輸入日期
+        status = False
         pass
     else:
         correct_date = None
@@ -356,20 +359,26 @@ def parse_string(message):
             available_dates = date_candidates
         else:
             # 日期輸入格式錯誤
+            status = False
             pass
 
-        if not daytime_constraint:
-            # 沒有輸入時間限制
+    if not daytime_constraint:
+        # 沒有輸入時間限制
+        status = False
+        pass
+    else:
+        no_earlier = min(daytime_constraint)
+        no_later = max(daytime_constraint)
+        if (no_earlier < 0 or 
+                no_later > 24 or
+                no_earlier == no_later):
+            # 時間限制格式錯誤
+            status = False
             pass
-        else:
-            no_earlier = min(daytime_constraint)
-            no_later = max(daytime_constraint)
-            if no_earlier < 0 or no_later > 24 or no_earlier == no_later:
-                # 時間限制格式錯誤
-                pass
 
-        if not event_name:
-            # 沒有輸入事件名稱
-            pass
+    if not event_name:
+        # 沒有輸入事件名稱
+        status = False
+        pass
 
     return status, event_name, available_dates, no_earlier, no_later
