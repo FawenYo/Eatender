@@ -11,6 +11,7 @@ class Ifoodie:
         self.longitude = float(longitude)
         self.restaurant_url = str()
         self.info = self.get_info()
+        self.comments = ""
         if request_review:
             self.comments = self.get_comments()
 
@@ -33,15 +34,27 @@ class Ifoodie:
                 break
         self.restaurant_url = "https://ifoodie.tw" + fragment_url
         
-        price_sel = soup.select("div.jsx-2133253768.avg-price")
-        avg_price = re.findall(r"[0-9]+", str(price_sel[target_index]))[1]
-
         info = {
             "營業時間": "尚無營業時間資訊",
             "店家地址": "尚無店家地址資訊",
             "聯絡電話": "尚無聯絡電話資訊",
-            "均消價位": str(avg_price),
+            "均消價位": "尚無均消價位資訊",
         }
+
+        try:
+            price_sel = soup.select("div.jsx-2133253768.avg-price")
+            info["均消價位"] = re.findall(r"[0-9]+", str(price_sel[target_index]))[1]
+
+            info_sel = soup.select("div.jsx-2133253768.info")
+            operating_info = re.findall(r"</span>(.*)</div>", str(info_sel[target_index]))[0]
+            temp = operating_info.split("營業:")
+            info["營業時間"] = temp[1].strip(" ")
+
+            address_sel = soup.select("div.jsx-2133253768.address-row")
+            info["店家地址"] = re.findall(r"address-row\">(.*)</div>", str(address_sel[target_index]))[0]
+        except:
+            pass
+
         return info
 
     def get_comments(self) -> list:
