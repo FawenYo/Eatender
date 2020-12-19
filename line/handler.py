@@ -245,11 +245,13 @@ def handle_postback(event):
                     ),
                 )
             elif postback_data == "endDate":
+                vote_pull = config.db.user.find_one({"user_id": user_id})["vote"]
                 end_date = event.postback.params["date"]
                 data = {
                     "action": "create_event",
                     "user_id": user_id,
                     "end_date": end_date,
+                    "pools": vote_pull,
                 }
                 config.db.pending.insert_one(data)
                 message = TextSendMessage(
