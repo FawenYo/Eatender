@@ -66,7 +66,9 @@ def vote_save():
 
 @vote.route("/choose")
 def choose():
-    return render_template("choose.html", name="test")
+    return render_template(
+        "choose.html", name="測試看看", event_id="10552586", code="8NX9m"
+    )
 
 
 @vote.route("/SaveTimes.php", methods=["POST"])

@@ -1,0 +1,177 @@
+.calendar {
+/*
+  margin: 1px; 
+  border: 1px solid black;
+  display: inline;
+*/
+  text-align: center;
+}
+
+body {
+  font-family: arial;
+}
+
+table {
+  empty-cells: show;
+}
+
+.label_row {
+  font-family: arial;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+}
+
+.week_row, .day_row {
+  margin: 0px;
+  border: 0px;
+  padding: 0px;
+}
+
+.week_row td, .day_row td {
+  border: 1px solid black;
+  width: 20px;
+  margin: 1px;
+  padding: 0px;
+  padding-top: 2px;
+  padding-bottom: 1px;
+  margin-bottom: 0px;
+  font-family: arial;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.red_cell {
+  background-color: ffdede;
+}
+
+.dark_red_cell {
+  background-color: de7878;
+}
+
+.green_cell {
+  background-color: 339933;
+}
+
+.dark_green_cell {
+  background-color: 78de78;
+}
+
+.gray_cell {
+  background-color: dedede;
+}
+
+.day_row td {
+  height: 20px;
+}
+
+.week_row td {
+  height: 108px;
+}
+
+.up_arrow, .up_arrow_off {
+  border-style: solid; 
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  border-width: 0px 80px 40px;
+}
+
+.up_arrow {
+  border-color: white white dedeff;
+  cursor: pointer;
+}
+
+.up_arrow_off {
+  border-color: white white white;
+}
+
+.down_arrow, .down_arrow_off {
+  border-style: solid; 
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  border-width: 40px 80px 0px;
+  margin-top: 5px;
+}
+
+.down_arrow {
+  border-color: dedeff white white;
+  cursor: pointer;
+}
+
+.down_arrow_off {
+  border-color: white white white;
+}
+
+.left_arrow {
+  border-style: solid; 
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  border-width: 9px 12px 9px 0px;
+  border-color: white dedeff white white;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.right_arrow {
+  border-style: solid; 
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  border-width: 9px 0px 9px 12px;
+  border-color: white white white dedeff;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.day_row th {
+  font-family: arial;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: right;
+  padding-right: 5px;
+  width: 50px;
+}
+
+.week_row th {
+  font-family: arial;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: right;
+  color: white;
+  width: 50px;
+  padding-right: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.left {
+  border-left: 1px #555 solid;
+}
+
+.little_up_arrow {
+  border-style: solid;
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  border-width: 0px 10px 10px;   
+  border-color: white white 0000ff;
+  cursor: pointer;
+}
+
+.little_down_arrow {
+  border-style: solid;
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  border-width: 10px 10px 0px;
+  border-color: 0000ff white white;
+  cursor: pointer;
+}
