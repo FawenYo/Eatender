@@ -301,7 +301,7 @@ def parse_string(message):
         return status, event_name, available_dates, no_earlier, no_later
 
     temp = message.split("/")
-    date_candidates = []
+    date_candidates = ""
     daytime_constraint = []
     for each in temp:
         if "-" in each:
