@@ -1,7 +1,8 @@
+import json
 import sys
 
 import requests
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 
 # 上層目錄import
 sys.path.append(".")
@@ -10,8 +11,30 @@ import config
 vote = Blueprint("vote", __name__)
 
 
-@vote.route("/vote/<pull_id>", methods=["POST"])
-def pull_data(pull_id):
+@vote.route("/login")
+def login():
+    try:
+        pull_id = request.args.get("liff.state")[1:]
+    except TypeError:
+        pull_id = ""
+    return render_template("login.html", pull_id=pull_id)
+
+
+@vote.route("/vote")
+def vote_page():
+    pull_id = request.args.get("id")
+    user_name = request.args.get("name")
+    message = get_pull_data(pull_id=pull_id)
+    if message["status"] == "success":
+        return render_template(
+            "restaurant.html", data=message["restaurants"], name=user_name
+        )
+    else:
+        return message
+
+
+@vote.route("/api/vote/<pull_id>", methods=["POST"])
+def get_pull_data(pull_id):
     pull_data = config.db.vote_pull.find_one({"_id": pull_id})
     if pull_data:
         message = {"status": "success", "restaurants": pull_data["restaurants"]}
