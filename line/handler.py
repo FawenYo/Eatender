@@ -1,6 +1,8 @@
-import sys
-import threading
 from datetime import datetime
+import sys
+import string
+import threading
+import random
 
 from flask import Blueprint, abort, current_app, request
 from linebot import LineBotApi, WebhookHandler
@@ -95,7 +97,32 @@ def handle_message(event):
                         no_earlier,
                         no_later,
                     ) = parse_string(message=user_message)
-                    pass
+
+                    if status:
+                        config.db.pending.delete_one({"user_id": user_id})
+
+                        link = create_event(
+                            event_name=event_name,
+                            dates=available_dates,
+                            early_time=no_earlier,
+                            later_time=no_later,
+                        )
+
+                        vote_id = "".join(
+                            random.choice(string.ascii_letters + string.digits)
+                            for x in range(10)
+                        )
+                        database.create_vote(
+                            vote_id=vote_id,
+                            vote_link=link,
+                            restaurants=pending["pools"],
+                            end_date=pending["end_date"],
+                        )
+                        message = TextSendMessage(
+                            text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?{vote_id} 投票！"
+                        )
+                    else:
+                        message = TextSendMessage(text="抱歉，格式有誤，請重新輸入！")
             else:
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
@@ -253,7 +280,7 @@ def handle_postback(event):
                 )
             elif postback_data == "endDate":
                 vote_pull = config.db.user.find_one({"user_id": user_id})["vote"]
-                end_date = event.postback.params["date"]
+                end_date = datetime.strptime(event.postback.params["date"], "%Y-%m-%d")
                 data = {
                     "action": "create_event",
                     "user_id": user_id,
@@ -262,8 +289,10 @@ def handle_postback(event):
                 }
                 config.db.pending.insert_one(data)
                 message = TextSendMessage(
-                    text=f"請依據 '投票名稱/投票日期(%Y-%m-%d, 多日期之間以 '|' 連結)/最早時間(小時, 24小時制)/最晚時間(小時, 24小時制)' 格式輸入投票資訊"
+                    text=f"請依據\n'投票名稱/投票日期(%Y-%m-%d, 多日期之間以 '|' 連結)/最早時間(小時, 24小時制)/最晚時間(小時, 24小時制)'\n格式輸入投票資訊"
                 )
+            else:
+                message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
             line_bot_api.reply_message(reply_token, message)
     except Exception as error:
         message = TextSendMessage(text=f"發生錯誤！\n{error}")
@@ -323,26 +352,24 @@ def parse_string(message):
                 correct_date = True
             except ValueError:
                 correct_date = False
-    if correct_date:
-        available_dates = date_candidates
-    else:
-        # 日期輸入格式錯誤
-        pass
-
-    if not daytime_constraint:
-        # 沒有輸入時間限制
-        pass
-    else:
-        no_earlier = min(daytime_constraint)
-        no_later = max(daytime_constraint)
-        if (no_earlier < 0 or 
-                no_later > 24 or
-                no_earlier == no_later):
-            # 時間限制格式錯誤
+        if correct_date:
+            available_dates = date_candidates
+        else:
+            # 日期輸入格式錯誤
             pass
 
-    if not event_name:
-        # 沒有輸入事件名稱
-        pass
+        if not daytime_constraint:
+            # 沒有輸入時間限制
+            pass
+        else:
+            no_earlier = min(daytime_constraint)
+            no_later = max(daytime_constraint)
+            if no_earlier < 0 or no_later > 24 or no_earlier == no_later:
+                # 時間限制格式錯誤
+                pass
+
+        if not event_name:
+            # 沒有輸入事件名稱
+            pass
 
     return status, event_name, available_dates, no_earlier, no_later
