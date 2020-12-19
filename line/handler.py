@@ -100,6 +100,9 @@ def handle_message(event):
 
                     if status:
                         config.db.pending.delete_one({"user_id": user_id})
+                        user = config.db.user.find_one({"user_id": user_id})
+                        user["vote"] = []
+                        config.db.user.update_one({"user_id": user_id}, {"$set": user})
 
                         link = create_event(
                             event_name=event_name,
@@ -255,7 +258,7 @@ def handle_postback(event):
                 )
                 if not restaurant_data:
                     restaurant_data = config.restaurants[restaurant_id]
-                if restaurant_id not in user["vote"]:
+                if restaurant_data not in user["vote"]:
                     user["vote"].append(restaurant_data)
                     config.db.user.update_one({"user_id": user_id}, {"$set": user})
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}加入投票池！")
