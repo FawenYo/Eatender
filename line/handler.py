@@ -87,7 +87,13 @@ def handle_message(event):
                         latitude=latitude, longitude=longitude, keyword=user_message
                     )
                 else:
-                    # TODO: 投票資訊
+                    (
+                        status,
+                        event_name,
+                        available_dates,
+                        no_earlier,
+                        no_later,
+                    ) = parse_string(message=user_message)
                     pass
             else:
                 if user_message == "我的最愛":
@@ -279,3 +285,12 @@ def find_nearby(
         # Show first five restaurant
         message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
     return message
+
+
+def parse_string(message):
+    status = False
+    event_name = ""
+    available_dates = ""
+    no_earlier = 0
+    no_later = 0
+    return status, event_name, available_dates, no_earlier, no_later
