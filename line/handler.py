@@ -81,6 +81,7 @@ def handle_message(event):
         user_message = event.message.text
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
+            # QA問答
             if pending:
                 if pending["action"] == "search":
                     config.db.pending.delete_one({"user_id": user_id})
@@ -127,19 +128,21 @@ def handle_message(event):
                     else:
                         message = TextSendMessage(text="抱歉，格式有誤，請重新輸入！")
             else:
+                # 我的最愛
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["favorite"]) > 0:
-                        message = Template(0, 0).show_favorite(
+                        message = Template().show_favorite(
                             restaurants=user_data["favorite"][:10]
                         )
                     else:
                         message = TextSendMessage(text="您的最愛列表內還沒有餐廳喔！")
+                # 投票池
                 elif user_message == "投票":
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["vote"]) > 0:
                         message = [
-                            Template(0, 0).show_vote_pull(
+                            Template().show_vote_pull(
                                 restaurants=user_data["vote"][:10]
                             ),
                             TextSendMessage(
@@ -158,11 +161,15 @@ def handle_message(event):
                         ]
                     else:
                         message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
+                elif user_message == "客服":
+                    message = TextSendMessage(text="客服連結\nhttps://lin.ee/DsogwtP")
                 else:
-                    message = TextSendMessage(text="不好意思，我聽不懂你在說什麼呢QwQ")
+                    message = TextSendMessage(
+                        text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
+                    )
         except Exception as error:
             config.console.print_exception()
-            message = TextSendMessage(text=f"發生錯誤！\n{error}")
+            message = Template().error()
         line_bot_api.reply_message(reply_token, message)
     elif isinstance(event.message, LocationMessage):
         try:
@@ -190,8 +197,9 @@ def handle_message(event):
                 text="請選擇餐廳類別",
                 quick_reply=QuickReply(items=quick_reply_items),
             )
-        except Exception as error:
-            message = TextSendMessage(text=f"發生錯誤！\n{error}")
+        except Exception:
+            config.console.print_exception()
+            message = Template().error()
         line_bot_api.reply_message(reply_token, message)
 
 
@@ -336,8 +344,9 @@ def handle_postback(event):
             else:
                 message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
             line_bot_api.reply_message(reply_token, message)
-    except Exception as error:
-        message = TextSendMessage(text=f"發生錯誤！\n{error}")
+    except Exception:
+        config.console.print_exception()
+        message = Template().error()
         line_bot_api.reply_message(reply_token, message)
 
 

@@ -9,7 +9,7 @@ true = True
 
 
 class Template:
-    def __init__(self, user_lat, user_lng):
+    def __init__(self, user_lat=0, user_lng=0):
         self.user_lat = user_lat
         self.user_lng = user_lng
 
@@ -142,6 +142,70 @@ class Template:
             )
             contents["contents"].append(more)
         message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
+        return message
+
+    def error(self):
+        contents = {
+            "type": "bubble",
+            "hero": {
+                "type": "image",
+                "url": "https://i.imgur.com/c8RJZCY.png",
+                "size": "full",
+                "aspectRatio": "5:3",
+                "aspectMode": "cover",
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "很抱歉！",
+                        "weight": "bold",
+                        "size": "xl",
+                        "color": "#FF0000",
+                        "align": "center",
+                    },
+                    {
+                        "type": "text",
+                        "text": "發生了些意料之外的錯誤，如果持續無法解決請聯繫客服！",
+                        "wrap": true,
+                    },
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "none",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "uri",
+                                    "label": "聯繫客服",
+                                    "uri": "https://lin.ee/DsogwtP",
+                                },
+                                "color": "#000000",
+                            }
+                        ],
+                        "backgroundColor": "#fdbe29",
+                        "cornerRadius": "100px",
+                        "margin": "none",
+                        "alignItems": "center",
+                        "justifyContent": "space-evenly",
+                        "position": "relative",
+                        "width": "200px",
+                        "height": "50px",
+                        "offsetStart": "40px",
+                    }
+                ],
+            },
+        }
+        message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
         return message
 
 
