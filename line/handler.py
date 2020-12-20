@@ -1,8 +1,8 @@
-from datetime import datetime
-import sys
-import string
-import threading
 import random
+import string
+import sys
+import threading
+from datetime import datetime
 
 from flask import Blueprint, abort, current_app, request
 from linebot import LineBotApi, WebhookHandler
@@ -130,7 +130,7 @@ def handle_message(event):
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["favorite"]) > 0:
-                        message = Template().show_favorite(
+                        message = Template(0, 0).show_favorite(
                             restaurants=user_data["favorite"][:10]
                         )
                     else:
@@ -139,7 +139,7 @@ def handle_message(event):
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["vote"]) > 0:
                         message = [
-                            Template().show_favorite(
+                            Template(0, 0).show_favorite(
                                 restaurants=user_data["vote"][:10]
                             ),
                             TextSendMessage(
@@ -248,6 +248,25 @@ def handle_postback(event):
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
                 except LineBotApiError:
+                    config.console.print_exception()
+                    line_bot_api.push_message(user_id, message)
+            elif action == "more":
+                latitude, longitude = [float(i) for i in postback_args[1].split(",")]
+                keyword = postback_args[2]
+                token = postback_args[3]
+                token_table = config.db.page_token.find_one({})
+                page_token = token_table["data"][token]
+                message = find_nearby(
+                    latitude=latitude,
+                    longitude=longitude,
+                    keyword=keyword,
+                    page_token=page_token,
+                )
+                try:
+                    line_bot_api.reply_message(reply_token, message)
+                # 搜尋超時
+                except LineBotApiError:
+                    config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
             # 加入投票池
             elif action == "vote":
@@ -302,21 +321,21 @@ def handle_postback(event):
         line_bot_api.reply_message(reply_token, message)
 
 
-def find_nearby(
-    latitude,
-    longitude,
-    keyword,
-):
+def find_nearby(latitude, longitude, keyword, page_token=""):
     if keyword == "隨便":
         keyword = ""
     restaurants = Nearby_restaurant(
-        latitude=latitude, longitude=longitude, keyword=keyword
+        latitude=latitude, longitude=longitude, keyword=keyword, page_token=page_token
     )
     if len(restaurants.restaurants) == 0:
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = Template().show_restaurant(restaurants=restaurants.restaurants[:5])
+        message = Template(user_lat=latitude, user_lng=longitude).show_restaurant(
+            restaurants=restaurants.restaurants[:5],
+            keyword=keyword,
+            next_page=restaurants.next_page,
+        )
     return message
 
 

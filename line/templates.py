@@ -3,10 +3,16 @@ from datetime import datetime
 
 from linebot.models import FlexSendMessage
 
+from config import console
+
 true = True
 
 
 class Template:
+    def __init__(self, user_lat, user_lng):
+        self.user_lat = user_lat
+        self.user_lng = user_lng
+
     def show_favorite(self, restaurants):
         show_list = []
         for each in restaurants:
@@ -49,7 +55,7 @@ class Template:
         message = FlexSendMessage(alt_text="最愛列表", contents=contents)
         return message
 
-    def show_restaurant(self, restaurants):
+    def show_restaurant(self, restaurants, keyword, next_page):
         show_list = []
         for each in restaurants:
             place_id = each.place_id
@@ -85,6 +91,14 @@ class Template:
             "type": "carousel",
             "contents": show_list,
         }
+        if next_page:
+            more = show_more(
+                user_lat=self.user_lat,
+                user_lng=self.user_lng,
+                keyword=keyword,
+                next_page=next_page,
+            )
+            contents["contents"].append(more)
         message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
         return message
 
@@ -421,6 +435,62 @@ def restaurant_card_info(
                     "width": "200px",
                     "height": "50px",
                     "offsetStart": "40px",
+                },
+            ],
+        },
+    }
+    return card
+
+
+def show_more(user_lat, user_lng, keyword, next_page):
+    print(f"more_{user_lat},{user_lng}_{keyword}_{next_page}")
+    card = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "image",
+                    "url": "https://img.onl/qZkjv",
+                    "size": "full",
+                    "offsetTop": "40px",
+                    "aspectMode": "fit",
+                    "position": "relative",
+                },
+                {
+                    "type": "text",
+                    "text": "還想看更多餐廳嗎?",
+                    "style": "normal",
+                    "weight": "bold",
+                    "offsetStart": "65px",
+                    "size": "md",
+                    "offsetTop": "35px",
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "postback",
+                                "label": "查看更多",
+                                "data": f"more_{user_lat},{user_lng}_{keyword}_{next_page}",
+                            },
+                            "position": "relative",
+                            "color": "#296ae8",
+                        }
+                    ],
+                    "width": "200px",
+                    "backgroundColor": "#fdbe29",
+                    "height": "50px",
+                    "cornerRadius": "100px",
+                    "justifyContent": "center",
+                    "alignItems": "center",
+                    "position": "relative",
+                    "offsetTop": "45px",
+                    "offsetStart": "30px",
                 },
             ],
         },

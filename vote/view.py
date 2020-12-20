@@ -2,7 +2,7 @@ import json
 import sys
 
 import requests
-from flask import Blueprint, request, render_template
+from flask import Blueprint, render_template, request
 
 # 上層目錄import
 sys.path.append(".")

@@ -16,7 +16,8 @@ class GM_Restaurant:
         longitude: float,
         keyword: str = "",
         search_type: str = "restaurant",
-        speed_mode=True,
+        complete_mode=False,
+        page_token="",
     ):
         """初始化
 
@@ -25,18 +26,19 @@ class GM_Restaurant:
             longitude (float): 經度.
             keyword (str): 關鍵字列表，以 " " 分割.
             search_type (str, optional): 限制類別. Defaults to "restaurant".
-            speed_mode(bool): 限制搜尋.
+            complete_mode(bool): 限制搜尋.
         """
         self.restaurants = []
         self.threads = []
+        self.next_page = ""
 
         self.latitude = latitude
         self.longitude = longitude
         self.keyword = keyword
         self.search_type = search_type
-        self.speed_mode = speed_mode
+        self.complete_mode = complete_mode
 
-        self.fetch_data()
+        self.fetch_data(pagetoken=page_token)
 
     def fetch_data(
         self,
@@ -48,7 +50,7 @@ class GM_Restaurant:
             pagetoken (str): Google Maps search page token.
 
         """
-        radius = 1000 if self.speed_mode else 50000
+        radius = 1000 if not self.complete_mode else 50000
         param_data = {
             "language": "zh-TW",
             "location": f"{self.latitude},{self.longitude}",
@@ -65,14 +67,16 @@ class GM_Restaurant:
         return self.parse_data(data=response.json())
 
     def parse_data(self, data):
-        if self.speed_mode:
+        if not self.complete_mode:
             filter_results = data["results"][:6]
         else:
             filter_results = data["results"]
         for place in filter_results:
             thread = threading.Thread(target=self.get_place_data, args=(place,))
             self.threads.append(thread)
-        if self.speed_mode or "next_page_token" not in data:
+        if not self.complete_mode or "next_page_token" not in data:
+            if "next_page_token" in data:
+                self.next_page = data["next_page_token"]
             self.start_thread()
         else:
             self.fetch_data(pagetoken=data["next_page_token"])

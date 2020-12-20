@@ -1,4 +1,6 @@
+import random
 import re
+import string
 import sys
 import threading
 from datetime import datetime
@@ -17,11 +19,13 @@ import MongoDB.operation as database
 
 
 class Nearby_restaurant:
-    def __init__(self, latitude, longitude, keyword=""):
+    def __init__(self, latitude, longitude, keyword="", page_token=""):
         self.restaurants = []
+        self.next_page = ""
         self.latitude = latitude
         self.longitude = longitude
         self.keyword = keyword
+        self.page_token = page_token
         self.get_info()
 
     def get_info(self):
@@ -78,25 +82,59 @@ class Nearby_restaurant:
         thread = threading.Thread(target=self.silent_update)
         thread.start()
 
-    def get_google_maps_data(self):
+    def get_google_maps_data(self, complete_mode=False):
         restaurants = GM_Restaurant(
-            latitude=self.latitude, longitude=self.longitude, keyword=self.keyword
+            latitude=self.latitude,
+            longitude=self.longitude,
+            keyword=self.keyword,
+            complete_mode=complete_mode,
+            page_token=self.page_token,
         )
-        self.restaurants = restaurants.restaurants
+        if not complete_mode:
+            self.next_page = restaurants.next_page
+            if self.next_page:
+                token_table = config.db.page_token.find_one({})
+                if self.next_page not in token_table["data"].values():
+                    token_key = "".join(
+                        random.choice(string.ascii_letters + string.digits)
+                        for x in range(10)
+                    )
+                    token_table["data"][token_key] = self.next_page
+                    config.db.page_token.update_one({}, {"$set": token_table})
+                    self.next_page = token_key
+                else:
+                    for key, value in token_table[
+                        "data"
+                    ].items():  # for name, age in dictionary.iteritems():  (for Python 2.x)
+                        if value == self.next_page:
+                            self.next_page = key
+            self.restaurants = restaurants.restaurants
+        else:
+            return restaurants
 
-    def get_ifoodie_data(self):
+    def get_ifoodie_data(self, complete_mode=False, restaurants=object):
         threads = []
-        for restaurant in self.restaurants:
-            config.restaurants[restaurant.place_id] = restaurant.__dict__
-            thread = threading.Thread(
-                target=self.multi_threading_ifoodie, args=(restaurant,)
-            )
-            threads.append(thread)
+        if not complete_mode:
+            for restaurant in self.restaurants:
+                config.restaurants[restaurant.place_id] = restaurant.__dict__
+                thread = threading.Thread(
+                    target=self.multi_threading_ifoodie, args=(restaurant,)
+                )
+                threads.append(thread)
+        else:
+            for restaurant in restaurants.restaurants:
+                config.restaurants[restaurant.place_id] = restaurant.__dict__
+                thread = threading.Thread(
+                    target=self.multi_threading_ifoodie, args=(restaurant,)
+                )
+                threads.append(thread)
 
         for thread in threads:
             thread.start()
         for thread in threads:
             thread.join()
+        if complete_mode:
+            return restaurants
 
     def multi_threading_ifoodie(self, restaurant):
         try:
@@ -116,27 +154,8 @@ class Nearby_restaurant:
     def silent_update(self):
         threads = []
         # Google Maps
-        restaurants = GM_Restaurant(
-            latitude=self.latitude,
-            longitude=self.longitude,
-            keyword=self.keyword,
-            speed_mode=False,
-        )
-        # Ifoodie
-        for restaurant in restaurants.restaurants:
-            try:
-                data = Ifoodie(
-                    restaurant_name=restaurant.name,
-                    latitude=self.latitude,
-                    longitude=self.longitude,
-                )
-                restaurant.ifoodie_url = data.restaurant_url
-                restaurant.price = int(data.info["均消價位"])
-                restaurant.reviews += data.comments
-            except ValueError:
-                pass
-            except IndexError:
-                pass
+        restaurants = self.get_google_maps_data(complete_mode=True)
+        restaurants = self.get_ifoodie_data(complete_mode=True, restaurants=restaurants)
         # Add to MongoDB
         for restaurant in self.restaurants:
             thread = threading.Thread(
