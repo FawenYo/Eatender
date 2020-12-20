@@ -139,7 +139,7 @@ def handle_message(event):
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["vote"]) > 0:
                         message = [
-                            Template(0, 0).show_favorite(
+                            Template(0, 0).show_vote_pull(
                                 restaurants=user_data["vote"][:10]
                             ),
                             TextSendMessage(
@@ -250,6 +250,7 @@ def handle_postback(event):
                 except LineBotApiError:
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
+            # 搜尋更多
             elif action == "more":
                 latitude, longitude = [float(i) for i in postback_args[1].split(",")]
                 keyword = postback_args[2]
@@ -284,6 +285,25 @@ def handle_postback(event):
                 else:
                     message = TextSendMessage(text=f"餐廳已經在投票池內囉！")
                 line_bot_api.reply_message(reply_token, message)
+            # 移除投票
+            elif action == "remove":
+                place_id = postback_args[1]
+                user = config.db.user.find_one({"user_id": user_id})
+                restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
+                if restaurant_data in user["vote"]:
+                    print(len(user["vote"]))
+                    user["vote"].remove(restaurant_data)
+                    print(len(user["vote"]))
+                    config.db.user.update_one({"user_id": user_id}, {"$set": user})
+                    message = TextSendMessage(text=f"已將{restaurant_data['name']}移除投票池！")
+                else:
+                    message = TextSendMessage(text=f"餐廳不在投票池內！")
+                try:
+                    line_bot_api.reply_message(reply_token, message)
+                # 搜尋超時
+                except LineBotApiError:
+                    config.console.print_exception()
+                    line_bot_api.push_message(user_id, message)
         else:
             if postback_data == "create":
                 message = TextSendMessage(
