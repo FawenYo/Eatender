@@ -21,4 +21,4 @@ def index():
 
 if __name__ == "__main__":
     # Used only when running locally.
-    app.run(threaded=True, port=8001, debug=True)
+    app.run(threaded=True, host="0.0.0.0", port=8888, debug=True)

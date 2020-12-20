@@ -2,10 +2,12 @@ import os
 import threading
 
 import pymongo
+from dotenv import load_dotenv
 from rich.console import Console
 
-console = Console()
+load_dotenv()
 
+console = Console()
 # LINE Bot 設定
 LINE_CHANNEL_SECRET = os.environ.get("LINE_CHANNEL_SECRET")
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")

@@ -4,6 +4,7 @@ gunicorn
 jieba
 line-bot-sdk
 pymongo[srv]
+python-dotenv
 pytz
 rich
 uwsgi

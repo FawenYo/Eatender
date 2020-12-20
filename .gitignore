@@ -137,6 +137,6 @@ dmypy.json
 # MacOS related files
 **/.DS_Store
 
-# Project secret files
-mac_initial.sh
-win_initial.bat
+# SSL file
+*.crt
+*.key
