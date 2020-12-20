@@ -10,10 +10,8 @@ services:
       - TZ=Asia/Taipei
   nginx:
     build: ./nginx
-    container_name: template_nginx
+    container_name: eatender_nginx
     # restart: always
-    links:
-      - project
     ports:
       - "80:80"
       - "443:443"
