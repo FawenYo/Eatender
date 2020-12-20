@@ -25,7 +25,10 @@ class Nearby_restaurant:
         self.get_info()
 
     def get_info(self):
-        result = []
+        self.get_google_maps_data()
+        self.get_ifoodie_data()
+        # Load from database
+        """ result = []
         config.db.restaurant.create_index([("loc", GEOSPHERE)])
         query = {
             "loc": {
@@ -70,7 +73,7 @@ class Nearby_restaurant:
                 self.restaurants.append(restaurant)
         else:
             self.get_google_maps_data()
-            self.get_ifoodie_data()
+            self.get_ifoodie_data() """
         # Updating Silently
         thread = threading.Thread(target=self.silent_update)
         thread.start()
