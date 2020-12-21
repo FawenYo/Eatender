@@ -45,5 +45,5 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
           script: |
             cd /home/fawenyo/Eatender
-            git pull origin development
+            git pull https://github.com/FawenYo/Eatender.git development
             docker-compose up --build -d
