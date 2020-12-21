@@ -381,22 +381,18 @@ def parse_string(message):
         status = False
         return status, event_name, available_dates, no_earlier, no_later
 
-    temp = message.split("/")
-    date_candidates = ""
-    daytime_constraint = []
-    for each in temp:
-        if "-" in each:
-            date_candidates = each
-        elif each.isdigit():
-            daytime_constraint.append(int(each))
-        else:
-            event_name = each
+    try:
+        date_candidates = re.findall(r'\d{4}-\d{1,2}-\d{1,2}', message)
+        if len(date_candidates) == 1:
+            date_candidates = date_candidates[0]
+        elif len(date_candidates) > 1:
+            date_candidates = "|".join(date_candidates)
+        message = message.replace(date_candidates, "")
 
-    if not date_candidates:
-        # 沒有輸入日期
-        status = False
-        pass
-    else:
+        daytime_constraint = re.findall(r'//\d{1,2}/\d{1,2}', message)[0]
+        event_name = message.replace(daytime_constraint, "")
+        daytime_constraint = list(map(int, filter(None, daytime_constraint.split("/"))))
+
         correct_date = None
         dates = date_candidates.split("|")
         for date in dates:
@@ -405,28 +401,23 @@ def parse_string(message):
                 correct_date = True
             except ValueError:
                 correct_date = False
+
         if correct_date:
             available_dates = date_candidates
         else:
             # 日期輸入格式錯誤
             status = False
             pass
-
-    if not daytime_constraint:
-        # 沒有輸入時間限制
-        status = False
-        pass
-    else:
+        
         no_earlier = min(daytime_constraint)
         no_later = max(daytime_constraint)
-        if no_earlier < 0 or no_later > 24 or no_earlier == no_later:
+        if (no_earlier < 0 or 
+                no_later > 24 or
+                no_earlier == no_later):
             # 時間限制格式錯誤
             status = False
-            pass
-
-    if not event_name:
-        # 沒有輸入事件名稱
+    except:
         status = False
-        pass
+        return status, event_name, available_dates, no_earlier, no_later
 
     return status, event_name, available_dates, no_earlier, no_later
