@@ -19,6 +19,12 @@ def index():
     return render_template("home.html")
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("404.html"), 404
+
+
 if __name__ == "__main__":
     # Used only when running locally.
-    app.run(threaded=True, host="0.0.0.0", port=8888, debug=True)
+    app.run(threaded=True, host="0.0.0.0", port=8001, debug=True)

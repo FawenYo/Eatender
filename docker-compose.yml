@@ -13,7 +13,7 @@ services:
     container_name: eatender_nginx
     # restart: always
     ports:
-      - "80:443"
+      - "80:80"
       - "443:443"
     depends_on:
       - project
