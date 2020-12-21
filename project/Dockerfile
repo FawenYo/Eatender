@@ -4,8 +4,10 @@ WORKDIR /app
 
 ADD . /app
 
-RUN apt update
-RUN apt install screen -y
 RUN pip3 install -r requirements.txt
 
-CMD ["uwsgi", "config.ini"]
+# Heroku can't bind port
+# CMD ["gunicorn", "main:app"]
+
+# GCP / Local
+CMD ["gunicorn", "--config", "gunicorn.py", "main:app"]

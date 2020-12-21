@@ -1,4 +1,4 @@
-name: Project CI/herCD
+name: Project CI/CD
 
 # 觸發條件
 on:
