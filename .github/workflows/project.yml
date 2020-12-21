@@ -1,4 +1,4 @@
-name: Project CI/CD
+name: Project CI/herCD
 
 # 觸發條件
 on:
@@ -37,7 +37,7 @@ jobs:
 
       # 遠端部署
       - name: CD
-        uses: FawenYo/Eatender@development
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
