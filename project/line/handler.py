@@ -1,11 +1,11 @@
 import random
+import re
 import string
 import sys
-import re
 import threading
 from datetime import datetime
 
-from flask import Blueprint, abort, current_app, request
+from fastapi import APIRouter, Request, HTTPException
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
@@ -21,11 +21,11 @@ from vote.main import create_event
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
-line_app = Blueprint("line_app", __name__)
+line_app = APIRouter()
 
 
-@line_app.route("/callback", methods=["POST"])
-def callback():
+@line_app.post("/callback")
+async def callback(request: Request):
     """LINE Server Webhook Callback
 
     Raises:
@@ -33,16 +33,13 @@ def callback():
     Returns:
         str: "OK"
     """
-    # get X-Line-Signature header value
     signature = request.headers["X-Line-Signature"]
-    # get request body as text
-    body = request.get_data(as_text=True)
-    current_app.logger.info("Request body: " + body)
+    body = await request.body()
     # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
-        abort(400)
+        raise HTTPException(status_code=400, detail="Missing Parameter")
     return "OK"
 
 
@@ -383,14 +380,14 @@ def parse_string(message):
         return status, event_name, available_dates, no_earlier, no_later
 
     try:
-        date_candidates = re.findall(r'\d{4}-\d{1,2}-\d{1,2}', message)
+        date_candidates = re.findall(r"\d{4}-\d{1,2}-\d{1,2}", message)
         if len(date_candidates) == 1:
             date_candidates = date_candidates[0]
         elif len(date_candidates) > 1:
             date_candidates = "|".join(date_candidates)
         message = message.replace(date_candidates, "")
 
-        daytime_constraint = re.findall(r'//\d{1,2}/\d{1,2}', message)[0]
+        daytime_constraint = re.findall(r"//\d{1,2}/\d{1,2}", message)[0]
         event_name = message.replace(daytime_constraint, "")
         daytime_constraint = list(map(int, filter(None, daytime_constraint.split("/"))))
 
@@ -409,12 +406,10 @@ def parse_string(message):
             # 日期輸入格式錯誤
             status = False
             pass
-        
+
         no_earlier = min(daytime_constraint)
         no_later = max(daytime_constraint)
-        if (no_earlier < 0 or 
-                no_later > 24 or
-                no_earlier == no_later):
+        if no_earlier < 0 or no_later > 24 or no_earlier == no_later:
             # 時間限制格式錯誤
             status = False
     except:

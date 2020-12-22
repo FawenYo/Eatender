@@ -1,30 +1,43 @@
-from flask import Flask, render_template, request
+import os
+import uvicorn
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from API.router import api
 from line.handler import line_app
 from vote.view import vote
 
-app = Flask(__name__, static_url_path="/static/")
-# Disable auto sort JSON data when API return values
-app.config["JSON_SORT_KEYS"] = False
-# Return proper json format data
-app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
-app.register_blueprint(line_app)
-app.register_blueprint(api, url_prefix="/api")
-app.register_blueprint(vote)
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+app.include_router(line_app)
+app.include_router(api)
+app.include_router(vote)
 
 
-@app.route("/")
-def index():
-    return render_template("home.html")
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("home.html", context={"request": request})
 
 
-@app.errorhandler(404)
-def page_not_found(e):
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request, exc):
     # note that we set the 404 status explicitly
-    return render_template("404.html"), 404
+    return templates.TemplateResponse("404.html", context={"request": request})
 
 
 if __name__ == "__main__":
-    # Used only when running locally.
-    app.run(threaded=True, host="0.0.0.0", port=8001, debug=True)
+    port = int(os.getenv("PORT", 8001))
+    uvicorn.run(
+        "main:app",
+        port=port,
+        workers=4,
+        log_level="info",
+        access_log=True,
+        use_colors=True,
+        reload=True,
+    )

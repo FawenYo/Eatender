@@ -1,9 +1,11 @@
+aiofiles
 beautifulsoup4
-flask
-gunicorn
+fastapi
+jinja2
 jieba
 line-bot-sdk
 pymongo[srv]
 python-dotenv
 pytz
 rich
+uvicorn
