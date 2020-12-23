@@ -5,7 +5,7 @@ import sys
 import threading
 from datetime import datetime
 
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
@@ -13,6 +13,7 @@ from linebot.models import *
 # 上層目錄import
 sys.path.append(".")
 import config
+import cron
 import MongoDB.operation as database
 from food.main import Nearby_restaurant
 from line.templates import Template
@@ -81,50 +82,64 @@ def handle_message(event):
             pending = config.db.pending.find_one({"user_id": user_id})
             # QA問答
             if pending:
-                if pending["action"] == "search":
+                if user_message == "取消":
                     config.db.pending.delete_one({"user_id": user_id})
-                    latitude = pending["latitude"]
-                    longitude = pending["longitude"]
-                    message = find_nearby(
-                        latitude=latitude, longitude=longitude, keyword=user_message
-                    )
+                    message = TextSendMessage(text=f"已取消操作！")
                 else:
-                    (
-                        status,
-                        event_name,
-                        available_dates,
-                        no_earlier,
-                        no_later,
-                    ) = parse_string(message=user_message)
-
-                    if status:
+                    if pending["action"] == "search":
                         config.db.pending.delete_one({"user_id": user_id})
-                        user = config.db.user.find_one({"user_id": user_id})
-                        user["vote"] = []
-                        config.db.user.update_one({"user_id": user_id}, {"$set": user})
-
-                        link = create_event(
-                            event_name=event_name,
-                            dates=available_dates,
-                            early_time=no_earlier,
-                            later_time=no_later,
-                        )
-
-                        vote_id = "".join(
-                            random.choice(string.ascii_letters + string.digits)
-                            for x in range(10)
-                        )
-                        database.create_vote(
-                            vote_id=vote_id,
-                            vote_link=link,
-                            restaurants=pending["pools"],
-                            end_date=pending["end_date"],
-                        )
-                        message = TextSendMessage(
-                            text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票！"
+                        latitude = pending["latitude"]
+                        longitude = pending["longitude"]
+                        message = find_nearby(
+                            latitude=latitude, longitude=longitude, keyword=user_message
                         )
                     else:
-                        message = TextSendMessage(text="抱歉，格式有誤，請重新輸入！")
+                        (
+                            status,
+                            event_name,
+                            available_dates,
+                            no_earlier,
+                            no_later,
+                        ) = parse_string(message=user_message)
+
+                        if status:
+                            config.db.pending.delete_one({"user_id": user_id})
+                            user = config.db.user.find_one({"user_id": user_id})
+                            user["vote"] = []
+                            config.db.user.update_one(
+                                {"user_id": user_id}, {"$set": user}
+                            )
+
+                            link = create_event(
+                                event_name=event_name,
+                                dates=available_dates,
+                                early_time=no_earlier,
+                                later_time=no_later,
+                            )
+
+                            vote_id = "".join(
+                                random.choice(string.ascii_letters + string.digits)
+                                for x in range(10)
+                            )
+                            database.create_vote(
+                                creator=user_id,
+                                vote_id=vote_id,
+                                vote_link=link,
+                                restaurants=pending["pools"],
+                                end_date=pending["end_date"],
+                            )
+                            cron.set_cronjob(
+                                creator=user_id,
+                                vote_end=pending["end_date"],
+                                vote_link=link,
+                            )
+                            message = TextSendMessage(
+                                text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票！"
+                            )
+                        else:
+                            message = TextSendMessage(
+                                text="抱歉，格式有誤，請重新輸入！\n如要取消操作請輸入 '取消' "
+                            )
             else:
                 # 我的最愛
                 if user_message == "我的最愛":
@@ -320,7 +335,7 @@ def handle_postback(event):
                                 action=DatetimePickerAction(
                                     label="截止日期",
                                     data="endDate",
-                                    mode="date",
+                                    mode="datetime",
                                 )
                             ),
                         ]
@@ -328,7 +343,9 @@ def handle_postback(event):
                 )
             elif postback_data == "endDate":
                 vote_pull = config.db.user.find_one({"user_id": user_id})["vote"]
-                end_date = datetime.strptime(event.postback.params["date"], "%Y-%m-%d")
+                end_date = datetime.strptime(
+                    event.postback.params["datetime"], "%Y-%m-%dT%H:%M"
+                )
                 data = {
                     "action": "create_event",
                     "user_id": user_id,

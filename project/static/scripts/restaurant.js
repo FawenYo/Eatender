@@ -175,7 +175,6 @@ function save_results() {
     success: function (data) {
       if (data.status == "success") {
         vote_link = data.vote_link;
-        vote_link = vote_link.substring(0, vote_link.length - 1);
         Swal.fire({
           type: "success",
           title: "儲存成功！",
