@@ -306,4 +306,16 @@ def gettime_attendant(url: str):
             candidate["available_time"]["time"] = time_segment(result[key_1][key_2])
         wrapped_result["candidates"].append(candidate)
 
-    return wrapped_result
+    message = f'投票結果出爐啦！\n\n【{wrapped_result["event_name"]}】\n------------------\n'
+    for each in wrapped_result["candidates"]:
+        message += f'參與者：{each["participants"]}\n'
+        message += f'日期：{each["available_time"]["date"]}\n'
+        message += f'時間：'
+        for i, each_time in enumerate(each["available_time"]["time"]):
+            if i == 0:
+                message += f'{each_time}\n'
+            else:
+                message += f'------{each_time}\n'
+        message += "------------------\n"
+
+    return message
