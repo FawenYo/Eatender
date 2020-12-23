@@ -37,7 +37,7 @@ async def callback(request: Request):
     body = await request.body()
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        handler.handle(body.decode(), signature)
     except InvalidSignatureError:
         raise HTTPException(status_code=400, detail="Missing Parameter")
     return "OK"
