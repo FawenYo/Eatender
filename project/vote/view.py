@@ -19,15 +19,7 @@ headers = {"content-type": "application/json; charset=utf-8"}
 
 @vote.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
-    if "liff.state" in request.args:
-        pull_id = request.args.get("liff.state")[1:]
-    elif "id" in request.args:
-        pull_id = request.args.get("id")
-    else:
-        pull_id = ""
-    return templates.TemplateResponse(
-        "login.html", context={"request": request, "pull_id": pull_id}
-    )
+    return templates.TemplateResponse("login.html", context={"request": request})
 
 
 @vote.get("/vote")
@@ -83,31 +75,3 @@ async def choose(request: Request):
             "code": "8NX9m",
         },
     )
-
-
-# FIXME: form data in FastAPI
-""" @vote.route("/SaveTimes.php", methods=["POST"])
-def route_savetimes():
-    post_data = request.form
-    response = requests.post(
-        "https://www.when2meet.com/SaveTimes.php", data=post_data
-    ).text
-    return response
-
-
-@vote.route("/ProcessLogin.php", methods=["POST"])
-def route_process_login():
-    post_data = request.form
-    response = requests.post(
-        "https://www.when2meet.com/ProcessLogin.php", data=post_data
-    ).text
-    return response
-
-
-@vote.route("/AvailabilityGrids.php", methods=["POST"])
-def route_availability_grids():
-    post_data = request.form
-    response = requests.post(
-        "https://www.when2meet.com/AvailabilityGrids.php", data=post_data
-    ).text
-    return response """

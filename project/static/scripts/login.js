@@ -1,10 +1,13 @@
+var pull_id = "";
 $(document).ready(function () {
-  pull_id = $("#pull_id").val();
-  if (pull_id == "") {
-    pull_id = readCookie("pull_id");
-    console.log(pull_id);
-  }
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
 
+  if (urlParams.has("liff.state")) {
+    pull_id = urlParams.get("liff.state");
+  } else if (urlParams.has("id")) {
+    pull_id = urlParams.get("id");
+  }
   initializeLiff("1655422218-8n1PlOw1");
 });
 
@@ -39,30 +42,5 @@ function initializeApp() {
 }
 
 function userStatus(userId) {
-  pull_id = $("#pull_id").val();
   location.replace(`../vote?id=${pull_id}&name=${userId}`);
-}
-
-function saveUserInfo(pullID) {
-  expire_days = 10; // 過期日期(天)
-  var d = new Date();
-  d.setTime(d.getTime() + expire_days * 24 * 60 * 60 * 1000);
-  document.cookie = `pull_id=${pullID}; expires=${d.toGMTString()}; path=/`;
-}
-
-// 讀取Cookie
-function readCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
 }
