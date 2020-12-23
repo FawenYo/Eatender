@@ -200,7 +200,7 @@ def handle_message(event):
                     action=PostbackAction(
                         label=category,
                         display_text=category,
-                        data=f"search_{lat},{lng}_{category}",
+                        data=f"search_||_{lat},{lng}_||_{category}",
                     )
                 )
                 for category in restaurant_category
@@ -227,8 +227,8 @@ def handle_postback(event):
     reply_token = event.reply_token
     postback_data = event.postback.data
     try:
-        if "_" in postback_data:
-            postback_args = postback_data.split("_")
+        if "_||_" in postback_data:
+            postback_args = postback_data.split("_||_")
             action = postback_args[0]
             # 加入收藏名單
             if action == "favorite":

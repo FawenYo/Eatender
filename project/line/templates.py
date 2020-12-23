@@ -508,7 +508,7 @@ def restaurant_card_info(
                             "action": {
                                 "type": "postback",
                                 "label": "收藏",
-                                "data": f"favorite_{place_id}",
+                                "data": f"favorite_||_{place_id}",
                             },
                             "offsetBottom": "md",
                         },
@@ -526,7 +526,7 @@ def restaurant_card_info(
                             "action": {
                                 "type": "postback",
                                 "label": "加入投票",
-                                "data": f"vote_{place_id}",
+                                "data": f"vote_||_{place_id}",
                             },
                             "color": "#000000",
                         }
@@ -580,7 +580,7 @@ def show_more(user_lat, user_lng, keyword, next_page):
                             "action": {
                                 "type": "postback",
                                 "label": "查看更多",
-                                "data": f"more_{user_lat},{user_lng}_{keyword}_{next_page}",
+                                "data": f"more_||_{user_lat},{user_lng}_||_{keyword}_||_{next_page}",
                             },
                             "position": "relative",
                             "color": "#296ae8",
@@ -871,7 +871,7 @@ def vote_card(
                             "action": {
                                 "type": "postback",
                                 "label": "移除餐廳",
-                                "data": f"remove_{place_id}",
+                                "data": f"remove_||_{place_id}",
                             },
                             "color": "#000000",
                         }
