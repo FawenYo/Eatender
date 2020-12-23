@@ -6,4 +6,4 @@ ADD . /app
 
 RUN pip3 install -r requirements.txt
 
-CMD python3 main.py
+CMD gunicorn -w 4 -b 0.0.0.0:8001 -k uvicorn.workers.UvicornWorker main:app

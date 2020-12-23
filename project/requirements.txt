@@ -1,6 +1,8 @@
 aiofiles
 beautifulsoup4
 fastapi
+gunicorn
+httptools
 jinja2
 jieba
 line-bot-sdk
@@ -9,3 +11,4 @@ python-dotenv
 pytz
 rich
 uvicorn
+uvloop
