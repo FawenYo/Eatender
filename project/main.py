@@ -1,4 +1,5 @@
 import os
+
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -7,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from API.router import api
+from cron import cron
 from line.handler import line_app
 from vote.view import vote
 
@@ -17,6 +19,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(line_app)
 app.include_router(api)
 app.include_router(vote)
+app.include_router(cron)
 
 
 @app.get("/", response_class=HTMLResponse)

@@ -1,4 +1,5 @@
 aiofiles
+apscheduler
 beautifulsoup4
 fastapi
 gunicorn

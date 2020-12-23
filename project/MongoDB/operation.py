@@ -60,11 +60,12 @@ def add_restaurant(restaurant, keyword):
             db.restaurant.update_one({"name": restaurant.name}, {"$set": result})
 
 
-def create_vote(vote_id, vote_link, restaurants, end_date):
+def create_vote(creator, vote_id, vote_link, restaurants, end_date):
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     if not db.vote_pull.find_one({"_id": vote_id}):
         data = {
             "_id": vote_id,
+            "creator": creator,
             "vote_link": vote_link,
             "end_date": end_date,
             "restaurants": restaurants,

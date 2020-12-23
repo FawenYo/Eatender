@@ -5,7 +5,7 @@ import sys
 import threading
 from datetime import datetime
 
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
@@ -13,6 +13,7 @@ from linebot.models import *
 # 上層目錄import
 sys.path.append(".")
 import config
+import cron
 import MongoDB.operation as database
 from food.main import Nearby_restaurant
 from line.templates import Template
@@ -115,10 +116,16 @@ def handle_message(event):
                             for x in range(10)
                         )
                         database.create_vote(
+                            creator=user_id,
                             vote_id=vote_id,
                             vote_link=link,
                             restaurants=pending["pools"],
                             end_date=pending["end_date"],
+                        )
+                        cron.set_cronjob(
+                            creator=user_id,
+                            vote_end=pending["end_date"],
+                            vote_link=link,
                         )
                         message = TextSendMessage(
                             text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票！"
@@ -320,7 +327,7 @@ def handle_postback(event):
                                 action=DatetimePickerAction(
                                     label="截止日期",
                                     data="endDate",
-                                    mode="date",
+                                    mode="datetime",
                                 )
                             ),
                         ]
@@ -328,7 +335,9 @@ def handle_postback(event):
                 )
             elif postback_data == "endDate":
                 vote_pull = config.db.user.find_one({"user_id": user_id})["vote"]
-                end_date = datetime.strptime(event.postback.params["date"], "%Y-%m-%d")
+                end_date = datetime.strptime(
+                    event.postback.params["datetime"], "%Y-%m-%dT%H:%M"
+                )
                 data = {
                     "action": "create_event",
                     "user_id": user_id,
