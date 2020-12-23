@@ -128,11 +128,10 @@ def handle_message(event):
                                 restaurants=pending["pools"],
                                 end_date=pending["end_date"],
                             )
-                            cron.set_cronjob(
-                                creator=user_id,
-                                vote_end=pending["end_date"],
-                                vote_link=link,
-                            )
+                            threading.Thread(
+                                target=cron.set_cronjob,
+                                args=(user_id, pending["end_date"], link),
+                            ).start()
                             message = TextSendMessage(
                                 text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票！"
                             )
