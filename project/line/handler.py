@@ -404,9 +404,9 @@ def parse_string(message):
             date_candidates = "|".join(date_candidates)
         message = message.replace(date_candidates, "")
 
-        daytime_constraint = re.findall(r"//\d{1,2}/\d{1,2}", message)[0]
-        event_name = message.replace(daytime_constraint, "")
-        daytime_constraint = list(map(int, filter(None, daytime_constraint.split("/"))))
+        event_name = message.replace(re.findall(r"//\d{1,2}/\d{1,2}", message)[0], "")
+        daytime_constraint = re.findall(r"//(\d{1,2})/(\d{1,2})", message)[0]
+        daytime_constraint = list(map(int, daytime_constraint))
 
         correct_date = None
         dates = date_candidates.split("|")
