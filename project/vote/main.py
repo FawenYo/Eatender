@@ -120,7 +120,7 @@ def gettime_attendant(url: str):
 
     group_grid = []
     for i in range(len(dates)):
-        group_grid.append([[] for j in range(((len(times) - 1) * 4))])
+        group_grid.append([[] for j in range((len(times) * 4))])
 
     raw_attendant = re.findall(
         r"PeopleNames\[\d\] = '(.*?)';PeopleIDs\[\d\] = (.*?);", str(response.text)
@@ -136,8 +136,10 @@ def gettime_attendant(url: str):
     availables = list(dict.fromkeys(availables))
 
     for each in availables:
-        time_slot = int(each[0]) % ((len(times) - 1) * 4)
-        date_slot = int(each[0]) // ((len(times) - 1) * 4)
+        time_slot = int(each[0]) % (len(times) * 4)
+        date_slot = int(each[0]) // (len(times) * 4)
+        # print(date_slot, time_slot, each)
+        # print(group_grid[date_slot][time_slot])
         group_grid[date_slot][time_slot].append(str(each[1]))
 
     grid_count = []
@@ -162,7 +164,7 @@ def gettime_attendant(url: str):
                     datetimes[attendant_name][dates[i]].append(j)
             except:
                 pass
-    
+
     if not dict.fromkeys(datetimes):
         return "還沒有人投票哦！"
     group_amount = list(map(len, dict.fromkeys(datetimes)))
@@ -301,23 +303,27 @@ def gettime_attendant(url: str):
     for key_1, item_1 in result.items():
         candidate = {
             "participants": key_1,
-            "available_time": dict(),
+            "available_time": list(),
         }
         for key_2, item_2 in item_1.items():
-            candidate["available_time"]["date"] = key_2
-            candidate["available_time"]["time"] = time_segment(result[key_1][key_2])
+            this_date = dict()
+            this_date["date"] = key_2
+            this_date["time"] = time_segment(result[key_1][key_2])
+            candidate["available_time"].append(this_date)
+
         wrapped_result["candidates"].append(candidate)
 
     message = f'投票結果出爐啦！\n\n【{wrapped_result["event_name"]}】\n------------------\n'
     for each in wrapped_result["candidates"]:
         message += f'參與者：{each["participants"]}\n'
-        message += f'日期：{each["available_time"]["date"]}\n'
-        message += f'時間：'
-        for i, each_time in enumerate(each["available_time"]["time"]):
-            if i == 0:
-                message += f'{each_time}\n'
-            else:
-                message += f'------{each_time}\n'
-        message += "------------------\n"
+        for each_available in each["available_time"]:
+            message += f'日期：{each_available["date"]}\n'
+            message += f'時間：'
+            for i, each_time in enumerate(each_available["time"]):
+                if i == 0:
+                    message += f'{each_time}\n'
+                else:
+                    message += f'------{each_time}\n'
+            message += "------------------\n"
 
     return message
