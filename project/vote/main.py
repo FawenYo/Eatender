@@ -162,7 +162,9 @@ def gettime_attendant(url: str):
                     datetimes[attendant_name][dates[i]].append(j)
             except:
                 pass
-
+    
+    if not dict.fromkeys(datetimes):
+        return "還沒有人投票哦！"
     group_amount = list(map(len, dict.fromkeys(datetimes)))
     max_people = max(group_amount)
 
