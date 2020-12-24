@@ -312,9 +312,7 @@ def handle_postback(event):
                 user = config.db.user.find_one({"user_id": user_id})
                 restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
                 if restaurant_data in user["vote"]:
-                    print(len(user["vote"]))
                     user["vote"].remove(restaurant_data)
-                    print(len(user["vote"]))
                     config.db.user.update_one({"user_id": user_id}, {"$set": user})
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}移除投票池！")
                 else:
