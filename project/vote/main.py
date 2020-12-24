@@ -164,11 +164,11 @@ def gettime_attendant(url: str):
                     datetimes[attendant_name][dates[i]].append(j)
             except:
                 pass
-
-    if not dict.fromkeys(datetimes):
+    try:
+        group_amount = list(map(len, dict.fromkeys(datetimes)))
+        max_people = max(group_amount)
+    except ValueError:
         return "還沒有人投票哦！"
-    group_amount = list(map(len, dict.fromkeys(datetimes)))
-    max_people = max(group_amount)
 
     result = dict()
     for i, amount in enumerate(group_amount):
