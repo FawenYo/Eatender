@@ -7,6 +7,7 @@ from linebot import LineBotApi
 
 from config import LINE_CHANNEL_ACCESS_TOKEN, db
 from vote.main import gettime_attendant
+from linebot.models import *
 
 cron = APIRouter()
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
@@ -27,8 +28,9 @@ async def init_cron():
 def set_cronjob(creator: str, vote_end: datetime, vote_link: str):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
-        show_result(creator=creator, vote_link=vote_link),
+        show_result,
         "date",
+        args=[creator, vote_link],
         run_date=vote_end,
         timezone=pytz.timezone("Asia/Taipei"),
     )
@@ -38,4 +40,5 @@ def set_cronjob(creator: str, vote_end: datetime, vote_link: str):
 
 def show_result(creator: str, vote_link: str):
     message = gettime_attendant(url=vote_link)
-    line_bot_api.push_message(creator, message)
+    line_bot_api.push_message(creator, TextSendMessage(text=message))
+    return True
