@@ -11,11 +11,10 @@ from .restaurant import Restaurant
 
 # 上層目錄import
 sys.path.append(".")
-from bson.son import SON
-from pymongo import GEOSPHERE
-
 import config
 import MongoDB.operation as database
+from bson.son import SON
+from pymongo import GEOSPHERE
 
 
 class Nearby_restaurant:
@@ -29,6 +28,7 @@ class Nearby_restaurant:
         self.get_info()
 
     def get_info(self):
+        threads = []
         self.get_google_maps_data()
         self.get_ifoodie_data()
         # Load from database
@@ -78,6 +78,15 @@ class Nearby_restaurant:
         else:
             self.get_google_maps_data()
             self.get_ifoodie_data() """
+        # Add to MongoDB
+        for restaurant in self.restaurants:
+            thread = threading.Thread(
+                target=database.add_restaurant, args=(restaurant, self.keyword)
+            )
+            threads.append(thread)
+        for thread in threads:
+            thread.start()
+
         # Updating Silently
         thread = threading.Thread(target=self.silent_update)
         thread.start()
@@ -157,7 +166,7 @@ class Nearby_restaurant:
         restaurants = self.get_google_maps_data(complete_mode=True)
         restaurants = self.get_ifoodie_data(complete_mode=True, restaurants=restaurants)
         # Add to MongoDB
-        for restaurant in self.restaurants:
+        for restaurant in restaurants.restaurants:
             thread = threading.Thread(
                 target=database.add_restaurant, args=(restaurant, self.keyword)
             )

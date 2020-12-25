@@ -41,9 +41,10 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
-          # PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
             cd /home/fawenyo/Eatender
             git pull https://github.com/FawenYo/Eatender.git development
+            docker-compose down -v --rmi all --remove-orphans
             docker-compose up --build -d
+            curl http://localhost/init
