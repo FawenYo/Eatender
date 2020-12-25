@@ -12,6 +12,147 @@ class Template:
         self.user_lat = user_lat
         self.user_lng = user_lng
 
+    def welcome(self):
+        contents = {}
+        message = FlexSendMessage(alt_text="歡迎來到 Eatender！", contents=contents)
+        return message
+
+    def tutorial(self):
+        contents = {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "image",
+                        "aspectMode": "cover",
+                        "size": "full",
+                        "gravity": "top",
+                        "margin": "none",
+                        "position": "relative",
+                        "aspectRatio": "2:3",
+                        "url": "https://i.imgur.com/RFqeCz2.jpg",
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "今晚，你或許會想先來點...",
+                                        "size": "lg",
+                                        "weight": "bold",
+                                        "margin": "5px",
+                                        "color": "#ffffff",
+                                        "wrap": true,
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "「使．用．教．學！」",
+                                        "color": "#0E9721",
+                                        "weight": "bold",
+                                        "size": "lg",
+                                    },
+                                ],
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "icon",
+                                        "url": "https://i.imgur.com/UQL7M2P.png",
+                                        "size": "md",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "首先，設定您要用餐的地點",
+                                        "margin": "5px",
+                                        "size": "md",
+                                        "weight": "bold",
+                                    },
+                                ],
+                                "margin": "sm",
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "icon",
+                                        "size": "md",
+                                        "url": "https://i.imgur.com/49UpMsr.png",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "將喜歡的餐廳加入投票箱",
+                                        "weight": "bold",
+                                        "margin": "5px",
+                                        "size": "md",
+                                    },
+                                ],
+                                "margin": "sm",
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "icon",
+                                        "url": "https://i.imgur.com/lNtabPe.png",
+                                        "size": "md",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "點選投票 跟朋友決定最愛的餐廳",
+                                        "size": "md",
+                                        "margin": "5px",
+                                        "weight": "bold",
+                                    },
+                                ],
+                                "margin": "sm",
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "icon",
+                                        "url": "https://i.imgur.com/247HjzP.png",
+                                        "size": "md",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "導航至目的地，Let's dig in！",
+                                        "size": "md",
+                                        "margin": "5px",
+                                        "weight": "bold",
+                                        "color": "#EF4B26",
+                                    },
+                                ],
+                                "margin": "sm",
+                            },
+                        ],
+                        "backgroundColor": "#EBA909cc",
+                        "position": "absolute",
+                        "offsetStart": "0px",
+                        "offsetEnd": "0px",
+                        "offsetBottom": "250px",
+                        "paddingAll": "20px",
+                        "paddingTop": "100px",
+                    },
+                ],
+                "paddingAll": "0px",
+            },
+        }
+        message = FlexSendMessage(alt_text="使用教學", contents=contents)
+        return message
+
     def show_vote_pull(self, restaurants):
         show_list = []
         for each in restaurants:
@@ -206,6 +347,155 @@ class Template:
         }
         message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
         return message
+
+    def liff_share(self, pull_id):
+        contents = {
+            "type": "carousel",
+            "contents": [
+                {
+                    "type": "bubble",
+                    "header": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "image",
+                                        "url": "https://i.ibb.co/y09hjt2/LOGO5.png",
+                                        "size": "full",
+                                        "aspectMode": "cover",
+                                        "aspectRatio": "20:12",
+                                        "position": "relative",
+                                    }
+                                ],
+                                "cornerRadius": "100px",
+                            }
+                        ],
+                        "paddingAll": "0px",
+                    },
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "餐廳選項建立完成",
+                                        "size": "lg",
+                                        "weight": "bold",
+                                        "style": "normal",
+                                        "wrap": true,
+                                    }
+                                ],
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "Step1. 左滑右滑來挑選餐廳",
+                                                "color": "#666666",
+                                                "size": "sm",
+                                                "flex": 2,
+                                            }
+                                        ],
+                                        "offsetTop": "sm",
+                                        "borderWidth": "bold",
+                                        "spacing": "sm",
+                                        "flex": 2,
+                                        "offsetBottom": "lg",
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "Step2. 選擇聚餐時間",
+                                                "flex": 2,
+                                                "size": "sm",
+                                                "color": "#666666",
+                                                "contents": [],
+                                            }
+                                        ],
+                                        "borderWidth": "bold",
+                                        "spacing": "sm",
+                                        "offsetBottom": "lg",
+                                        "offsetTop": "sm",
+                                        "position": "relative",
+                                        "flex": 2,
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "Step3. 投票完成，等待投票結果",
+                                                "flex": 2,
+                                                "size": "sm",
+                                                "color": "#666666",
+                                                "contents": [],
+                                            }
+                                        ],
+                                        "borderWidth": "bold",
+                                        "spacing": "sm",
+                                        "offsetBottom": "lg",
+                                        "offsetTop": "sm",
+                                        "position": "relative",
+                                        "flex": 2,
+                                    },
+                                ],
+                                "spacing": "sm",
+                            },
+                        ],
+                    },
+                    "footer": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "spacing": "none",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "button",
+                                        "action": {
+                                            "type": "uri",
+                                            "label": "開始投票",
+                                            "uri": f"https://liff.line.me/1655422218-8n1PlOw1?id={pull_id}",
+                                        },
+                                        "color": "#000000",
+                                    }
+                                ],
+                                "backgroundColor": "#fdbe29",
+                                "cornerRadius": "100px",
+                                "margin": "none",
+                                "alignItems": "center",
+                                "justifyContent": "space-evenly",
+                                "position": "relative",
+                                "width": "200px",
+                                "height": "50px",
+                                "offsetStart": "40px",
+                            }
+                        ],
+                    },
+                }
+            ],
+        }
+        return contents
 
 
 def find_operating_status(data):

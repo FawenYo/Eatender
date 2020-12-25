@@ -9,6 +9,7 @@ from weather.main import Weather
 sys.path.append(".")
 import config
 from food.main import Nearby_restaurant
+from line.templates import Template
 
 api = APIRouter()
 
@@ -41,3 +42,9 @@ async def restaurant(keyword: str, loc: str):
     except KeyError:
         error_message = {"status": "error", "error_message": "Parameters value error."}
         return error_message
+
+
+@api.get("/api/liffshare")
+async def liff_share(pull_id: str):
+    message = Template().liff_share(pull_id=pull_id)
+    return {"status": "success", "data": message}

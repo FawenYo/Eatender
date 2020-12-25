@@ -4,7 +4,8 @@ $(document).ready(function () {
   const urlParams = new URLSearchParams(queryString);
 
   if (urlParams.has("liff.state")) {
-    pull_id = urlParams.get("liff.state");
+    param = urlParams.get("liff.state");
+    pull_id = param.substring(4);
   } else if (urlParams.has("id")) {
     pull_id = urlParams.get("id");
   }

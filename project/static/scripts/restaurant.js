@@ -163,7 +163,6 @@ function save_results() {
     user_id: user_id,
     choose_result: choose_result,
   };
-  console.log(sendData);
 
   // 請求伺服器
   $.ajax({

@@ -318,21 +318,12 @@ def gettime_attendant(url: str):
         message += f'參與者：{each["participants"]}\n'
         for each_available in each["available_time"]:
             message += f'日期：{each_available["date"]}\n'
-<<<<<<< HEAD
             message += f"時間："
             for i, each_time in enumerate(each_available["time"]):
                 if i == 0:
                     message += f"{each_time}\n"
                 else:
                     message += f"------{each_time}\n"
-=======
-            message += f'時間：'
-            for i, each_time in enumerate(each_available["time"]):
-                if i == 0:
-                    message += f'{each_time}\n'
-                else:
-                    message += f'------{each_time}\n'
->>>>>>> 8171610455141806bc778e020c66536656fde579
             message += "------------------\n"
 
     return message

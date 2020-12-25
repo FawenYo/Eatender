@@ -73,7 +73,7 @@ def handle_follow(event):
         event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#follow-event
     """
     reply_token = event.reply_token
-    message = TextSendMessage(text="那你真的很懂吃ㄟ🈹️")
+    message = Template().welcome()
     line_bot_api.reply_message(reply_token, message)
     database.new_user(user_id=event.source.user_id)
 
@@ -154,13 +154,17 @@ def handle_message(event):
                                 args=(user_id, pending["end_date"], link),
                             ).start()
                             message = TextSendMessage(
-                                text=f"投票建立成功！請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票！"
+                                text=f"投票已經成功建立囉！\n請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票 或是至\nhttps://liff.line.me/1655422218-O3KRZNpK?id={vote_id} 分享給你的朋友吧！"
                             )
                         else:
                             message = TextSendMessage(
                                 text="抱歉，格式有誤，請重新輸入！\n如要取消操作請輸入 '取消' "
                             )
             else:
+                # 教學
+                if user_message == "教學":
+                    message = Template().tutorial()
+                    line_bot_api.reply_message(reply_token, message)
                 # 我的最愛
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})

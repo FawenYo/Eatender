@@ -26,6 +26,11 @@ async def index(request: Request):
     return templates.TemplateResponse("home.html", context={"request": request})
 
 
+@app.get("/about", response_class=HTMLResponse)
+async def about(request: Request):
+    return templates.TemplateResponse("about.html", context={"request": request})
+
+
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request, exc):
     # note that we set the 404 status explicitly
