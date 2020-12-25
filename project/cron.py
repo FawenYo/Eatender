@@ -1,21 +1,20 @@
 from datetime import datetime
 
+import config
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import APIRouter
 from linebot import LineBotApi
-
-from config import LINE_CHANNEL_ACCESS_TOKEN, db
-from vote.main import gettime_attendant
 from linebot.models import *
+from vote.main import gettime_attendant
 
 cron = APIRouter()
-line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
+line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 
 
 @cron.get("/init")
 async def init_cron():
-    all_votes = db.vote_pull.find({})
+    all_votes = config.db.vote_pull.find({})
     for each_vote in all_votes:
         set_cronjob(
             creator=each_vote["creator"],
@@ -39,6 +38,10 @@ def set_cronjob(creator: str, vote_end: datetime, vote_link: str):
 
 
 def show_result(creator: str, vote_link: str):
+    user_data = config.db.user.find_one({"user_id": creator})
+    access_token = user_data["notify"]["token"]
     message = gettime_attendant(url=vote_link)
-    line_bot_api.push_message(creator, TextSendMessage(text=message))
-    return True
+    response = config.lotify_client.send_message(
+        access_token=access_token, message=message
+    )
+    return response

@@ -11,11 +11,10 @@ from .restaurant import Restaurant
 
 # 上層目錄import
 sys.path.append(".")
-from bson.son import SON
-from pymongo import GEOSPHERE
-
 import config
 import MongoDB.operation as database
+from bson.son import SON
+from pymongo import GEOSPHERE
 
 
 class Nearby_restaurant:

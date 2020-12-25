@@ -5,13 +5,17 @@ import sys
 import threading
 from datetime import datetime
 
+import requests
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
 
 # 上層目錄import
 sys.path.append(".")
+from typing import Optional
+
 import config
 import cron
 import MongoDB.operation as database
@@ -23,6 +27,23 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 line_app = APIRouter()
+
+# LINE Notify
+@line_app.get("/notify/", response_class=RedirectResponse)
+async def line_notify_redirect(uid: Optional[str] = ""):
+    link = config.lotify_client.get_auth_link(state=uid)
+    return RedirectResponse(link)
+
+
+# Line Notify Callback
+@line_app.get("/notify/callback", response_class=RedirectResponse)
+async def line_notify_callback(code: str = "", state: str = ""):
+    line_notify_key = config.lotify_client.get_access_token(code=code)
+    result = config.db.user.find_one({"user_id": state})
+    result["notify"]["status"] = True
+    result["notify"]["token"] = line_notify_key
+    config.db.user.update_one({"user_id": state}, {"$set": result})
+    return RedirectResponse(config.SITE_NAME)
 
 
 @line_app.post("/callback")
@@ -153,27 +174,32 @@ def handle_message(event):
                 # 投票池
                 elif user_message == "投票":
                     user_data = config.db.user.find_one({"user_id": user_id})
-                    if len(user_data["vote"]) > 0:
-                        message = [
-                            Template().show_vote_pull(
-                                restaurants=user_data["vote"][:10]
-                            ),
-                            TextSendMessage(
-                                text="請確認投票名單是否正確",
-                                quick_reply=QuickReply(
-                                    items=[
-                                        QuickReplyButton(
-                                            action=PostbackAction(
-                                                label="創建",
-                                                data=f"create",
-                                            )
-                                        )
-                                    ]
+                    if user_data["notify"]["status"]:
+                        if len(user_data["vote"]) > 0:
+                            message = [
+                                Template().show_vote_pull(
+                                    restaurants=user_data["vote"][:10]
                                 ),
-                            ),
-                        ]
+                                TextSendMessage(
+                                    text="請確認投票名單是否正確",
+                                    quick_reply=QuickReply(
+                                        items=[
+                                            QuickReplyButton(
+                                                action=PostbackAction(
+                                                    label="創建",
+                                                    data=f"create",
+                                                )
+                                            )
+                                        ]
+                                    ),
+                                ),
+                            ]
+                        else:
+                            message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
                     else:
-                        message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
+                        message = TextSendMessage(
+                            text=f"尚未綁定 LINE Notify!\n請先前往 {config.SITE_NAME}notify/?uid={user_id} 進行綁定~"
+                        )
                 elif user_message == "客服":
                     message = TextSendMessage(text="客服連結\nhttps://lin.ee/DsogwtP")
                 else:

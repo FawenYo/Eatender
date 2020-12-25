@@ -1,9 +1,8 @@
 import sys
 from datetime import datetime
 
-from fastapi import APIRouter, HTTPException, Request
-
 from config import console
+from fastapi import APIRouter, HTTPException, Request
 from weather.main import Weather
 
 # 上層目錄import

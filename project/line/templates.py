@@ -1,9 +1,8 @@
 import re
 from datetime import datetime, timedelta
 
-from linebot.models import FlexSendMessage
-
 from config import console
+from linebot.models import FlexSendMessage
 
 true = True
 
