@@ -15,11 +15,6 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 @cron.get("/init")
 async def init_cron():
     all_votes = config.db.vote_pull.find({})
-    show_result(
-        "oc4EjlzqDu",
-        "Uf5b60799f9be7c6bcb92a74e13b249b1",
-        "https://www.when2meet.com/?10574533-OTbxB",
-    )
     for each_vote in all_votes:
         set_cronjob(
             event_id=each_vote["_id"],
