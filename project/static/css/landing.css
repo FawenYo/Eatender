@@ -139,7 +139,7 @@ z-index: 1;
 }
 
 #hero-title {
-  font-family: Microsoft JhengHei;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size:60px;
   font-weight:bold;
   color:#fff;
@@ -149,7 +149,7 @@ z-index: 1;
 }
 
 #hero-message {
-  font-family: Microsoft JhengHei;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size:21px;
   font-weight:600;
   color:#fff;
