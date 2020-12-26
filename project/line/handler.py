@@ -5,7 +5,6 @@ import sys
 import threading
 from datetime import datetime
 
-import requests
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from linebot import LineBotApi, WebhookHandler
@@ -155,9 +154,7 @@ def handle_message(event):
                                 target=cron.set_cronjob,
                                 args=(vote_id, user_id, pending["end_date"], link),
                             ).start()
-                            message = TextSendMessage(
-                                text=f"投票已經成功建立囉！\n請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票 或是至\nhttps://liff.line.me/1655422218-O3KRZNpK?id={vote_id} 分享給你的朋友吧！"
-                            )
+                            message = Template().share_vote(pull_id=vote_id)
                         else:
                             message = TextSendMessage(
                                 text="抱歉，格式有誤，請重新輸入！\n如要取消操作請輸入 '取消' "

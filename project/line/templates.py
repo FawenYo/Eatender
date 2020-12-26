@@ -42,15 +42,7 @@ class Template:
                                         "align": "center",
                                         "weight": "regular",
                                         "size": "3xl",
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "Design for Decidophobia",
-                                        "size": "xs",
-                                        "weight": "bold",
-                                        "align": "center",
-                                        "style": "italic",
-                                    },
+                                    }
                                 ],
                             },
                             {
@@ -59,7 +51,7 @@ class Template:
                                 "contents": [
                                     {
                                         "type": "text",
-                                        "text": "「打開你的line，根除選擇障礙」",
+                                        "text": "加LINE約吃飯，感情不會散",
                                         "size": "md",
                                         "margin": "md",
                                         "weight": "bold",
@@ -454,6 +446,180 @@ class Template:
         message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
         return message
 
+    def share_vote(self, pull_id):
+        contents = {
+            "type": "carousel",
+            "contents": [
+                {
+                    "type": "bubble",
+                    "header": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "image",
+                                        "url": "https://i.ibb.co/y09hjt2/LOGO5.png",
+                                        "size": "full",
+                                        "aspectMode": "cover",
+                                        "aspectRatio": "20:12",
+                                        "position": "relative",
+                                    }
+                                ],
+                                "cornerRadius": "100px",
+                            }
+                        ],
+                        "paddingAll": "0px",
+                    },
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "餐廳選項建立完成",
+                                        "size": "lg",
+                                        "weight": "bold",
+                                        "style": "normal",
+                                        "wrap": true,
+                                        "align": "center",
+                                    }
+                                ],
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "Step1. 左滑右滑來挑選餐廳",
+                                                "color": "#666666",
+                                                "size": "sm",
+                                                "flex": 2,
+                                            }
+                                        ],
+                                        "offsetTop": "sm",
+                                        "borderWidth": "bold",
+                                        "spacing": "sm",
+                                        "flex": 2,
+                                        "offsetBottom": "lg",
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "Step2. 選擇聚餐時間",
+                                                "flex": 2,
+                                                "size": "sm",
+                                                "color": "#666666",
+                                                "contents": [],
+                                            }
+                                        ],
+                                        "borderWidth": "bold",
+                                        "spacing": "sm",
+                                        "offsetBottom": "lg",
+                                        "offsetTop": "sm",
+                                        "position": "relative",
+                                        "flex": 2,
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "Step3. 投票完成，等待投票結果",
+                                                "flex": 2,
+                                                "size": "sm",
+                                                "color": "#666666",
+                                                "contents": [],
+                                            }
+                                        ],
+                                        "borderWidth": "bold",
+                                        "spacing": "sm",
+                                        "offsetBottom": "lg",
+                                        "offsetTop": "sm",
+                                        "position": "relative",
+                                        "flex": 2,
+                                    },
+                                ],
+                                "spacing": "sm",
+                            },
+                        ],
+                    },
+                    "footer": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "button",
+                                        "action": {
+                                            "type": "uri",
+                                            "label": "開始投票",
+                                            "uri": f"https://liff.line.me/1655422218-8n1PlOw1?id={pull_id}",
+                                        },
+                                        "color": "#000000",
+                                    }
+                                ],
+                                "backgroundColor": "#fdbe29",
+                                "cornerRadius": "100px",
+                                "margin": "none",
+                                "alignItems": "center",
+                                "justifyContent": "space-evenly",
+                                "position": "relative",
+                                "width": "200px",
+                                "height": "50px",
+                                "offsetStart": "40px",
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "button",
+                                        "action": {
+                                            "type": "uri",
+                                            "label": "分享投票",
+                                            "uri": f"https://liff.line.me/1655422218-O3KRZNpK?id={pull_id}",
+                                        },
+                                        "color": "#000000",
+                                    }
+                                ],
+                                "backgroundColor": "#fdbe29",
+                                "cornerRadius": "100px",
+                                "margin": "lg",
+                                "alignItems": "center",
+                                "justifyContent": "space-evenly",
+                                "position": "relative",
+                                "width": "200px",
+                                "height": "50px",
+                                "offsetStart": "40px",
+                            },
+                        ],
+                    },
+                }
+            ],
+        }
+        message = FlexSendMessage(alt_text="投票創建成功！", contents=contents)
+        return message
+
     def liff_share(self, pull_id):
         contents = {
             "type": "carousel",
@@ -497,6 +663,7 @@ class Template:
                                         "weight": "bold",
                                         "style": "normal",
                                         "wrap": true,
+                                        "align": "center",
                                     }
                                 ],
                             },

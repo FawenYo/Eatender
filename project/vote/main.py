@@ -1,9 +1,9 @@
 import re
 import sys
+from collections import Counter
 
 import requests
 from bs4 import BeautifulSoup
-from collections import Counter
 
 # 上層目錄import
 sys.path.append(".")
