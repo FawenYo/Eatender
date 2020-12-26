@@ -153,7 +153,7 @@ def handle_message(event):
                             )
                             threading.Thread(
                                 target=cron.set_cronjob,
-                                args=(user_id, pending["end_date"], link),
+                                args=(vote_id, user_id, pending["end_date"], link),
                             ).start()
                             message = TextSendMessage(
                                 text=f"投票已經成功建立囉！\n請至 https://liff.line.me/1655422218-8n1PlOw1?id={vote_id} 投票 或是至\nhttps://liff.line.me/1655422218-O3KRZNpK?id={vote_id} 分享給你的朋友吧！"
