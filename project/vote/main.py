@@ -1,7 +1,13 @@
 import re
+import sys
 
 import requests
 from bs4 import BeautifulSoup
+from collections import Counter
+
+# 上層目錄import
+sys.path.append(".")
+import config
 
 
 def create_event(event_name: str, dates: str, early_time: int, later_time: int):
@@ -36,7 +42,7 @@ def create_event(event_name: str, dates: str, early_time: int, later_time: int):
     return f"https://www.when2meet.com/{event_id}"
 
 
-def gettime_attendant(url: str):
+def gettime_attendant(event_id: str, url: str):
     response = requests.get(url, timeout=10)
     soup = BeautifulSoup(response.text, "html.parser")
 
@@ -313,7 +319,16 @@ def gettime_attendant(url: str):
 
         wrapped_result["candidates"].append(candidate)
 
-    message = f'投票結果出爐啦！\n\n【{wrapped_result["event_name"]}】\n------------------\n'
+    choose_result = ""
+    like_list = []
+    event_data = config.db.vote_pull.find_one({"_id": event_id})
+    for each_participant, like in event_data["participants"].items():
+        like_list += like
+    occurence_count = Counter(like_list)
+    for restaurant_index, count in occurence_count.most_common(3):
+        restaurant_name = event_data["restaurants"][restaurant_index]["name"]
+        choose_result += f"{restaurant_name} ： {count}票\n"
+    message = f'投票結果出爐啦！\n\n【{wrapped_result["event_name"]}】\n------------------\n{choose_result}'
     for each in wrapped_result["candidates"]:
         message += f'參與者：{each["participants"]}\n'
         for each_available in each["available_time"]:

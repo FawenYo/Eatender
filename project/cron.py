@@ -15,8 +15,14 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 @cron.get("/init")
 async def init_cron():
     all_votes = config.db.vote_pull.find({})
+    show_result(
+        "oc4EjlzqDu",
+        "Uf5b60799f9be7c6bcb92a74e13b249b1",
+        "https://www.when2meet.com/?10574533-OTbxB",
+    )
     for each_vote in all_votes:
         set_cronjob(
+            event_id=each_vote["_id"],
             creator=each_vote["creator"],
             vote_end=each_vote["end_date"],
             vote_link=each_vote["vote_link"],
@@ -24,12 +30,12 @@ async def init_cron():
     return "Init done"
 
 
-def set_cronjob(creator: str, vote_end: datetime, vote_link: str):
+def set_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         show_result,
         "date",
-        args=[creator, vote_link],
+        args=[event_id, creator, vote_link],
         run_date=vote_end,
         timezone=pytz.timezone("Asia/Taipei"),
     )
@@ -37,10 +43,10 @@ def set_cronjob(creator: str, vote_end: datetime, vote_link: str):
     return True
 
 
-def show_result(creator: str, vote_link: str):
+def show_result(event_id: str, creator: str, vote_link: str):
     user_data = config.db.user.find_one({"user_id": creator})
     access_token = user_data["notify"]["token"]
-    message = gettime_attendant(url=vote_link)
+    message = gettime_attendant(event_id=event_id, url=vote_link)
     response = config.lotify_client.send_message(
         access_token=access_token, message=message
     )

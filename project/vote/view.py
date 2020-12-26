@@ -61,8 +61,8 @@ async def vote_save(body: dict):
     choose_result = body["choose_result"]
     pull_data = config.db.vote_pull.find_one({"_id": pull_id})
     if pull_data:
-        pull_data["participants"][user_id] = choose_result
-        config.db.vote_pull.update_one({"user_id": user_id}, {"$set": pull_data})
+        pull_data["participants"][user_id] = choose_result["love"]
+        config.db.vote_pull.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "vote_link": pull_data["vote_link"]}
     else:
         message = {"status": "error", "error_message": "查無投票！"}
