@@ -211,6 +211,7 @@ body .cybr-btn + .cybr-btn {
 html, body {
   width: 100%;
   height: 100%;
+  margin: 0px;
   background-color: #11111b;
   color: #afd33d;
   font-size: calc(6.4px + 0.8125vw);
@@ -225,8 +226,6 @@ html, body {
 .error-body:before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background-color: #afd33d;
@@ -236,8 +235,6 @@ html, body {
 .error-body:after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, #11111b 21px, transparent 1%) center, linear-gradient(#11111b 21px, transparent 1%) center, white;
@@ -248,8 +245,6 @@ html, body {
 }
 .error-body .background {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;

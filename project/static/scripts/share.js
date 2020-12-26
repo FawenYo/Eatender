@@ -1,6 +1,9 @@
 pull_id = "";
 
 $(document).ready(function () {
+  $("#btnShare").click(function (event) {
+    sendShare();
+  });
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
@@ -38,7 +41,7 @@ function sendShare() {
           },
         ]);
         if (result) {
-          alert(`[${result.status}] Message sent!`);
+          console.log(`[${result.status}] Message sent!`);
         } else {
           const [majorVer, minorVer, patchVer] = (
             liff.getLineVersion() || ""
