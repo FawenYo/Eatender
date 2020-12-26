@@ -19,9 +19,7 @@ headers = {"content-type": "application/json; charset=utf-8"}
 
 @vote.get("/share", response_class=HTMLResponse)
 async def share(request: Request):
-    return templates.TemplateResponse(
-        "share.html", context={"request": request}
-    )
+    return templates.TemplateResponse("share.html", context={"request": request})
 
 
 @vote.get("/login", response_class=HTMLResponse)

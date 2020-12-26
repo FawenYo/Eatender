@@ -8,10 +8,11 @@ sys.path.append(".")
 from config import db
 
 
-def new_user(user_id: str):
+def new_user(user_id: str, display_name: str):
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     data = {
         "user_id": user_id,
+        "display_name": display_name,
         "add_time": now,
         "favorite": [],
         "vote": [],

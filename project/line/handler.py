@@ -75,7 +75,9 @@ def handle_follow(event):
     reply_token = event.reply_token
     message = Template().welcome()
     line_bot_api.reply_message(reply_token, message)
-    database.new_user(user_id=event.source.user_id)
+    profile = line_bot_api.get_profile(event.source.user_id)
+    display_name = profile.display_name
+    database.new_user(user_id=event.source.user_id, display_name=display_name)
 
 
 @handler.add(UnfollowEvent)

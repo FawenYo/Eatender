@@ -13,8 +13,114 @@ class Template:
         self.user_lng = user_lng
 
     def welcome(self):
-        contents = {}
-        message = FlexSendMessage(alt_text="歡迎來到 Eatender！", contents=contents)
+        contents = {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "image",
+                        "size": "full",
+                        "aspectMode": "cover",
+                        "aspectRatio": "2:2.9",
+                        "gravity": "center",
+                        "url": "https://i.imgur.com/oy86bfe.jpg",
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "Eatender",
+                                        "gravity": "top",
+                                        "align": "center",
+                                        "weight": "regular",
+                                        "size": "3xl",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "Design for Decidophobia",
+                                        "size": "xs",
+                                        "weight": "bold",
+                                        "align": "center",
+                                        "style": "italic",
+                                    },
+                                ],
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "「打開你的line，根除選擇障礙」",
+                                        "size": "md",
+                                        "margin": "md",
+                                        "weight": "bold",
+                                        "align": "center",
+                                        "color": "#ffffffcc",
+                                    }
+                                ],
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "歡迎使用Eatender，",
+                                        "weight": "bold",
+                                        "color": "#666666",
+                                        "size": "md",
+                                        "margin": "lg",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "馬上開始第一次「約食」吧！",
+                                        "weight": "bold",
+                                        "color": "#666666",
+                                        "size": "md",
+                                        "margin": "xs",
+                                        "offsetEnd": "0px",
+                                    },
+                                ],
+                            },
+                        ],
+                        "backgroundColor": "#fdbe29cc",
+                        "paddingAll": "30px",
+                        "position": "absolute",
+                        "offsetBottom": "0px",
+                        "offsetStart": "0px",
+                        "offsetEnd": "0px",
+                        "paddingTop": "20px",
+                        "paddingBottom": "28px",
+                    },
+                ],
+                "paddingAll": "0px",
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {"type": "message", "label": "教學", "text": "教學"},
+                        "position": "relative",
+                        "height": "sm",
+                        "color": "#E5E3DF",
+                    }
+                ],
+                "backgroundColor": "#666666",
+                "paddingAll": "md",
+            },
+        }
+        message = FlexSendMessage(alt_text="歡迎使用 Eatender！", contents=contents)
         return message
 
     def tutorial(self):
