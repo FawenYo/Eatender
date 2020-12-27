@@ -1,5 +1,5 @@
-# Eatender
-[![logo](https://i.imgur.com/tEEYEEW.png)](https://eatender.site/)
+# EATender
+[![demo image](https://i.imgur.com/tEEYEEW.png)](https://eatender.site/)
 
 ## Table of Contents
 
