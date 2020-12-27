@@ -144,8 +144,6 @@ def gettime_attendant(event_id: str, url: str):
     for each in availables:
         time_slot = int(each[0]) % (len(times) * 4)
         date_slot = int(each[0]) // (len(times) * 4)
-        # print(date_slot, time_slot, each)
-        # print(group_grid[date_slot][time_slot])
         group_grid[date_slot][time_slot].append(str(each[1]))
 
     grid_count = []
@@ -319,6 +317,7 @@ def gettime_attendant(event_id: str, url: str):
 
         wrapped_result["candidates"].append(candidate)
 
+    # 餐廳選擇結果
     choose_result = ""
     like_list = []
     event_data = config.db.vote_pull.find_one({"_id": event_id})
@@ -328,6 +327,7 @@ def gettime_attendant(event_id: str, url: str):
     for restaurant_index, count in occurence_count.most_common(3):
         restaurant_name = event_data["restaurants"][restaurant_index]["name"]
         choose_result += f"{restaurant_name} ： {count}票\n"
+
     message = f'投票結果出爐啦！\n\n【{wrapped_result["event_name"]}】\n------------------\n{choose_result}'
     for each in wrapped_result["candidates"]:
         message += f'參與者：{each["participants"]}\n'

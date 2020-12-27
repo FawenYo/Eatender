@@ -1,10 +1,7 @@
-import json
 import sys
 
-import requests
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 # 上層目錄import
@@ -44,6 +41,7 @@ async def vote_page(request: Request, id: str, name: str):
         return message
 
 
+# 取得投票餐廳
 @vote.post("/api/vote/{pull_id}", response_class=JSONResponse)
 async def get_pull_data(pull_id):
     pull_data = config.db.vote_pull.find_one({"_id": pull_id})
@@ -54,6 +52,7 @@ async def get_pull_data(pull_id):
     return message
 
 
+# 紀錄餐廳投票結果
 @vote.post("/api/save/restaurants", response_class=JSONResponse)
 async def vote_save(body: dict):
     pull_id = body["pull_id"]
@@ -67,16 +66,3 @@ async def vote_save(body: dict):
     else:
         message = {"status": "error", "error_message": "查無投票！"}
     return JSONResponse(content=message, headers=headers)
-
-
-@vote.get("/choose", response_class=HTMLResponse)
-async def choose(request: Request):
-    return templates.TemplateResponse(
-        "choose.html",
-        context={
-            "request": request,
-            "name": "測試看看",
-            "event_id": "10552586",
-            "code": "8NX9m",
-        },
-    )
