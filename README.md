@@ -1,5 +1,5 @@
 # EATender
-[![demo image](https://i.imgur.com/tEEYEEW.png)](https://eatender.site/)
+g[![demo image](https://i.imgur.com/3OPL9mf.png)](https://eatender.site/)
 
 ## Table of Contents
 
