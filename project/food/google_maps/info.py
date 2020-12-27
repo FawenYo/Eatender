@@ -69,7 +69,10 @@ class GM_Restaurant:
 
     def parse_data(self, data):
         if not self.complete_mode:
-            filter_results = random.sample(data["results"], 6)
+            if len(data["results"]) < 6:
+                filter_results = data["results"]
+            else:
+                filter_results = random.sample(data["results"], 6)
         else:
             filter_results = data["results"]
         for place in filter_results:
