@@ -1,0 +1,16 @@
+aiofiles
+apscheduler
+beautifulsoup4
+fastapi
+gunicorn
+httptools
+jinja2
+jieba
+line-bot-sdk
+lotify
+pymongo[srv]
+python-dotenv
+pytz
+rich
+uvicorn
+uvloop

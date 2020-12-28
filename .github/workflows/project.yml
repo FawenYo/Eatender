@@ -1,0 +1,50 @@
+name: Project CI/CD
+
+# 觸發條件
+on:
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development]
+
+# 執行一項或多項任務
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8.6]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # 建立環境
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./project/requirements.txt
+
+      # 運行測試
+      # - name: Run Tests
+      #   run: |
+      #     cd project
+      #     bash test.sh
+
+      # 遠端部署
+      - name: CD
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          KEY: ${{ secrets.SSHKEY }}
+          script: |
+            cd /home/fawenyo/Eatender
+            git pull https://github.com/FawenYo/Eatender.git development
+            docker-compose down -v --rmi all --remove-orphans
+            docker-compose up --build -d
+            curl http://localhost/init

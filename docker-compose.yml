@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  project:
+    build: ./project
+    container_name: eatender
+    expose:
+      - 8001
+    environment:
+      - TZ=Asia/Taipei
+  nginx:
+    build: ./nginx
+    container_name: eatender_nginx
+    # restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - project
+    environment:
+      - TZ=Asia/Taipei

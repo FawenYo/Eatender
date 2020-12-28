@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VSCode related files
+.vscode/
+
+# Pycharm related files
+.idea/
+
+# MacOS related files
+**/.DS_Store
+
+# SSL file
+*.crt
+*.key
