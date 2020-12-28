@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from lotify.client import Client
 from rich.console import Console
 
+# Load environment variables
 load_dotenv()
 
 console = Console()

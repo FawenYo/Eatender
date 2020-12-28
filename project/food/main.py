@@ -7,14 +7,13 @@ from datetime import datetime
 
 from .google_maps.info import GM_Restaurant
 from .ifoodie.ifoodie import Ifoodie
-from .restaurant import Restaurant
 
-# 上層目錄import
 sys.path.append(".")
-import config
-import MongoDB.operation as database
 from bson.son import SON
 from pymongo import GEOSPHERE
+
+import config
+import MongoDB.operation as database
 
 
 class Nearby_restaurant:
@@ -28,6 +27,7 @@ class Nearby_restaurant:
         self.get_info()
 
     def get_info(self):
+        # Get nearby restaurants
         threads = []
         self.get_google_maps_data()
         self.get_ifoodie_data()
@@ -92,6 +92,11 @@ class Nearby_restaurant:
         thread.start()
 
     def get_google_maps_data(self, complete_mode=False):
+        """Get Google Maps nearby restaurants data
+
+        Args:
+            complete_mode (bool, optional): Set it to True to get complete data. Defaults to False.
+        """
         restaurants = GM_Restaurant(
             latitude=self.latitude,
             longitude=self.longitude,
@@ -112,16 +117,23 @@ class Nearby_restaurant:
                     config.db.page_token.update_one({}, {"$set": token_table})
                     self.next_page = token_key
                 else:
-                    for key, value in token_table[
-                        "data"
-                    ].items():  # for name, age in dictionary.iteritems():  (for Python 2.x)
+                    for key, value in token_table["data"].items():
                         if value == self.next_page:
                             self.next_page = key
             self.restaurants = restaurants.restaurants
         else:
             return restaurants
 
-    def get_ifoodie_data(self, complete_mode=False, restaurants=object):
+    def get_ifoodie_data(self, restaurants: object = object, complete_mode=False):
+        """Get ifoodie data
+
+        Args:
+            restaurants (object, optional): Restaurants data. Defaults to object.
+            complete_mode (bool, optional): Set it to True to get complete data. Defaults to False.
+
+        Returns:
+            [type]: [description]
+        """
         threads = []
         if not complete_mode:
             for restaurant in self.restaurants:
@@ -145,7 +157,12 @@ class Nearby_restaurant:
         if complete_mode:
             return restaurants
 
-    def multi_threading_ifoodie(self, restaurant):
+    def multi_threading_ifoodie(self, restaurant: object):
+        """Multi-threading Get ifoodie data
+
+        Args:
+            restaurant (object): Restaurant data
+        """
         try:
             data = Ifoodie(
                 restaurant_name=restaurant.name,
@@ -178,6 +195,7 @@ class Nearby_restaurant:
         print("Silent update done.")
 
 
+# 店家營業狀態
 def find_operating_status(data):
     now = datetime.now()
     weekday = now.weekday()

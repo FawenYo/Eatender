@@ -4,7 +4,6 @@ import threading
 
 import requests
 
-# 上層目錄import
 sys.path.append(".")
 from config import GOOGLE_MAPS_APIKEY, GOOGLE_MAPS_REQUEST_FIELD
 from food.restaurant import Restaurant

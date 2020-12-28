@@ -1,5 +1,6 @@
 import jieba
 
+# import stop words
 stop_words = []
 with open("food/stop_words.txt", "r", encoding="UTF-8") as file:
     for data in file.readlines():
@@ -42,7 +43,16 @@ class Restaurant:
         self.keywords = self.find_keywords(name=name, reviews=reviews)
         self.ifoodie_url = ifoodie_url
 
-    def find_keywords(self, name, reviews):
+    def find_keywords(self, name: str, reviews: list) -> list:
+        """Restaurant review keyword
+
+        Args:
+            name (str): Restaurant name
+            reviews (list): Reviews list
+
+        Returns:
+            (list): Most frequent keywords (3 items)
+        """
         keyword_data = {}
         keywords = []
         for review in reviews:
@@ -65,6 +75,3 @@ class Restaurant:
         for each in most_frequent[:3]:
             keywords.append(each[0])
         return keywords
-
-    def real_keyword(self):
-        pass

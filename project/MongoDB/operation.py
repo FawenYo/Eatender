@@ -2,13 +2,18 @@ import sys
 from datetime import datetime
 
 import pytz
-from pymongo import results
 
 sys.path.append(".")
 from config import db
 
 
 def new_user(user_id: str, display_name: str):
+    """LINE Bot - New User
+
+    Args:
+        user_id (str): LINE User ID
+        display_name (str): LINE User Name
+    """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     data = {
         "user_id": user_id,
@@ -22,10 +27,22 @@ def new_user(user_id: str, display_name: str):
 
 
 def delete_user(user_id: str):
+    """LINE Bot - Delete User
+
+    Args:
+        user_id (str): LINE User ID
+    """
     db.user.delete_one({"user_id": user_id})
 
 
 def record_user_location(user_id: str, lat: float, lng: float):
+    """LINE Bot - Record user
+
+    Args:
+        user_id (str): LINE User ID
+        lat (float): Location latitude
+        lng (float): Location longitude
+    """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     data = {
         "user_id": user_id,
@@ -35,7 +52,13 @@ def record_user_location(user_id: str, lat: float, lng: float):
     db.history.insert_one(data)
 
 
-def add_restaurant(restaurant, keyword):
+def add_restaurant(restaurant: object, keyword: str):
+    """New restaurant
+
+    Args:
+        restaurant (object): Restaurant data (food/restaurant.py)
+        keyword (str): Restaurant category
+    """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     result = db.restaurant.find_one({"name": restaurant.name})
     if not result:
@@ -67,7 +90,18 @@ def add_restaurant(restaurant, keyword):
             db.restaurant.update_one({"name": restaurant.name}, {"$set": result})
 
 
-def create_vote(creator, vote_id, vote_link, restaurants, end_date):
+def create_vote(
+    creator: str, vote_id: str, vote_link: str, restaurants: list, end_date: datetime
+):
+    """Create vote event
+
+    Args:
+        creator (str): Creator's LINE User ID
+        vote_id (str): Vote's event ID
+        vote_link (str): When2meet link
+        restaurants (list): Restaurant list
+        end_date (datetime): Vote end date
+    """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     if not db.vote_pull.find_one({"_id": vote_id}):
         data = {

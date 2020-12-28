@@ -15,23 +15,22 @@
       <link href="./static/css/restaurant.css" rel="stylesheet" type="text/css">
       <style type="text/css">.fxC3 { color: #666666 !important; } .fxC2 { color: #999999 !important; } .fxC1 { color: #ff0000 !important; } .fxC0 { color: #00ff00 !important; } .LyGi { width: 100%; max-width: 500px; min-width: 0;} .LyMe { width: 100%; max-width: 300px; min-width: 0;} .LyKi { width: 100%; max-width: 260px; min-width: 0;} .LyMi { width: 100%; max-width: 160px; min-width: 0;} .LyNa { width: 100%; max-width: 120px; min-width: 0;} </style>
       <link rel="stylesheet" type="text/css" href="./static/css/main.css">
-
       <!-- Global site tag (gtag.js) - Google Analytics -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
       <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-8XVRR4RQHN');
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          
+          gtag('config', 'G-8XVRR4RQHN');
       </script>
    </head>
    <body>
-      <!-- Jquery -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
       <script type="text/javascript" src="./static/scripts/restaurant.js"></script>
+      
       <input id="restaurant_count" type="hidden" value={{ data|length }} />
       <input id="pull_id" type="hidden" value={{ pull_id }} />
       <input id="user_name" type="hidden" value={{ name }} />

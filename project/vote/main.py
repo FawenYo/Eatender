@@ -5,7 +5,6 @@ from collections import Counter
 import requests
 from bs4 import BeautifulSoup
 
-# 上層目錄import
 sys.path.append(".")
 import config
 
@@ -42,7 +41,16 @@ def create_event(event_name: str, dates: str, early_time: int, later_time: int):
     return f"https://www.when2meet.com/{event_id}"
 
 
-def gettime_attendant(event_id: str, url: str):
+def gettime_attendant(event_id: str, url: str) -> str:
+    """取得 when2meet 結果
+
+    Args:
+        event_id (str): vote id (EATender)
+        url (str): when2meet url
+
+    Returns:
+        (str): LINE Notify message text
+    """
     response = requests.get(url, timeout=10)
     soup = BeautifulSoup(response.text, "html.parser")
 

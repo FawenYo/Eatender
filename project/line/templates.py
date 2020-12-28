@@ -1,7 +1,6 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from config import console
 from linebot.models import FlexSendMessage
 
 true = True
@@ -12,7 +11,8 @@ class Template:
         self.user_lat = user_lat
         self.user_lng = user_lng
 
-    def welcome(self):
+    # 歡迎訊息
+    def welcome(self) -> FlexSendMessage:
         contents = {
             "type": "bubble",
             "body": {
@@ -115,7 +115,8 @@ class Template:
         message = FlexSendMessage(alt_text="歡迎使用 Eatender！", contents=contents)
         return message
 
-    def tutorial(self):
+    # 教學
+    def tutorial(self) -> FlexSendMessage:
         contents = {
             "type": "bubble",
             "body": {
@@ -251,7 +252,8 @@ class Template:
         message = FlexSendMessage(alt_text="使用教學", contents=contents)
         return message
 
-    def show_vote_pull(self, restaurants):
+    # 投票池列表
+    def show_vote_pull(self, restaurants) -> FlexSendMessage:
         show_list = []
         for each in restaurants:
             place_id = each["place_id"]
@@ -293,7 +295,8 @@ class Template:
         message = FlexSendMessage(alt_text="投票池列表", contents=contents)
         return message
 
-    def show_favorite(self, restaurants):
+    # 最愛列表
+    def show_favorite(self, restaurants) -> FlexSendMessage:
         show_list = []
         for each in restaurants:
             place_id = each["place_id"]
@@ -335,7 +338,8 @@ class Template:
         message = FlexSendMessage(alt_text="最愛列表", contents=contents)
         return message
 
-    def show_restaurant(self, restaurants, keyword, next_page):
+    # 附近餐廳列表
+    def show_restaurant(self, restaurants, keyword, next_page) -> FlexSendMessage:
         show_list = []
         for each in restaurants:
             place_id = each.place_id
@@ -382,7 +386,8 @@ class Template:
         message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
         return message
 
-    def error(self):
+    # 發生錯誤
+    def error(self) -> FlexSendMessage:
         contents = {
             "type": "bubble",
             "hero": {
@@ -446,7 +451,8 @@ class Template:
         message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
         return message
 
-    def share_vote(self, pull_id):
+    # LINE - 分享投票
+    def share_vote(self, pull_id) -> FlexSendMessage:
         contents = {
             "type": "carousel",
             "contents": [
@@ -620,6 +626,7 @@ class Template:
         message = FlexSendMessage(alt_text="投票創建成功！", contents=contents)
         return message
 
+    # Web - 分享投票
     def liff_share(self, pull_id):
         contents = {
             "type": "carousel",
@@ -771,6 +778,7 @@ class Template:
         return contents
 
 
+# 店家營業狀態
 def find_operating_status(data):
     now = datetime.now()
     weekday = now.weekday()
@@ -795,6 +803,7 @@ def find_operating_status(data):
     return False
 
 
+# 附近餐廳資訊
 def restaurant_card_info(
     place_id: str,
     restaurant_name: str,
@@ -809,7 +818,7 @@ def restaurant_card_info(
     phone_number: str,
     lat: float,
     lng: float,
-):
+) -> dict:
     star = {
         "type": "icon",
         "size": "sm",
@@ -1112,7 +1121,8 @@ def restaurant_card_info(
     return card
 
 
-def show_more(user_lat, user_lng, keyword, next_page):
+# 顯示更多
+def show_more(user_lat, user_lng, keyword, next_page) -> dict:
     card = {
         "type": "bubble",
         "body": {
@@ -1167,6 +1177,7 @@ def show_more(user_lat, user_lng, keyword, next_page):
     return card
 
 
+# 投票餐廳資訊
 def vote_card(
     place_id: str,
     restaurant_name: str,
@@ -1181,7 +1192,7 @@ def vote_card(
     phone_number: str,
     lat: float,
     lng: float,
-):
+) -> dict:
     star = {
         "type": "icon",
         "size": "sm",

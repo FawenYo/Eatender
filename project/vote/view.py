@@ -4,9 +4,9 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
-# 上層目錄import
 sys.path.append(".")
 import config
+from API.router import get_pull_data
 
 vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -14,16 +14,19 @@ templates = Jinja2Templates(directory="templates")
 headers = {"content-type": "application/json; charset=utf-8"}
 
 
+# Share vote
 @vote.get("/share", response_class=HTMLResponse)
 async def share(request: Request):
     return templates.TemplateResponse("share.html", context={"request": request})
 
 
+# Vote login
 @vote.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
     return templates.TemplateResponse("login.html", context={"request": request})
 
 
+# Vote page content
 @vote.get("/vote")
 async def vote_page(request: Request, id: str, name: str):
     message = await get_pull_data(pull_id=id)
@@ -39,17 +42,6 @@ async def vote_page(request: Request, id: str, name: str):
         )
     else:
         return message
-
-
-# 取得投票餐廳
-@vote.post("/api/vote/{pull_id}", response_class=JSONResponse)
-async def get_pull_data(pull_id):
-    pull_data = config.db.vote_pull.find_one({"_id": pull_id})
-    if pull_data:
-        message = {"status": "success", "restaurants": pull_data["restaurants"]}
-    else:
-        message = {"status": "error", "error_message": "Vote pull not found."}
-    return message
 
 
 # 紀錄餐廳投票結果

@@ -2,9 +2,6 @@ import sys
 
 import requests
 
-# 上層目錄import
-sys.path.append(".")
-
 
 class Weather:
     def __init__(self):

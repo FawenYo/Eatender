@@ -11,7 +11,6 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
 
-# 上層目錄import
 sys.path.append(".")
 from typing import Optional
 
@@ -27,7 +26,7 @@ handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 line_app = APIRouter()
 
-# LINE Notify
+# LINE Notify Redirect
 @line_app.get("/notify/", response_class=RedirectResponse)
 async def line_notify_redirect(uid: Optional[str] = ""):
     link = config.lotify_client.get_auth_link(state=uid)
@@ -45,6 +44,7 @@ async def line_notify_callback(code: str = "", state: str = ""):
     return RedirectResponse(config.SITE_NAME)
 
 
+# LINE Server Webhook callback
 @line_app.post("/callback")
 async def callback(request: Request):
     """LINE Server Webhook Callback
@@ -98,16 +98,19 @@ def handle_message(event):
     """
     user_id = event.source.user_id
     reply_token = event.reply_token
+    # 文字訊息
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
             # QA問答
             if pending:
+                # 取消操作
                 if user_message == "取消":
                     config.db.pending.delete_one({"user_id": user_id})
                     message = TextSendMessage(text=f"已取消操作！")
                 else:
+                    # 餐廳關鍵字
                     if pending["action"] == "search":
                         config.db.pending.delete_one({"user_id": user_id})
                         latitude = pending["latitude"]
@@ -115,6 +118,7 @@ def handle_message(event):
                         message = find_nearby(
                             latitude=latitude, longitude=longitude, keyword=user_message
                         )
+                    # 創建投票
                     else:
                         (
                             status,
@@ -176,6 +180,7 @@ def handle_message(event):
                 # 投票池
                 elif user_message == "投票":
                     user_data = config.db.user.find_one({"user_id": user_id})
+                    # 已綁定 LINE Notify
                     if user_data["notify"]["status"]:
                         if len(user_data["vote"]) > 0:
                             message = [
@@ -208,10 +213,11 @@ def handle_message(event):
                     message = TextSendMessage(
                         text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
                     )
-        except Exception as error:
+        except Exception:
             config.console.print_exception()
             message = Template().error()
         line_bot_api.reply_message(reply_token, message)
+    # 地點訊息
     elif isinstance(event.message, LocationMessage):
         try:
             lat = event.message.latitude
@@ -267,11 +273,12 @@ def handle_postback(event):
                 if not restaurant_data:
                     restaurant_data = config.restaurants[restaurant_id]
                 user = config.db.user.find_one({"user_id": user_id})
+                # 尚未收藏餐廳
                 if restaurant_data not in user["favorite"]:
-                    # update user favorite list
+                    # 更新收藏列表
                     user["favorite"].append(restaurant_data)
                     config.db.user.update_one({"user_id": user_id}, {"$set": user})
-                    # reply message
+
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}加入最愛！")
                 else:
                     message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
@@ -317,6 +324,7 @@ def handle_postback(event):
                 # 搜尋超時
                 except LineBotApiError:
                     config.console.print_exception()
+                    # 使用push回應內容
                     line_bot_api.push_message(user_id, message)
             # 加入投票池
             elif action == "vote":
@@ -352,6 +360,7 @@ def handle_postback(event):
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
         else:
+            # 創建投票
             if postback_data == "create":
                 message = TextSendMessage(
                     text=f"請設定投票截止日期",
@@ -367,6 +376,7 @@ def handle_postback(event):
                         ]
                     ),
                 )
+            # 投票截止日期
             elif postback_data == "endDate":
                 vote_pull = config.db.user.find_one({"user_id": user_id})["vote"]
                 end_date = datetime.strptime(
@@ -391,7 +401,15 @@ def handle_postback(event):
         line_bot_api.reply_message(reply_token, message)
 
 
-def find_nearby(latitude, longitude, keyword, page_token=""):
+def find_nearby(latitude: float, longitude: float, keyword: str, page_token: str = ""):
+    """搜尋附近餐廳
+
+    Args:
+        latitude (float): Location latitude
+        longitude (float): Location longitude
+        keyword (str): Restaurant name / category
+        page_token (str, optional): Google Maps API page token. Defaults to "".
+    """
     if keyword == "隨便":
         keyword = ""
     restaurants = Nearby_restaurant(
@@ -409,7 +427,12 @@ def find_nearby(latitude, longitude, keyword, page_token=""):
     return message
 
 
-def parse_string(message):
+def parse_string(message: str):
+    """投票資訊
+
+    Args:
+        message (str): 投票資訊內容
+    """
     # default
     status = True
     event_name = ""
