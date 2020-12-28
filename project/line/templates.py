@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from linebot.models import FlexSendMessage
 
@@ -781,22 +781,21 @@ class Template:
 # 店家營業狀態
 def find_operating_status(data):
     now = datetime.now()
-    weekday = now.weekday()
+    today_date = now.strftime("%Y:%m:%d")
     time = now.strftime("%H:%M")
 
-    today_open = data[weekday].split(",")
+    today_open = data[now.weekday()].split(",")
     for each in today_open:
         if "休息" in each:
             return False
         if "24 小時營業" in each:
-            return True
+            return False
         temp = re.findall(r"\d{1,2}\:\d{1,2}", each)
-        start = datetime.strptime(f"{temp[0]}:{str(weekday)}", "%H:%M:%d")
-        current = datetime.strptime(f"{time}:{str(weekday)}", "%H:%M:%d")
-        if int(temp[0][0:2]) <= int(temp[1][0:2]):
-            end = datetime.strptime(f"{temp[1]}:{str(weekday)}", "%H:%M:%d")
-        else:
-            end = datetime.strptime(f"{temp[1]}:{str(weekday + 1)}", "%H:%M:%d")
+        start = datetime.strptime(f"{today_date}:{temp[0]}", "%Y:%m:%d:%H:%M")
+        current = datetime.strptime(f"{today_date}:{time}", "%Y:%m:%d:%H:%M")
+        end = datetime.strptime(f"{today_date}:{temp[1]}", "%Y:%m:%d:%H:%M")
+        if int(temp[0][0:2]) > int(temp[1][0:2]):
+            end += timedelta(days=1)
 
         if start <= current <= end:
             return True
