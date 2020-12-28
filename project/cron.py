@@ -1,12 +1,11 @@
 from datetime import datetime
 
+import config
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import APIRouter
 from linebot import LineBotApi
 from linebot.models import *
-
-import config
 from vote.main import gettime_attendant
 
 cron = APIRouter()
