@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "Eatender"
+version = "0.1.0"
+description = "EATender python packages requirements"
+authors = ["FawenYo <twsky020600@gmail.com>"]
+license = "MIT License"
+
+[tool.poetry.dependencies]
+python = "3.8.6"
+aiofiles = "^0.6.0"
+APScheduler = "^3.6.3"
+beautifulsoup4 = "^4.9.3"
+fastapi = "^0.63.0"
+gunicorn = "^20.0.4"
+httptools = "^0.1.1"
+Jinja2 = "^2.11.2"
+jieba = "^0.42.1"
+line-bot-sdk = "^1.18.0"
+lotify = "^2.1.4"
+python-dotenv = "^0.15.0"
+pytz = "^2020.5"
+rich = "^9.5.1"
+uvicorn = "^0.13.2"
+uvloop = "^0.14.0"
+pymongo = {extras = ["srv"], version = "^3.11.2"}
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+isort = "^5.7.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
