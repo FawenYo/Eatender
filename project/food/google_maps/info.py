@@ -1,4 +1,3 @@
-import random
 import sys
 import threading
 
@@ -16,8 +15,9 @@ class GM_Restaurant:
         longitude: float,
         keyword: str = "",
         search_type: str = "restaurant",
-        complete_mode=False,
-        page_token="",
+        complete_mode: bool = False,
+        page_token: str = "",
+        index: int = 0,
     ):
         """初始化
 
@@ -26,7 +26,9 @@ class GM_Restaurant:
             longitude (float): 經度.
             keyword (str): 關鍵字列表，以 " " 分割.
             search_type (str, optional): 限制類別. Defaults to "restaurant".
-            complete_mode(bool): 限制搜尋.
+            complete_mode(bool): 限制搜尋. Defaults to false.
+            page_token (str, optional): 頁面搜尋token. Defaults to "".
+            index (int, optional): 搜尋項目. Defaults to 0.
         """
         self.restaurants = []
         self.threads = []
@@ -37,19 +39,13 @@ class GM_Restaurant:
         self.keyword = keyword
         self.search_type = search_type
         self.complete_mode = complete_mode
+        self.current_page = page_token
+        self.index = index
 
-        self.fetch_data(pagetoken=page_token)
+        self.fetch_data(page_token=page_token)
 
-    def fetch_data(
-        self,
-        pagetoken: str = "",
-    ):
-        """Google Maps 餐廳資料
-
-        Args:
-            pagetoken (str): Google Maps search page token.
-
-        """
+    def fetch_data(self, page_token):
+        # Google Maps 餐廳資料
         radius = 1000 if not self.complete_mode else 50000
         param_data = {
             "language": "zh-TW",
@@ -57,7 +53,7 @@ class GM_Restaurant:
             "radius": radius,
             "type": self.search_type,
             "keyword": self.keyword,
-            "pagetoken": pagetoken,
+            "pagetoken": page_token,
             "key": GOOGLE_MAPS_APIKEY,
         }
         response = requests.get(
@@ -68,21 +64,22 @@ class GM_Restaurant:
 
     def parse_data(self, data):
         if not self.complete_mode:
-            if len(data["results"]) < 6:
-                filter_results = data["results"]
-            else:
-                filter_results = random.sample(data["results"], 6)
+            filter_results = data["results"][0 + 5 * self.index : 5 + 5 * self.index]
         else:
             filter_results = data["results"]
         for place in filter_results:
             thread = threading.Thread(target=self.get_place_data, args=(place,))
             self.threads.append(thread)
-        if not self.complete_mode or "next_page_token" not in data:
-            if "next_page_token" in data:
-                self.next_page = data["next_page_token"]
+        if not self.complete_mode:
+            if len(data["results"][5 + 5 * self.index :]) > 0:
+                self.next_page = f"{self.current_page}[|]{self.index + 1}"
+            elif "next_page_token" in data:
+                self.next_page = f"{data['next_page_token']}[|]0"
+            self.start_thread()
+        elif "next_page_token" not in data:
             self.start_thread()
         else:
-            self.fetch_data(pagetoken=data["next_page_token"])
+            self.fetch_data(page_token=data["next_page_token"])
 
     def start_thread(self):
         for thread in self.threads:
