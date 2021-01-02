@@ -1,9 +1,9 @@
+import re
 import sys
+from datetime import datetime, timedelta
 
 import requests
-import re
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
 
 
 class Weather:
@@ -86,7 +86,6 @@ class Weather:
             "冬至，想來點...": "湯圓",
         }
 
-
         def add_to_customized(keyword: str):
             for category in category_reference.keys():
                 if keyword in category:
@@ -104,7 +103,7 @@ class Weather:
         today = datetime.now()
         response = requests.get(f"https://toolskk.com/{today.year}calendar", timeout=10)
         soup = BeautifulSoup(response.text, "html.parser")
-        
+
         festivals = {
             "農曆新年": re.findall("(\d{1,2}/\d{1,2}) 除夕過年", soup.text),
             "情人節": re.findall("(\d{1,2}/\d{1,2}).*?情人節", soup.text),
@@ -120,7 +119,7 @@ class Weather:
                 if festival == "農曆新年":
                     start = datetime.strptime(f"{today.year}/{period[0]}", "%Y/%m/%d")
                     end = start + timedelta(days=7)
-                    
+
                     if start <= today <= end:
                         add_to_customized(keyword=festival)
                 elif festival == "中秋節":
