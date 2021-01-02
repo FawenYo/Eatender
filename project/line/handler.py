@@ -241,7 +241,7 @@ def handle_message(event):
                 for category in restaurant_category
             ]
 
-            dynamic_update_category = Weather.customized_category(lat=lat, lng=lng)
+            dynamic_update_category = Weather().customized_category(lat=lat, lng=lng)
             temp_quick_reply_items = [
                 QuickReplyButton(
                     action=PostbackAction(
