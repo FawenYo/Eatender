@@ -1,9 +1,10 @@
 import sys
 from datetime import datetime
 
-import config
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+
+import config
 from weather.main import Weather
 
 sys.path.append(".")
