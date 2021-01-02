@@ -4,7 +4,7 @@ import threading
 import requests
 
 sys.path.append(".")
-from config import GOOGLE_MAPS_APIKEY, GOOGLE_MAPS_REQUEST_FIELD
+import config
 from food.restaurant import Restaurant
 
 
@@ -54,7 +54,7 @@ class GM_Restaurant:
             "type": self.search_type,
             "keyword": self.keyword,
             "pagetoken": page_token,
-            "key": GOOGLE_MAPS_APIKEY,
+            "key": config.GOOGLE_MAPS_APIKEY,
         }
         response = requests.get(
             f"https://maps.googleapis.com/maps/api/place/nearbysearch/json",
@@ -96,15 +96,35 @@ class GM_Restaurant:
             photo_url = self.place_photo(photo_reference=photo_reference)
             name = place["name"]
             location = place["geometry"]["location"]
-            open_now = place["opening_hours"]["open_now"]
+            if "opening_hours" not in place:
+                open_now = False
+            else:
+                open_now = place["opening_hours"]["open_now"]
             rating = place["rating"]
-            operating_time = detail["opening_hours"]
+            if "opening_hours" not in detail:
+                operating_time = {
+                    "open_now": False,
+                    "periods": [],
+                    "weekday_text": [
+                        "星期一: 休息",
+                        "星期二: 休息",
+                        "星期三: 休息",
+                        "星期四: 休息",
+                        "星期五: 休息",
+                        "星期六: 休息",
+                        "星期日: 休息",
+                    ],
+                }
+            else:
+                operating_time = detail["opening_hours"]
             address = detail["formatted_address"]
             phone_number = detail["formatted_phone_number"]
             if "website" in detail:
                 website = detail["website"]
-            else:
+            elif "url" in place:
                 website = place["url"]
+            else:
+                website = "https://www.google.com.tw/maps"
             google_url = detail["url"]
             reviews = []
             for each in detail["reviews"]:
@@ -127,17 +147,17 @@ class GM_Restaurant:
             )
             self.restaurants.append(restaurant)
         except KeyError:
-            pass
+            config.console.print_exception()
 
     def place_detail(self, place_id):
-        fileds_data = ",".join(GOOGLE_MAPS_REQUEST_FIELD)
+        fileds_data = ",".join(config.GOOGLE_MAPS_REQUEST_FIELD)
         response = requests.get(
-            f"https://maps.googleapis.com/maps/api/place/details/json?language=zh-TW&place_id={place_id}&fields={fileds_data}&key={GOOGLE_MAPS_APIKEY}"
+            f"https://maps.googleapis.com/maps/api/place/details/json?language=zh-TW&place_id={place_id}&fields={fileds_data}&key={config.GOOGLE_MAPS_APIKEY}"
         ).json()
         return response["result"]
 
     def place_photo(self, photo_reference, max_width=400):
         photo_url = requests.get(
-            f"https://maps.googleapis.com/maps/api/place/photo?maxwidth={max_width}&photoreference={photo_reference}&key={GOOGLE_MAPS_APIKEY}"
+            f"https://maps.googleapis.com/maps/api/place/photo?maxwidth={max_width}&photoreference={photo_reference}&key={config.GOOGLE_MAPS_APIKEY}"
         ).url
         return photo_url
