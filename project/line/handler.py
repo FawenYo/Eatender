@@ -20,6 +20,7 @@ import MongoDB.operation as database
 from food.main import Nearby_restaurant
 from line.templates import Template
 from vote.main import create_event
+from weather.main import Weather
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
@@ -228,7 +229,8 @@ def handle_message(event):
             )
             thread.start()
 
-            restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩", "其他"]
+            # 預設類別
+            restaurant_category = ["隨便", "日式", "中式", "西式"]
             quick_reply_items = [
                 QuickReplyButton(
                     action=PostbackAction(
@@ -240,6 +242,29 @@ def handle_message(event):
                 for category in restaurant_category
             ]
 
+            # 動態類別
+            dynamic_update_category = Weather().customized_category(lat=lat, lng=lng)
+            temp_quick_reply_items = [
+                QuickReplyButton(
+                    action=PostbackAction(
+                        label=category,
+                        display_text=category,
+                        data=f"search_||_{lat},{lng}_||_{dynamic_update_category[category]}",
+                    )
+                )
+                for category in list(dynamic_update_category.keys())
+            ]
+
+            quick_reply_items += temp_quick_reply_items
+            quick_reply_items.append(
+                QuickReplyButton(
+                    action=PostbackAction(
+                        label="其他",
+                        display_text="其他",
+                        data=f"search_||_{lat},{lng}_||_其他",
+                    )
+                )
+            )
             message = TextSendMessage(
                 text="請選擇餐廳類別",
                 quick_reply=QuickReply(items=quick_reply_items),

@@ -9,10 +9,11 @@ from .google_maps.info import GM_Restaurant
 from .ifoodie.ifoodie import Ifoodie
 
 sys.path.append(".")
-import config
-import MongoDB.operation as database
 from bson.son import SON
 from pymongo import GEOSPHERE
+
+import config
+import MongoDB.operation as database
 
 
 class Nearby_restaurant:
@@ -96,12 +97,18 @@ class Nearby_restaurant:
         Args:
             complete_mode (bool, optional): Set it to True to get complete data. Defaults to False.
         """
+        if "[|]" not in self.page_token:
+            page_token = self.page_token
+            index = 0
+        else:
+            page_token, index = self.page_token.split("[|]")
         restaurants = GM_Restaurant(
             latitude=self.latitude,
             longitude=self.longitude,
             keyword=self.keyword,
             complete_mode=complete_mode,
-            page_token=self.page_token,
+            page_token=page_token,
+            index=int(index),
         )
         if not complete_mode:
             self.next_page = restaurants.next_page
