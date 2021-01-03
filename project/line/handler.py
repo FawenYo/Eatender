@@ -248,7 +248,7 @@ def handle_message(event):
                 QuickReplyButton(
                     action=PostbackAction(
                         label=category,
-                        display_text=category,
+                        display_text=dynamic_update_category[category],
                         data=f"search_||_{lat},{lng}_||_{dynamic_update_category[category]}",
                     )
                 )
