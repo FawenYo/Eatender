@@ -89,48 +89,24 @@ class GM_Restaurant:
             thread.join()
 
     def get_place_data(self, place):
-        try:
-            place_id = place["place_id"]
-            detail = self.place_detail(place_id=place_id)
-            photo_reference = place["photos"][0]["photo_reference"]
-            photo_url = self.place_photo(photo_reference=photo_reference)
-            name = place["name"]
-            location = place["geometry"]["location"]
-            if "opening_hours" not in place:
-                open_now = False
-            else:
-                open_now = place["opening_hours"]["open_now"]
-            rating = place["rating"]
-            if "opening_hours" not in detail:
-                operating_time = {
-                    "open_now": False,
-                    "periods": [],
-                    "weekday_text": [
-                        "星期一: 休息",
-                        "星期二: 休息",
-                        "星期三: 休息",
-                        "星期四: 休息",
-                        "星期五: 休息",
-                        "星期六: 休息",
-                        "星期日: 休息",
-                    ],
-                }
-            else:
-                operating_time = detail["opening_hours"]
-            address = detail["formatted_address"]
-            phone_number = detail["formatted_phone_number"]
-            if "website" in detail:
-                website = detail["website"]
-            elif "url" in place:
-                website = place["url"]
-            else:
-                website = "https://www.google.com.tw/maps"
-            google_url = detail["url"]
-            reviews = []
-            for each in detail["reviews"]:
-                content = each["text"]
-                reviews.append(content)
+        place_id = place["place_id"]
+        if "opening_hours" not in place:
+            open_now = False
+        else:
+            open_now = place["opening_hours"]["open_now"]
 
+        data = config.db.restaurant.find_one({"place_id": place_id})
+        if data:
+            name = data["name"]
+            photo_url = data["photo_url"]
+            operating_time = data["operating_time"]
+            location = data["location"]
+            address = data["address"]
+            rating = data["rating"]
+            website = data["website"]
+            google_url = data["google_url"]
+            phone_number = data["phone_number"]
+            reviews = data["reviews"]
             restaurant = Restaurant(
                 place_id=place_id,
                 name=name,
@@ -146,8 +122,61 @@ class GM_Restaurant:
                 reviews=reviews,
             )
             self.restaurants.append(restaurant)
-        except KeyError:
-            config.console.print_exception()
+        else:
+            try:
+                detail = self.place_detail(place_id=place_id)
+                photo_reference = place["photos"][0]["photo_reference"]
+                photo_url = self.place_photo(photo_reference=photo_reference)
+                name = place["name"]
+                location = place["geometry"]["location"]
+                rating = place["rating"]
+                if "opening_hours" not in detail:
+                    operating_time = {
+                        "open_now": False,
+                        "periods": [],
+                        "weekday_text": [
+                            "星期一: 休息",
+                            "星期二: 休息",
+                            "星期三: 休息",
+                            "星期四: 休息",
+                            "星期五: 休息",
+                            "星期六: 休息",
+                            "星期日: 休息",
+                        ],
+                    }
+                else:
+                    operating_time = detail["opening_hours"]
+                address = detail["formatted_address"]
+                phone_number = detail["formatted_phone_number"]
+                if "website" in detail:
+                    website = detail["website"]
+                elif "url" in place:
+                    website = place["url"]
+                else:
+                    website = "https://www.google.com.tw/maps"
+                google_url = detail["url"]
+                reviews = []
+                for each in detail["reviews"]:
+                    content = each["text"]
+                    reviews.append(content)
+
+                restaurant = Restaurant(
+                    place_id=place_id,
+                    name=name,
+                    photo_url=photo_url,
+                    open_now=open_now,
+                    operating_time=operating_time,
+                    location=location,
+                    address=address,
+                    rating=rating,
+                    website=website,
+                    google_url=google_url,
+                    phone_number=phone_number,
+                    reviews=reviews,
+                )
+                self.restaurants.append(restaurant)
+            except KeyError:
+                config.console.print_exception()
 
     def place_detail(self, place_id):
         fileds_data = ",".join(config.GOOGLE_MAPS_REQUEST_FIELD)
