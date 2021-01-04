@@ -87,10 +87,6 @@ class Nearby_restaurant:
         for thread in threads:
             thread.start()
 
-        # Updating Silently
-        thread = threading.Thread(target=self.silent_update)
-        thread.start()
-
     def get_google_maps_data(self, complete_mode=False):
         """Get Google Maps nearby restaurants data
 
@@ -182,23 +178,6 @@ class Nearby_restaurant:
             pass
         except IndexError:
             pass
-
-    def silent_update(self):
-        threads = []
-        # Google Maps
-        restaurants = self.get_google_maps_data(complete_mode=True)
-        restaurants = self.get_ifoodie_data(complete_mode=True, restaurants=restaurants)
-        # Add to MongoDB
-        for restaurant in restaurants.restaurants:
-            thread = threading.Thread(
-                target=database.add_restaurant, args=(restaurant, self.keyword)
-            )
-            threads.append(thread)
-        for thread in threads:
-            thread.start()
-        for thread in threads:
-            thread.join()
-        print("Silent update done.")
 
 
 # 店家營業狀態
