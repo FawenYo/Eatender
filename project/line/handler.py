@@ -117,7 +117,10 @@ def handle_message(event):
                         latitude = pending["latitude"]
                         longitude = pending["longitude"]
                         message = find_nearby(
-                            latitude=latitude, longitude=longitude, keyword=user_message
+                            user_id=user_id,
+                            latitude=latitude,
+                            longitude=longitude,
+                            keyword=user_message,
                         )
                     # 創建投票
                     else:
@@ -223,11 +226,6 @@ def handle_message(event):
         try:
             lat = event.message.latitude
             lng = event.message.longitude
-            # 記錄使用者位置
-            thread = threading.Thread(
-                target=database.record_user_location, args=(user_id, lat, lng)
-            )
-            thread.start()
 
             # 預設類別
             restaurant_category = ["隨便", "日式", "中式", "西式"]
@@ -323,7 +321,10 @@ def handle_postback(event):
                     message = TextSendMessage(text=f"請輸入餐廳類別或名稱")
                 else:
                     message = find_nearby(
-                        latitude=latitude, longitude=longitude, keyword=keyword
+                        user_id=user_id,
+                        latitude=latitude,
+                        longitude=longitude,
+                        keyword=keyword,
                     )
                 try:
                     line_bot_api.reply_message(reply_token, message)
@@ -339,6 +340,7 @@ def handle_postback(event):
                 token_table = config.db.page_token.find_one({})
                 page_token = token_table["data"][token]
                 message = find_nearby(
+                    user_id=user_id,
                     latitude=latitude,
                     longitude=longitude,
                     keyword=keyword,
@@ -426,7 +428,9 @@ def handle_postback(event):
         line_bot_api.reply_message(reply_token, message)
 
 
-def find_nearby(latitude: float, longitude: float, keyword: str, page_token: str = ""):
+def find_nearby(
+    user_id: str, latitude: float, longitude: float, keyword: str, page_token: str = ""
+):
     """搜尋附近餐廳
 
     Args:
@@ -449,6 +453,11 @@ def find_nearby(latitude: float, longitude: float, keyword: str, page_token: str
             keyword=keyword,
             next_page=restaurants.next_page,
         )
+    # 記錄使用者位置
+    thread = threading.Thread(
+        target=database.record_user_search, args=(user_id, latitude, longitude, keyword)
+    )
+    thread.start()
     return message
 
 
