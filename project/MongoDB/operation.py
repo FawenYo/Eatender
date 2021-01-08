@@ -45,6 +45,8 @@ def record_user_search(user_id: str, lat: float, lng: float, search: str):
         search (str): Search Texts
     """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
+    if search == "":
+        search = "隨便"
     data = {
         "user_id": user_id,
         "location": [lat, lng],
