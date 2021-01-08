@@ -22,8 +22,8 @@ async def export_history():
         each["latitude"], each["longitude"] = each["location"]
         del each["location"]
         data = data.append(each, ignore_index=True)
-    data.to_csv("static/files/history.csv", encoding="utf_8_sig")
-    return FileResponse("static/files/history.csv")
+    data.to_csv("history.csv", encoding="utf_8_sig")
+    return FileResponse("history.csv")
 
 
 # API - 當地天氣
