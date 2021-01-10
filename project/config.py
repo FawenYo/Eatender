@@ -1,6 +1,7 @@
 import os
 import threading
 
+import sentry_sdk
 import pymongo
 from dotenv import load_dotenv
 from lotify.client import Client
@@ -10,6 +11,8 @@ from rich.console import Console
 load_dotenv()
 
 console = Console()
+sentry_sdk.init(os.environ.get("SENTRY_SDK"), traces_sample_rate=1.0)
+
 SITE_NAME = os.environ.get("SITE_NAME")
 # LINE Bot 設定
 LINE_CHANNEL_SECRET = os.environ.get("LINE_CHANNEL_SECRET")

@@ -2,9 +2,11 @@ import random
 import re
 import string
 import sys
+import traceback
 import threading
 from datetime import datetime
 
+import sentry_sdk
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from linebot import LineBotApi, WebhookHandler
@@ -217,7 +219,8 @@ def handle_message(event):
                     message = TextSendMessage(
                         text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
                     )
-        except Exception:
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
             config.console.print_exception()
             message = Template().error()
         line_bot_api.reply_message(reply_token, message)
@@ -267,7 +270,8 @@ def handle_message(event):
                 text="請選擇餐廳類別",
                 quick_reply=QuickReply(items=quick_reply_items),
             )
-        except Exception:
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
             config.console.print_exception()
             message = Template().error()
         line_bot_api.reply_message(reply_token, message)
@@ -329,7 +333,8 @@ def handle_postback(event):
                 try:
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
-                except LineBotApiError:
+                except LineBotApiError as e:
+                    sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
             # 搜尋更多
@@ -349,7 +354,8 @@ def handle_postback(event):
                 try:
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
-                except LineBotApiError:
+                except LineBotApiError as e:
+                    sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     # 使用push回應內容
                     line_bot_api.push_message(user_id, message)
@@ -383,7 +389,8 @@ def handle_postback(event):
                 try:
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
-                except LineBotApiError:
+                except LineBotApiError as e:
+                    sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
         else:
@@ -422,7 +429,8 @@ def handle_postback(event):
             else:
                 message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
             line_bot_api.reply_message(reply_token, message)
-    except Exception:
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         config.console.print_exception()
         message = Template().error()
         line_bot_api.reply_message(reply_token, message)
