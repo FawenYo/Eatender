@@ -2,9 +2,11 @@ import random
 import re
 import string
 import sys
+import traceback
 import threading
 from datetime import datetime
 
+import sentry_sdk
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from linebot import LineBotApi, WebhookHandler
@@ -20,6 +22,7 @@ import MongoDB.operation as database
 from food.main import Restaurant_Info
 from line.templates import Template
 from vote.main import create_event
+from weather.main import Weather
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
@@ -116,7 +119,10 @@ def handle_message(event):
                         latitude = pending["latitude"]
                         longitude = pending["longitude"]
                         message = find_nearby(
-                            latitude=latitude, longitude=longitude, keyword=user_message
+                            user_id=user_id,
+                            latitude=latitude,
+                            longitude=longitude,
+                            keyword=user_message,
                         )
                     # 創建投票
                     else:
@@ -217,7 +223,8 @@ def handle_message(event):
                     message = TextSendMessage(
                         text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
                     )
-        except Exception:
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
             config.console.print_exception()
             message = Template().error()
         line_bot_api.reply_message(reply_token, message)
@@ -226,13 +233,9 @@ def handle_message(event):
         try:
             lat = event.message.latitude
             lng = event.message.longitude
-            # 記錄使用者位置
-            thread = threading.Thread(
-                target=database.record_user_location, args=(user_id, lat, lng)
-            )
-            thread.start()
 
-            restaurant_category = ["隨便", "日式", "中式", "西式", "咖哩", "其他"]
+            # 預設類別
+            restaurant_category = ["隨便", "日式", "中式", "西式"]
             quick_reply_items = [
                 QuickReplyButton(
                     action=PostbackAction(
@@ -244,11 +247,35 @@ def handle_message(event):
                 for category in restaurant_category
             ]
 
+            # 動態類別
+            dynamic_update_category = Weather().customized_category(lat=lat, lng=lng)
+            temp_quick_reply_items = [
+                QuickReplyButton(
+                    action=PostbackAction(
+                        label=category,
+                        display_text=dynamic_update_category[category],
+                        data=f"search_||_{lat},{lng}_||_{dynamic_update_category[category]}",
+                    )
+                )
+                for category in list(dynamic_update_category.keys())
+            ]
+
+            quick_reply_items += temp_quick_reply_items
+            quick_reply_items.append(
+                QuickReplyButton(
+                    action=PostbackAction(
+                        label="其他",
+                        display_text="其他",
+                        data=f"search_||_{lat},{lng}_||_其他",
+                    )
+                )
+            )
             message = TextSendMessage(
                 text="請選擇餐廳類別",
                 quick_reply=QuickReply(items=quick_reply_items),
             )
-        except Exception:
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
             config.console.print_exception()
             message = Template().error()
         line_bot_api.reply_message(reply_token, message)
@@ -302,12 +329,16 @@ def handle_postback(event):
                     message = TextSendMessage(text=f"請輸入餐廳類別或名稱")
                 else:
                     message = find_nearby(
-                        latitude=latitude, longitude=longitude, keyword=keyword
+                        user_id=user_id,
+                        latitude=latitude,
+                        longitude=longitude,
+                        keyword=keyword,
                     )
                 try:
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
-                except LineBotApiError:
+                except LineBotApiError as e:
+                    sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
             # 搜尋更多
@@ -318,6 +349,7 @@ def handle_postback(event):
                 token_table = config.db.page_token.find_one({})
                 page_token = token_table["data"][token]
                 message = find_nearby(
+                    user_id=user_id,
                     latitude=latitude,
                     longitude=longitude,
                     keyword=keyword,
@@ -326,7 +358,8 @@ def handle_postback(event):
                 try:
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
-                except LineBotApiError:
+                except LineBotApiError as e:
+                    sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     # 使用push回應內容
                     line_bot_api.push_message(user_id, message)
@@ -360,7 +393,8 @@ def handle_postback(event):
                 try:
                     line_bot_api.reply_message(reply_token, message)
                 # 搜尋超時
-                except LineBotApiError:
+                except LineBotApiError as e:
+                    sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
         else:
@@ -399,13 +433,34 @@ def handle_postback(event):
             else:
                 message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
             line_bot_api.reply_message(reply_token, message)
-    except Exception:
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         config.console.print_exception()
         message = Template().error()
         line_bot_api.reply_message(reply_token, message)
 
 
-def find_nearby(latitude: float, longitude: float, keyword: str, page_token: str = ""):
+def search_info(user_id: str, query: str, page_token: str = ""):
+    restaurants = Restaurant_Info(page_token=page_token)
+    restaurants.search(query=query)
+    if len(restaurants.restaurants) == 0:
+        message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
+    else:
+        # Show first five restaurant
+        message = Template().search_result(
+            restaurants=restaurants.restaurants[:5],
+        )
+    # 記錄使用者位置
+    """thread = threading.Thread(
+        target=database.record_user_search, args=(user_id, latitude, longitude, keyword)
+    )
+    thread.start()"""
+    return message
+
+
+def find_nearby(
+    user_id: str, latitude: float, longitude: float, keyword: str, page_token: str = ""
+):
     """搜尋附近餐廳
 
     Args:
@@ -429,6 +484,11 @@ def find_nearby(latitude: float, longitude: float, keyword: str, page_token: str
             keyword=keyword,
             next_page=restaurants.next_page,
         )
+    # 記錄使用者位置
+    thread = threading.Thread(
+        target=database.record_user_search, args=(user_id, latitude, longitude, keyword)
+    )
+    thread.start()
     return message
 
 

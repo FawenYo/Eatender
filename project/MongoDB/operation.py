@@ -35,18 +35,22 @@ def delete_user(user_id: str):
     db.user.delete_one({"user_id": user_id})
 
 
-def record_user_location(user_id: str, lat: float, lng: float):
+def record_user_search(user_id: str, lat: float, lng: float, search: str):
     """LINE Bot - Record user
 
     Args:
         user_id (str): LINE User ID
         lat (float): Location latitude
         lng (float): Location longitude
+        search (str): Search Texts
     """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
+    if search == "":
+        search = "隨便"
     data = {
         "user_id": user_id,
         "location": [lat, lng],
+        "search": search,
         "time": now,
     }
     db.history.insert_one(data)
