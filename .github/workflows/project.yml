@@ -28,8 +28,7 @@ jobs:
               run: |
                   python -m pip install --upgrade pip
                   cd ./project
-                  pip install poetry
-                  poetry install --no-dev
+                  pip install -r requirements.txt
 
             # 運行測試
             # - name: Run Tests

@@ -4,8 +4,6 @@ WORKDIR /app
 
 ADD . /app
 
-RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev
+RUN pip install -r requirements.txt
 
 CMD gunicorn -c gunicorn.py -k uvicorn.workers.UvicornWorker main:app

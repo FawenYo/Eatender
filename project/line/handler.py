@@ -220,9 +220,10 @@ def handle_message(event):
                     message = search_info(user_id=user_id, query=target)
                     line_bot_api.reply_message(reply_token, message)
                 else:
-                    message = TextSendMessage(
-                        text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
-                    )
+                    if event.source.type == "user":
+                        message = TextSendMessage(
+                            text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
+                        )
         except Exception as e:
             sentry_sdk.capture_exception(e)
             config.console.print_exception()
