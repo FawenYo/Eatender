@@ -17,7 +17,7 @@ from typing import Optional
 import config
 import cron
 import MongoDB.operation as database
-from food.main import Nearby_restaurant
+from food.main import Restaurant_Info
 from line.templates import Template
 from vote.main import create_event
 
@@ -209,6 +209,10 @@ def handle_message(event):
                         )
                 elif user_message == "客服":
                     message = TextSendMessage(text="客服連結\nhttps://lin.ee/DsogwtP")
+                elif "@找" in user_message:
+                    target = user_message.split("@找")[1]
+                    message = search_info(user_id=user_id, query=target)
+                    line_bot_api.reply_message(reply_token, message)
                 else:
                     message = TextSendMessage(
                         text="不好意思，我聽不懂你在說什麼呢QwQ\n如需要幫助，請輸入「客服」尋求幫忙"
@@ -412,9 +416,10 @@ def find_nearby(latitude: float, longitude: float, keyword: str, page_token: str
     """
     if keyword == "隨便":
         keyword = ""
-    restaurants = Nearby_restaurant(
+    restaurants = Restaurant_Info(
         latitude=latitude, longitude=longitude, keyword=keyword, page_token=page_token
     )
+    restaurants.nearby()
     if len(restaurants.restaurants) == 0:
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:

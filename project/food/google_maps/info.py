@@ -11,8 +11,8 @@ from food.restaurant import Restaurant
 class GM_Restaurant:
     def __init__(
         self,
-        latitude: float,
-        longitude: float,
+        latitude: float = 0.0,
+        longitude: float = 0.0,
         keyword: str = "",
         search_type: str = "restaurant",
         complete_mode: bool = False,
@@ -22,8 +22,8 @@ class GM_Restaurant:
         """初始化
 
         Args:
-            latitude (float): 緯度.
-            longitude (float): 經度.
+            latitude (float): 緯度. Defaults to 0.0.
+            longitude (float): 經度. Defaults to 0.0.
             keyword (str): 關鍵字列表，以 " " 分割.
             search_type (str, optional): 限制類別. Defaults to "restaurant".
             complete_mode(bool): 限制搜尋. Defaults to false.
@@ -42,9 +42,19 @@ class GM_Restaurant:
         self.current_page = page_token
         self.index = index
 
-        self.fetch_data(page_token=page_token)
+    def search_info(self, query: str):
+        param_data = {
+            "language": "zh-TW",
+            "query": query,
+            "key": config.GOOGLE_MAPS_APIKEY,
+        }
+        response = requests.get(
+            f"https://maps.googleapis.com/maps/api/place/textsearch/json",
+            params=param_data,
+        )
+        return self.parse_data(data=response.json())
 
-    def fetch_data(self, page_token):
+    def nearby_info(self, page_token):
         # Google Maps 餐廳資料
         radius = 1000 if not self.complete_mode else 50000
         param_data = {
@@ -79,7 +89,7 @@ class GM_Restaurant:
         elif "next_page_token" not in data:
             self.start_thread()
         else:
-            self.fetch_data(page_token=data["next_page_token"])
+            self.nearby_info(page_token=data["next_page_token"])
 
     def start_thread(self):
         for thread in self.threads:

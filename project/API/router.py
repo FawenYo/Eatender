@@ -8,7 +8,7 @@ import config
 from weather.main import Weather
 
 sys.path.append(".")
-from food.main import Nearby_restaurant
+from food.main import Restaurant_Info
 from line.templates import Template
 
 api = APIRouter()
@@ -34,10 +34,10 @@ async def restaurant(keyword: str, loc: str):
     start = datetime.now()
     try:
         latitude, longitude = loc.split(",")
-        restaurant_data = Nearby_restaurant(
+        restaurant_data = Restaurant_Info(
             latitude=latitude, longitude=longitude, keyword=keyword
         )
-        restaurant_data.get_info()
+        restaurant_data.nearby()
         config.console.log(restaurant_data.__dict__)
         end = datetime.now()
         return f"Total Process Time: {end - start}."

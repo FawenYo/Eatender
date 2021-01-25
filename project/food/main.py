@@ -16,20 +16,34 @@ import config
 import MongoDB.operation as database
 
 
-class Nearby_restaurant:
-    def __init__(self, latitude, longitude, keyword="", page_token=""):
+class Restaurant_Info:
+    def __init__(
+        self, latitude: float = 0.0, longitude: float = 0.0, keyword="", page_token=""
+    ):
         self.restaurants = []
         self.next_page = ""
         self.latitude = latitude
         self.longitude = longitude
         self.keyword = keyword
         self.page_token = page_token
-        self.get_info()
 
-    def get_info(self):
+    def search(self, query: str):
+        threads = []
+        self.google_maps_search(query=query)
+        self.get_ifoodie_data()
+        # Add to MongoDB
+        for restaurant in self.restaurants:
+            thread = threading.Thread(
+                target=database.add_restaurant, args=(restaurant, self.keyword)
+            )
+            threads.append(thread)
+        for thread in threads:
+            thread.start()
+
+    def nearby(self):
         # Get nearby restaurants
         threads = []
-        self.get_google_maps_data()
+        self.google_maps_nearby()
         self.get_ifoodie_data()
         # Load from database
         """ result = []
@@ -87,11 +101,27 @@ class Nearby_restaurant:
         for thread in threads:
             thread.start()
 
-        # Updating Silently
-        thread = threading.Thread(target=self.silent_update)
-        thread.start()
+    def google_maps_search(self, query: str):
+        restaurants = GM_Restaurant()
+        restaurants.search_info(query=query)
+        self.next_page = restaurants.next_page
+        if self.next_page:
+            token_table = config.db.page_token.find_one({})
+            if self.next_page not in token_table["data"].values():
+                token_key = "".join(
+                    random.choice(string.ascii_letters + string.digits)
+                    for x in range(10)
+                )
+                token_table["data"][token_key] = self.next_page
+                config.db.page_token.update_one({}, {"$set": token_table})
+                self.next_page = token_key
+            else:
+                for key, value in token_table["data"].items():
+                    if value == self.next_page:
+                        self.next_page = key
+        self.restaurants = restaurants.restaurants
 
-    def get_google_maps_data(self, complete_mode=False):
+    def google_maps_nearby(self, complete_mode=False):
         """Get Google Maps nearby restaurants data
 
         Args:
@@ -110,6 +140,7 @@ class Nearby_restaurant:
             page_token=page_token,
             index=int(index),
         )
+        restaurants.nearby_info(page_token=page_token)
         if not complete_mode:
             self.next_page = restaurants.next_page
             if self.next_page:
