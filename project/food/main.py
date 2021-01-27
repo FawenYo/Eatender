@@ -44,6 +44,7 @@ class Restaurant_Info:
         threads = []
         self.google_maps_nearby()
         self.get_ifoodie_data()
+        print(self.restaurants)
         # Load from database
         """ result = []
         config.db.restaurant.create_index([("loc", GEOSPHERE)])
