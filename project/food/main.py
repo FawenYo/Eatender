@@ -9,11 +9,10 @@ from .google_maps.info import GM_Restaurant
 from .ifoodie.ifoodie import Ifoodie
 
 sys.path.append(".")
-from bson.son import SON
-from pymongo import GEOSPHERE
-
 import config
 import MongoDB.operation as database
+from bson.son import SON
+from pymongo import GEOSPHERE
 
 
 class Restaurant_Info:

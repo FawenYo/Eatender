@@ -2,8 +2,8 @@ import random
 import re
 import string
 import sys
-import traceback
 import threading
+import traceback
 from datetime import datetime
 
 import sentry_sdk
@@ -161,7 +161,7 @@ def handle_message(event):
                                 end_date=pending["end_date"],
                             )
                             threading.Thread(
-                                target=cron.set_cronjob,
+                                target=cron.vote_cronjob,
                                 args=(vote_id, user_id, pending["end_date"], link),
                             ).start()
                             message = Template().share_vote(pull_id=vote_id)

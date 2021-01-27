@@ -1,11 +1,7 @@
-import jieba
+import re
 
-# import stop words
-stop_words = []
-with open("food/stop_words.txt", "r", encoding="UTF-8") as file:
-    for data in file.readlines():
-        data = data.strip()
-        stop_words.append(data)
+import requests
+from bs4 import BeautifulSoup
 
 
 class Restaurant:
@@ -43,35 +39,31 @@ class Restaurant:
         self.keywords = self.find_keywords(name=name, reviews=reviews)
         self.ifoodie_url = ifoodie_url
 
-    def find_keywords(self, name: str, reviews: list) -> list:
+    def find_keywords(self, cid: str) -> list:
         """Restaurant review keyword
 
         Args:
-            name (str): Restaurant name
+            cid (str): Google Maps CID
             reviews (list): Reviews list
 
         Returns:
             (list): Most frequent keywords (3 items)
         """
-        keyword_data = {}
-        keywords = []
-        for review in reviews:
-            segments = jieba.cut(review, use_paddle=True)
-            remainder_words = list(
-                filter(
-                    lambda a: a not in stop_words
-                    and a is not name
-                    and a != "\n"
-                    and a.replace(" ", "") != "",
-                    segments,
-                )
-            )
-            for word in remainder_words:
-                if word in keyword_data:
-                    keyword_data[word] += 1
-                else:
-                    keyword_data[word] = 1
-        most_frequent = sorted(keyword_data.items(), key=lambda x: -x[1])
-        for each in most_frequent[:3]:
-            keywords.append(each[0])
-        return keywords
+        headers = {
+            "user-agent": "Mozilla/5.0 (Macintosh Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
+        }
+
+        response = requests.get(f"{cid}&hl=zh-TW", headers=headers)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        try:
+            result = re.findall(r"規劃行程(.*)查看附近的餐廳", str(soup))[0]
+            result = result.replace("\\", " ")
+            chinese_filter = re.compile(r"[^\u4e00-\u9fa5]+\s")
+            result = re.sub(chinese_filter, "", result)
+            result = result.strip('"').split(sep='"')
+        except:
+            print("error")
+            result = []
+
+        return result[:3]

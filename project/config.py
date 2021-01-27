@@ -1,8 +1,8 @@
 import os
 import threading
 
-import sentry_sdk
 import pymongo
+import sentry_sdk
 from dotenv import load_dotenv
 from lotify.client import Client
 from rich.console import Console
