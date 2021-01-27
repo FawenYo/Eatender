@@ -43,6 +43,7 @@ class GM_Restaurant:
         self.index = index
 
     def search_info(self, query: str):
+        # 特定餐廳資料
         param_data = {
             "language": "zh-TW",
             "query": query,
@@ -55,7 +56,7 @@ class GM_Restaurant:
         return self.parse_data(data=response.json())
 
     def nearby_info(self, page_token):
-        # Google Maps 餐廳資料
+        # 附近餐廳資料
         radius = 1000 if not self.complete_mode else 50000
         param_data = {
             "language": "zh-TW",
@@ -73,10 +74,12 @@ class GM_Restaurant:
         return self.parse_data(data=response.json())
 
     def parse_data(self, data):
+        # filter
         if not self.complete_mode:
             filter_results = data["results"][0 + 5 * self.index : 5 + 5 * self.index]
         else:
             filter_results = data["results"]
+
         for place in filter_results:
             thread = threading.Thread(target=self.get_place_data, args=(place,))
             self.threads.append(thread)

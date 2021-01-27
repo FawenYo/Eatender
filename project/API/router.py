@@ -1,10 +1,10 @@
 import sys
 from datetime import datetime
-import pandas as pd
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse, FileResponse
 
 import config
+import pandas as pd
+from fastapi import APIRouter
+from fastapi.responses import FileResponse, JSONResponse
 from weather.main import Weather
 
 sys.path.append(".")

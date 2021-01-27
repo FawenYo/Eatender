@@ -1,12 +1,11 @@
 from datetime import datetime
 
+import config
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import APIRouter
 from linebot import LineBotApi
 from linebot.models import *
-
-import config
 from vote.main import gettime_attendant
 
 cron = APIRouter()
@@ -18,7 +17,7 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 async def init_cron():
     all_votes = config.db.vote_pull.find({})
     for each_vote in all_votes:
-        set_cronjob(
+        vote_cronjob(
             event_id=each_vote["_id"],
             creator=each_vote["creator"],
             vote_end=each_vote["end_date"],
@@ -27,8 +26,8 @@ async def init_cron():
     return "Init done"
 
 
-# Set up cron jobs
-def set_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str):
+# Set up vote cron jobs
+def vote_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         show_result,
