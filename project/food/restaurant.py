@@ -36,7 +36,7 @@ class Restaurant:
         self.price = price
         self.phone_number = phone_number
         self.reviews = reviews
-        self.keywords = self.find_keywords(name=name, reviews=reviews)
+        self.keywords = self.find_keywords(cid=google_url)
         self.ifoodie_url = ifoodie_url
 
     def find_keywords(self, cid: str) -> list:
