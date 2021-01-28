@@ -57,8 +57,14 @@ class Restaurant:
         soup = BeautifulSoup(response.text, "html.parser")
 
         try:
-            result = re.findall(r"規劃行程(.*)查看附近的餐廳", str(soup))[0]
-            result = result.replace("\\", " ")
+            result = re.findall(r"規劃行程(.*)查看附近的餐廳", str(soup))
+            if not result:
+                result = re.findall(
+                    r"規劃行程(.*),null,null,null,\[\[2\]\\n\]\\n\]\\n\]\\n\]\\n,",
+                    str(soup),
+                )
+
+            result = result[0].replace("\\", " ")
             chinese_filter = re.compile(r"[^\u4e00-\u9fa5]+\s")
             result = re.sub(chinese_filter, "", result)
             result = result.strip('"').split(sep='"')
