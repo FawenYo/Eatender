@@ -57,12 +57,15 @@ class Restaurant:
         soup = BeautifulSoup(response.text, "html.parser")
 
         try:
-            result = re.findall(r"規劃行程(.*)查看附近的餐廳", str(soup))
-            if not result:
-                result = re.findall(
-                    r"規劃行程(.*),null,null,null,\[\[2\]\\n\]\\n\]\\n\]\\n\]\\n,",
-                    str(soup),
-                )
+            pattern = [
+                r"規劃行程(.*)查看附近的餐廳",
+                r"規劃行程(.*),null,null,null,\[\[\d\]\\n\]\\n\]\\n\]\\n\]\\n,",
+                r",\[null,null,1\]\\n,null,null,\[\[\[\[(.*),null,null,null,\[\[\d\]\\n\]\\n\]\\n\]\\n\]\\n,",
+            ]
+            for i in range(len(pattern)):
+                result = re.findall(f"{pattern[i]}", str(soup))
+                if result:
+                    break
 
             result = result[0].replace("\\", " ")
             chinese_filter = re.compile(r"[^\u4e00-\u9fa5]+\s")
@@ -70,6 +73,6 @@ class Restaurant:
             result = result.strip('"').split(sep='"')
         except:
             print("error")
+            print(cid)
             result = []
-
         return result[:3]
