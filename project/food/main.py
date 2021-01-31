@@ -44,7 +44,6 @@ class Restaurant_Info:
         threads = []
         self.google_maps_nearby()
         self.get_ifoodie_data()
-        print(self.restaurants)
         # Load from database
         """ result = []
         config.db.restaurant.create_index([("loc", GEOSPHERE)])
@@ -203,8 +202,8 @@ class Restaurant_Info:
         try:
             data = Ifoodie(
                 restaurant_name=restaurant.name,
-                latitude=self.latitude,
-                longitude=self.longitude,
+                latitude=restaurant.location["lat"],
+                longitude=restaurant.location["lng"],
             )
             restaurant.ifoodie_url = data.restaurant_url
             restaurant.price = int(data.info["均消價位"])

@@ -104,6 +104,7 @@ def handle_message(event):
     # 文字訊息
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
+        user_message.replace("＠", "@")
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
             # QA問答
@@ -218,7 +219,6 @@ def handle_message(event):
                 elif "@找" in user_message:
                     target = user_message.split("@找")[1]
                     message = search_info(user_id=user_id, query=target)
-                    line_bot_api.reply_message(reply_token, message)
                 else:
                     if event.source.type == "user":
                         message = TextSendMessage(

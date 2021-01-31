@@ -108,6 +108,7 @@ class GM_Restaurant:
         else:
             open_now = place["opening_hours"]["open_now"]
 
+        # 資料已存在
         data = config.db.restaurant.find_one({"place_id": place_id})
         if data:
             name = data["name"]
