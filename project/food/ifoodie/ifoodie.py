@@ -51,16 +51,14 @@ class Ifoodie:
             info["均消價位"] = re.findall(r"[0-9]+", str(price_sel[0]))[1]
 
             info_sel = soup.select("div.jsx-2133253768.info")
-            operating_info = re.findall(
-                r"</span>(.*)</div>", str(info_sel[0])
-            )[0]
+            operating_info = re.findall(r"</span>(.*)</div>", str(info_sel[0]))[0]
             temp = operating_info.split("營業:")
             info["營業時間"] = temp[1].strip(" ")
 
             address_sel = soup.select("div.jsx-2133253768.address-row")
-            info["店家地址"] = re.findall(
-                r"address-row\">(.*)</div>", str(address_sel[0])
-            )[0]
+            info["店家地址"] = re.findall(r"address-row\">(.*)</div>", str(address_sel[0]))[
+                0
+            ]
         except:
             pass
 

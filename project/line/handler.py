@@ -104,7 +104,7 @@ def handle_message(event):
     # 文字訊息
     if isinstance(event.message, TextMessage):
         user_message = event.message.text
-        user_message.replace("＠", "@")
+        user_message = user_message.replace("＠", "@")
         try:
             pending = config.db.pending.find_one({"user_id": user_id})
             # QA問答
