@@ -17,8 +17,20 @@ from pymongo import GEOSPHERE
 
 class Restaurant_Info:
     def __init__(
-        self, latitude: float = 0.0, longitude: float = 0.0, keyword="", page_token=""
+        self,
+        latitude: float = 0.0,
+        longitude: float = 0.0,
+        keyword: str = "",
+        page_token: str = "",
     ):
+        """Initial restaurant info object
+
+        Args:
+            latitude (float, optional): restaurant's latitude. Defaults to 0.0.
+            longitude (float, optional): restaurant's longitude. Defaults to 0.0.
+            keyword (str, optional): category keyword. Defaults to "".
+            page_token (str, optional): Google Map's page token. Defaults to "".
+        """
         self.restaurants = []
         self.next_page = ""
         self.latitude = latitude
