@@ -11,11 +11,9 @@ from .ifoodie.ifoodie import Ifoodie
 sys.path.append(".")
 import config
 import MongoDB.operation as database
-from bson.son import SON
-from pymongo import GEOSPHERE
 
 
-class Restaurant_Info:
+class RestaurantInfo:
     def __init__(
         self,
         latitude: float = 0.0,
@@ -56,53 +54,7 @@ class Restaurant_Info:
         threads = []
         self.google_maps_nearby()
         self.get_ifoodie_data()
-        # Load from database
-        """ result = []
-        config.db.restaurant.create_index([("loc", GEOSPHERE)])
-        query = {
-            "loc": {
-                "$near": SON(
-                    [
-                        (
-                            "$geometry",
-                            SON(
-                                [
-                                    ("type", "Point"),
-                                    ("coordinates", [self.longitude, self.latitude]),
-                                ]
-                            ),
-                        ),
-                        ("$maxDistance", 1000),
-                    ]
-                )
-            },
-            "category": self.keyword,
-        }
-        for each in config.db.restaurant.find(query):
-            result.append(each)
-        if len(result) >= 5:
-            print("load from db.")
-            for each in result:
-                restaurant = Restaurant(
-                    place_id=each["place_id"],
-                    name=each["name"],
-                    photo_url=each["photo_url"],
-                    open_now=find_operating_status(
-                        data=each["operating_time"]["weekday_text"]
-                    ),
-                    operating_time=each["operating_time"],
-                    location=each["location"],
-                    address=each["address"],
-                    rating=each["rating"],
-                    website=each["website"],
-                    google_url=each["google_url"],
-                    phone_number=each["phone_number"],
-                    reviews=each["reviews"],
-                )
-                self.restaurants.append(restaurant)
-        else:
-            self.get_google_maps_data()
-            self.get_ifoodie_data() """
+
         # Add to MongoDB
         for restaurant in self.restaurants:
             thread = threading.Thread(

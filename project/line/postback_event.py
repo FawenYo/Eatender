@@ -11,7 +11,7 @@ sys.path.append(".")
 
 import config
 import MongoDB.operation as database
-from food.main import Restaurant_Info
+from food.main import RestaurantInfo
 from line.templates import Template
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -188,7 +188,7 @@ def find_nearby(
     """
     if keyword == "隨便":
         keyword = ""
-    restaurants = Restaurant_Info(
+    restaurants = RestaurantInfo(
         latitude=latitude, longitude=longitude, keyword=keyword, page_token=page_token
     )
     restaurants.nearby()

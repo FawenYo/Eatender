@@ -5,7 +5,7 @@ import requests
 
 sys.path.append(".")
 import config
-from food.restaurant import Restaurant
+from food.model import Restaurant
 
 
 class GM_Restaurant:

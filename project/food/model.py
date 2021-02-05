@@ -22,6 +22,24 @@ class Restaurant:
         reviews: list = [""],
         ifoodie_url: str = "https://ifoodie.tw/",
     ):
+        """Restaurant object
+
+        Args:
+            place_id (str): Google Maps' place id.
+            name (str): 餐廳名稱.
+            photo_url (str): Google Maps 餐廳照片.
+            open_now (bool): 餐廳營業狀況.
+            operating_time (dict): 餐廳營業時間.
+            location (dict): 餐廳座標.
+            address (str): 餐廳地址.
+            rating (float): Google Maps 評分.
+            website (str): 餐廳網站.
+            google_url (str): Google Maps CID.
+            price (int, optional): 餐廳平均消費價格. Defaults to 0.
+            phone_number (str, optional): 餐廳電話. Defaults to "無".
+            reviews (list, optional): 餐廳留言. Defaults to [""].
+            ifoodie_url (str, optional): 餐廳愛食記連結. Defaults to "https://ifoodie.tw/".
+        """
         self.place_id = place_id
         self.name = name
         self.photo_url = photo_url
@@ -43,8 +61,7 @@ class Restaurant:
         """Restaurant review keyword
 
         Args:
-            cid (str): Google Maps CID
-            reviews (list): Reviews list
+            cid (str): Google Maps CID.
 
         Returns:
             (list): Most frequent keywords (3 items)

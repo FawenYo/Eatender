@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from weather.main import Weather
 
 sys.path.append(".")
-from food.main import Restaurant_Info
+from food.main import RestaurantInfo
 from line.templates import Template
 
 api = APIRouter()
@@ -32,7 +32,7 @@ async def weather(loc: str):
     try:
         lat, lng = loc.split(",")
         weather_data = Weather()
-        weather_data.fetch_data(lat=lat, lng=lng)
+        weather_data.fetch_data(latitude=lat, longitude=lng)
         config.console.log(weather_data.__dict__)
         return weather_data.__dict__
     except KeyError:
@@ -46,7 +46,7 @@ async def restaurant(keyword: str, loc: str):
     start = datetime.now()
     try:
         latitude, longitude = loc.split(",")
-        restaurant_data = Restaurant_Info(
+        restaurant_data = RestaurantInfo(
             latitude=latitude, longitude=longitude, keyword=keyword
         )
         restaurant_data.nearby()

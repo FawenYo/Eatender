@@ -60,7 +60,7 @@ def add_restaurant(restaurant: object, keyword: str):
     """New restaurant
 
     Args:
-        restaurant (object): Restaurant data (food/restaurant.py)
+        restaurant (object): Restaurant data (food/model.py)
         keyword (str): Restaurant category
     """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))

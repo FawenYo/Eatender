@@ -9,7 +9,7 @@ sys.path.append(".")
 import config
 
 
-def create_event(event_name: str, dates: str, early_time: int, later_time: int):
+def create_event(event_name: str, dates: str, early_time: int, later_time: int) -> str:
     """建立 when2meet 投票
 
     Args:
@@ -19,7 +19,7 @@ def create_event(event_name: str, dates: str, early_time: int, later_time: int):
         later_time (int): 最晚時間(24小時制)
 
     Returns:
-        [type]: [description]
+        (str): when2meet連結
     """
     data = {
         "NewEventName": event_name,

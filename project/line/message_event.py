@@ -14,7 +14,7 @@ sys.path.append(".")
 import config
 import cron
 import MongoDB.operation as database
-from food.main import Restaurant_Info
+from food.main import RestaurantInfo
 from line.templates import Template
 from vote.main import create_event
 from weather.main import Weather
@@ -192,7 +192,9 @@ def handle_message(event):
             ]
 
             # 動態類別
-            dynamic_update_category = Weather().customized_category(lat=lat, lng=lng)
+            dynamic_update_category = Weather().customized_category(
+                latitude=lat, longitude=lng
+            )
             temp_quick_reply_items = [
                 QuickReplyButton(
                     action=PostbackAction(
@@ -231,7 +233,7 @@ def search_info(query: str, page_token: str = ""):
     Args:
         query (str): Query Info
     """
-    restaurants = Restaurant_Info(page_token=page_token)
+    restaurants = RestaurantInfo(page_token=page_token)
     restaurants.search(query=query)
     if len(restaurants.restaurants) == 0:
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
@@ -261,7 +263,7 @@ def find_nearby(
     """
     if keyword == "隨便":
         keyword = ""
-    restaurants = Restaurant_Info(
+    restaurants = RestaurantInfo(
         latitude=latitude, longitude=longitude, keyword=keyword, page_token=page_token
     )
     restaurants.nearby()

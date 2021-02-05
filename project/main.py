@@ -1,7 +1,7 @@
 import os
 
 import uvicorn
-from API.router import api
+from api.urls import api
 from cron import cron
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from line.urls import line_app
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from view import view
-from vote.view import vote
+from vote.urls import vote
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
