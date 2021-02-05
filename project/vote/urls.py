@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 
 sys.path.append(".")
 import config
-from API.urls import get_pull_data
+from api.urls import get_pull_data
 
 vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
