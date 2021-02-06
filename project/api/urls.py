@@ -1,4 +1,5 @@
 import sys
+import requests
 from datetime import datetime
 
 import config
@@ -74,3 +75,17 @@ async def get_pull_data(pull_id):
     else:
         message = {"status": "error", "error_message": "Vote pull not found."}
     return message
+
+
+# API - deploy done
+@api.get("/api/deploy", response_class=JSONResponse)
+async def deploy():
+    commit_info = requests.get(config.GITHUB_REPO_URL).json()
+    commit_committer = commit_info["commit"]["commit"]["committer"]["name"]
+    commit_date = commit_info["commit"]["commit"]["committer"]["date"]
+    commit_message = commit_info["commit"]["commit"]["message"]
+    commit_url = commit_info["commit"]["html_url"]
+    for token in config.AUTHORS_NOTIFY_TOKEN:
+        message = f"New Commit\n提交者：{commit_committer}\n提交日期：{commit_date}\n提交訊息：{commit_message}\n詳細資訊：{commit_url}"
+        config.lotify_client.send_message(access_token=token, message=message)
+    return {"status": "success"}
