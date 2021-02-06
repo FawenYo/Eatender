@@ -6,13 +6,13 @@ import sentry_sdk
 from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 from linebot.models import *
+from .templates import Template
 
 sys.path.append(".")
 
 import config
 import MongoDB.operation as database
 from food.main import RestaurantInfo
-from line.templates import Template
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 

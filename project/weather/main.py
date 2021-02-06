@@ -1,5 +1,4 @@
 import re
-import sys
 from datetime import datetime, timedelta
 
 import requests
@@ -48,10 +47,10 @@ class Weather:
         return self.parse_data(data=response)
 
     def parse_data(self, data):
-        """解析資料
+        """處理回傳資訊
 
         Args:
-            data (JSON): 天氣資料內容
+            data (json): 天氣資訊
         """
         self.location_name = data["now"]["name"]
         self.wind_direction = data["now"]["wdir"]

@@ -2,12 +2,12 @@ import sys
 
 from linebot import LineBotApi
 from linebot.models import *
+from .templates import Template
 
 sys.path.append(".")
 
 import config
 import MongoDB.operation as database
-from line.templates import Template
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 

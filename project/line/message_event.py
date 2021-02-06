@@ -8,6 +8,7 @@ from datetime import datetime
 import sentry_sdk
 from linebot import LineBotApi
 from linebot.models import *
+from .templates import Template
 
 sys.path.append(".")
 
@@ -15,7 +16,6 @@ import config
 import cron
 import MongoDB.operation as database
 from food.main import RestaurantInfo
-from line.templates import Template
 from vote.main import create_event
 from weather.main import Weather
 
@@ -23,6 +23,11 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 
 
 def handle_message(event):
+    """事件 - 訊息
+
+    Args:
+        event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#message-event
+    """
     can_reply = True
     user_id = event.source.user_id
     reply_token = event.reply_token
@@ -231,7 +236,7 @@ def search_info(query: str, page_token: str = ""):
     """搜尋特定餐廳
 
     Args:
-        query (str): Query Info
+        query (str): 餐廳名稱
     """
     restaurants = RestaurantInfo(page_token=page_token)
     restaurants.search(query=query)

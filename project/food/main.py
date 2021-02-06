@@ -5,7 +5,7 @@ import sys
 import threading
 from datetime import datetime, timedelta
 
-from .google_maps.info import GM_Restaurant
+from .google_maps.info import GoogleMaps
 from .ifoodie.ifoodie import Ifoodie
 
 sys.path.append(".")
@@ -65,7 +65,7 @@ class RestaurantInfo:
             thread.start()
 
     def google_maps_search(self, query: str):
-        restaurants = GM_Restaurant()
+        restaurants = GoogleMaps()
         restaurants.search_info(query=query)
         self.next_page = restaurants.next_page
         if self.next_page:
@@ -95,7 +95,7 @@ class RestaurantInfo:
             index = 0
         else:
             page_token, index = self.page_token.split("[|]")
-        restaurants = GM_Restaurant(
+        restaurants = GoogleMaps(
             latitude=self.latitude,
             longitude=self.longitude,
             keyword=self.keyword,
@@ -166,12 +166,11 @@ class RestaurantInfo:
         try:
             data = Ifoodie(
                 restaurant_name=restaurant.name,
-                latitude=restaurant.location["lat"],
-                longitude=restaurant.location["lng"],
+                latitude=float(restaurant.location["lat"]),
+                longitude=float(restaurant.location["lng"]),
             )
             restaurant.ifoodie_url = data.restaurant_url
-            restaurant.price = int(data.info["均消價位"])
-            restaurant.reviews += data.comments
+            restaurant.price = data.price
         except ValueError:
             pass
         except IndexError:
