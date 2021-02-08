@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import ReactDOM from "react-dom"
-import SaveIcon from "@material-ui/icons/Save"
-import Button from "@material-ui/core/Button"
+import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import TextField from "@material-ui/core/TextField"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
@@ -62,16 +61,15 @@ const Form = (props) => {
     )
 
     return (
-        <div>
-            <div>
+        <React.Fragment>
+            <React.Fragment>
                 <Typography variant="h5">投票名稱</Typography>
                 <TextField variant="outlined" margin="normal" required fullWidth id="Form" label="輸入投票名稱" />
-            </div>
-            <div>
-                <br />
+            </React.Fragment>
+            <React.Fragment>
                 <Typography variant="h5">最早開始時間 / 最晚結束時間</Typography>
                 <center>
-                    <FormControl className={timeRangeClass.formControl}>
+                    <FormControl className={timeRangeClass.formControl} required>
                         <InputLabel htmlFor="grouped-select">最早時間</InputLabel>
                         <Select native defaultValue="" id="grouped-select">
                             <option aria-label="None" value="" />
@@ -101,7 +99,7 @@ const Form = (props) => {
                             <option value={23}>23 pm</option>
                         </Select>
                     </FormControl>
-                    <FormControl className={timeRangeClass.formControl}>
+                    <FormControl className={timeRangeClass.formControl} required>
                         <InputLabel htmlFor="grouped-select">最晚時間</InputLabel>
                         <Select native defaultValue="" id="grouped-select">
                             <option aria-label="None" value="" />
@@ -132,9 +130,8 @@ const Form = (props) => {
                         </Select>
                     </FormControl>
                 </center>
-            </div>
-            <div>
-                <br />
+            </React.Fragment>
+            <React.Fragment>
                 <Typography variant="h5">投票截止日期</Typography>
                 <center>
                     <DatePicker
@@ -144,31 +141,27 @@ const Form = (props) => {
                         shouldHighlightWeekends
                     />
                 </center>
-            </div>
-            <div>
-                <br />
+            </React.Fragment>
+            <React.Fragment>
                 <Typography variant="h5">聚餐日期</Typography>
                 <center>
                     <MultiDate />
                 </center>
-            </div>
-            <div>
-                <br />
-                <br />
-                <br />
+            </React.Fragment>
+            <React.Fragment>
                 <center>
                     <Button
                         variant="contained"
                         color="primary"
                         size="large"
                         className={submitButtonClass.button}
-                        startIcon={<SaveIcon />}
+                        endIcon={<RestaurantMenuIcon />}
                     >
                         建立投票
                     </Button>
                 </center>
-            </div>
-        </div>
+            </React.Fragment>
+        </React.Fragment>
     )
 }
 

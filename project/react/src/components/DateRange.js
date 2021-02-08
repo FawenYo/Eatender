@@ -3,19 +3,15 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css"
 import { Calendar } from "react-modern-calendar-datepicker"
 
 const MultiDate = () => {
+    var current = new Date();
     const defaultFrom = {
-        year: 2021,
-        month: 2,
-        day: 7,
-    }
-    const defaultTo = {
-        year: 2019,
-        month: 2,
-        day: 15,
+        year: current.getFullYear(),
+        month: current.getMonth(),
+        day: current.getDate(),
     }
     const defaultValue = {
         from: defaultFrom,
-        to: defaultTo,
+        to: null,
     }
     const [selectedDayRange, setSelectedDayRange] = useState(defaultValue)
 
