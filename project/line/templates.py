@@ -1,7 +1,11 @@
 import re
+import sys
 from datetime import datetime, timedelta
 
 from linebot.models import FlexSendMessage
+
+sys.path.append(".")
+import config
 
 true = True
 
@@ -817,6 +821,56 @@ class Template:
             ],
         }
         return contents
+
+    # 未綁定 LINE Notify
+    def not_bound(self, user_id: str):
+        contents = {
+            "type": "bubble",
+            "hero": {
+                "type": "image",
+                "url": "https://i.imgur.com/l2Yipv5.png",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "fit",
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "歐嗚！",
+                        "weight": "bold",
+                        "size": "xxl",
+                        "align": "center",
+                        "color": "#FF0000",
+                    },
+                    {
+                        "type": "text",
+                        "text": "尚未綁定 LINE Notify，請先前往綁定！",
+                        "wrap": true,
+                        "align": "center",
+                    },
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "綁定 LINE Notify",
+                            "uri": f"{config.SITE_NAME}notify/?uid={user_id}",
+                        },
+                        "style": "primary",
+                    }
+                ],
+            },
+        }
+        message = FlexSendMessage(alt_text=f"尚未綁定 LINE Notify", contents=contents)
+        return message
 
 
 # 店家營業狀態

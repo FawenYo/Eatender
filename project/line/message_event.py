@@ -8,6 +8,7 @@ from datetime import datetime
 import sentry_sdk
 from linebot import LineBotApi
 from linebot.models import *
+
 from .templates import Template
 
 sys.path.append(".")
@@ -148,9 +149,7 @@ def handle_message(event):
                         else:
                             message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
                     else:
-                        message = TextSendMessage(
-                            text=f"尚未綁定 LINE Notify!\n請先前往 {config.SITE_NAME}notify/?uid={user_id} 進行綁定~"
-                        )
+                        message = Template().not_bound(user_id=user_id)
 
                 # 客服
                 elif user_message == "客服":

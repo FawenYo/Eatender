@@ -6,6 +6,7 @@ import sentry_sdk
 from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 from linebot.models import *
+
 from .templates import Template
 
 sys.path.append(".")
