@@ -1,208 +1,230 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>EATender</title>
-        <meta property="og:title" content="EATender"/>
-        <meta property="og:description" content="加LINE約吃飯，感情不會散"/>
-        <meta property="og:type" content="product"/>
-        <meta property="og:url" content="https://eatender.site.com/"/>
-        <meta property="og:image" content="./static/images/logo.png"/>
-        <meta name="HandheldFriendly" content="true">
-        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-        <link rel="shortcut icon" href="./static/images/logo.png">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.8/typicons.min.css">
-        <link rel="stylesheet" href="./static/css/about.css">
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            gtag('config', 'G-8XVRR4RQHN');
-        </script>
-    </head>
-    <body>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
-        <script type="text/javascript" src="./static/scripts/about.js"></script>
-        <!-- Header Section
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>EATender</title>
+    <meta property="og:title" content="EATender" />
+    <meta property="og:description" content="加LINE約吃飯，感情不會散" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="https://eatender.site.com/" />
+    <meta property="og:image" content="./static/images/logo.png" />
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="shortcut icon" href="./static/images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.8/typicons.min.css">
+    <link rel="stylesheet" href="./static/css/about.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-8XVRR4RQHN');
+    </script>
+</head>
+
+<body>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+    <script type="text/javascript" src="./static/js/about.js"></script>
+    <!-- Header Section
             –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-        <header id="header">
-            <div class="main_nav">
-                <div class="container">
-                    <div class="mobile-toggle"> <span></span> <span></span> <span></span> </div>
-                    <nav>
-                        <ul>
-                            <li><a class="smoothscroll" href="#about">簡介</a></li>
-                            <li><a class="smoothscroll" href="#team">團隊介紹</a></li>
-                            <li><a class="smoothscroll" href="#skills">程式內容</a></li>
-                        </ul>
-                    </nav>
-                </div>
+    <header id="header">
+        <div class="main_nav">
+            <div class="container">
+                <div class="mobile-toggle"> <span></span> <span></span> <span></span> </div>
+                <nav>
+                    <ul>
+                        <li><a class="smoothscroll" href="#about">簡介</a></li>
+                        <li><a class="smoothscroll" href="#team">團隊介紹</a></li>
+                        <li><a class="smoothscroll" href="#skills">程式內容</a></li>
+                    </ul>
+                </nav>
             </div>
-            <div class="title">
-                <div><span class="typcn typcn-heart-outline icon heading"></span></div>
-                <div class="smallsep heading"></div>
-                <h1 class="heading">EATender</h1>
-                <h2 class="heading">加LINE約吃飯，感情不會散</h2>
-                <a class="smoothscroll" href="#about">
-                    <div class="mouse">
-                        <div class="wheel"></div>
-                    </div>
-                </a>
-            </div>
+        </div>
+        <div class="title">
+            <div><span class="typcn typcn-heart-outline icon heading"></span></div>
+            <div class="smallsep heading"></div>
+            <h1 class="heading">EATender</h1>
+            <h2 class="heading">加LINE約吃飯，感情不會散</h2>
             <a class="smoothscroll" href="#about">
-                <div class="scroll-down"></div>
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
             </a>
-        </header>
-        <!-- About Section
-            –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
-        <section id="about">
-            <div class="container">
-                <div class="row">
-                    <h1>簡介</h1>
-                    <div class="block"></div>
-                    <p>你是否還在為了「不知道吃甚麼？」而和煩惱著？不知道該約朋友去哪聚餐而躊躇著？<br>
-                        EATender來幫你！<br>
-                        擁有最即時的餐廳訊息，在資訊爆炸的時代，為您指引一條「美食之路」！<br>
-                        更有「餐廳配對系統」，讓您和朋友在決定餐廳時，也能享受到猶如「交友軟體」般的樂趣。<br>
-                        佛洛伊德說過：「夢是人潛意識的縮影。」<br>
-                        加入EATender，尋找夢中的餐廳！
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="row">
-                        <div class="six columns">
-                            <h3><span class="typcn typcn-cog-outline icon"></span>現在</h3>
-                            <p>在短短的半個月內，EATender做到了能讓使用者與Line Bot互動，<br>
-                                幫助使用者『找餐廳』、『約吃飯』！<br>
-                                透過一系列直覺的資訊圖卡，EATender協助現代人解決選擇障礙。<br>
-                                除此之外，EATender更結合Tinder左滑右滑的投票功能，<br>
-                                讓使用者能輕鬆邀請朋友們一起約吃飯！
-                            </p>
-                        </div>
-                        <div class="six columns">
-                            <h3><span class="typcn typcn-lightbulb icon"></span>未來</h3>
-                            <p>EATender希望未來可以整合Line的生態圈，<br>
-                                像是與分帳軟體Lightsplit合作，<br>
-                                垂直整合『找餐廳』、『約吃飯』和『分帳』等功能，<br>
-                                並使用 React, Vue 改建網頁介面創造更好的使用者體驗，<br>
-                                讓使用者透過EATender就可以輕鬆和朋友一同享受美味的佳餚！
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Team Section
-            –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
-        <section id="team">
-            <div class="container">
-                <div class="row">
-                    <h1>團隊介紹</h1>
-                    <div class="block"></div>
-                    <p>我們是來自台灣大學的一群吃貨，每一天到了吃飯時間，<br>
-                        我們經常遇到一個煩惱——「欸，等下要吃什麼？」<br>
-                        於是就有了這次專題的發想...<br>
-                        致力於解決「選擇障礙」和「社交困難」的EATender。
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="four columns">
-                        <img src="https://i.imgur.com/s17I3hu.png" width="220" height="220" alt=""/>
-                        <h4>鄭鈞瀚</h4>
-                        <p>Software/System Engineer</p>
-                        <span class="typcn typcn-social-facebook-circular icon"></span><span class="typcn typcn-social-instagram-circular icon"></span><span class="typcn typcn-social-google-plus-circular icon"></span><span class="typcn typcn-social-linkedin-circular icon"></span> 
-                    </div>
-                    <div class="four columns">
-                        <img src="https://i.imgur.com/MYq31Cx.png" width="220" height="220" alt=""/>
-                        <h4>蔡昊辰</h4>
-                        <p>Associate Engineer</p>
-                        <span class="typcn typcn-social-facebook-circular icon"></span><span class="typcn typcn-social-instagram-circular icon"></span><span class="typcn typcn-social-google-plus-circular icon"></span><span class="typcn typcn-social-linkedin-circular icon"></span> 
-                    </div>
-                    <div class="four columns">
-                        <img src="https://i.imgur.com/R2GN57s.png" width="220" height="220" alt=""/>
-                        <h4>何以恩</h4>
-                        <p>Project Manager</p>
-                        <span class="typcn typcn-social-facebook-circular icon"></span><span class="typcn typcn-social-instagram-circular icon"></span><span class="typcn typcn-social-google-plus-circular icon"></span><span class="typcn typcn-social-linkedin-circular icon"></span> 
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 30px;">
-                    <div class="four columns">
-                        <img src="https://i.imgur.com/nVV96cj.png" width="220" height="220" alt=""/>
-                        <h4>曾莉晴</h4>
-                        <p>Planner</p>
-                        <span class="typcn typcn-social-facebook-circular icon"></span><span class="typcn typcn-social-instagram-circular icon"></span><span class="typcn typcn-social-google-plus-circular icon"></span><span class="typcn typcn-social-linkedin-circular icon"></span> 
-                    </div>
-                    <div class="four columns">
-                        <img src="https://i.imgur.com/X7Nb4SS.png" width="220" height="220" alt=""/>
-                        <h4>陳家薇</h4>
-                        <p>UX Designer/ QA</p>
-                        <span class="typcn typcn-social-facebook-circular icon"></span><span class="typcn typcn-social-instagram-circular icon"></span><span class="typcn typcn-social-google-plus-circular icon"></span><span class="typcn typcn-social-linkedin-circular icon"></span> 
-                    </div>
-                    <div class="four columns">
-                        <img src="https://i.imgur.com/zRDdKuP.png" width="220" height="220" alt=""/>
-                        <h4>陸品瑄</h4>
-                        <p>QA</p>
-                        <span class="typcn typcn-social-facebook-circular icon"></span><span class="typcn typcn-social-instagram-circular icon"></span><span class="typcn typcn-social-google-plus-circular icon"></span><span class="typcn typcn-social-linkedin-circular icon"></span> 
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Skills Section
-            –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
-        <section id="skills">
-            <div class="container">
-                <h1>程式內容</h1>
+        </div>
+        <a class="smoothscroll" href="#about">
+            <div class="scroll-down"></div>
+        </a>
+    </header>
+    <!-- About Section
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <h1>簡介</h1>
                 <div class="block"></div>
+                <p>你是否還在為了「不知道吃甚麼？」而和煩惱著？不知道該約朋友去哪聚餐而躊躇著？<br>
+                    EATender來幫你！<br>
+                    擁有最即時的餐廳訊息，在資訊爆炸的時代，為您指引一條「美食之路」！<br>
+                    更有「餐廳配對系統」，讓您和朋友在決定餐廳時，也能享受到猶如「交友軟體」般的樂趣。<br>
+                    佛洛伊德說過：「夢是人潛意識的縮影。」<br>
+                    加入EATender，尋找夢中的餐廳！
+                </p>
+            </div>
+            <div class="row">
                 <div class="row">
                     <div class="six columns">
-                        <h3>Language</h3>
-                        <p>我們使用Python作為專案主要語言，並使用FastAPI為網頁框架。<br>其非同步高併發的優勢讓我們能將反應時間縮短達到更好的使用者體驗。<br>舉凡 LINE Bot, Google Maps API串接, 投票系統 皆使用Python。</p>
+                        <h3><span class="typcn typcn-cog-outline icon"></span>現在</h3>
+                        <p>在短短的半個月內，EATender做到了能讓使用者與Line Bot互動，<br>
+                            幫助使用者『找餐廳』、『約吃飯』！<br>
+                            透過一系列直覺的資訊圖卡，EATender協助現代人解決選擇障礙。<br>
+                            除此之外，EATender更結合Tinder左滑右滑的投票功能，<br>
+                            讓使用者能輕鬆邀請朋友們一起約吃飯！
+                        </p>
                     </div>
                     <div class="six columns">
-                        <h3>Database</h3>
-                        <p>專案以 MongoDB 作為資料庫，其 no-sql 的特性讓我們即便沒專精資料庫也能輕鬆使用資料庫進行操作。</p>
+                        <h3><span class="typcn typcn-lightbulb icon"></span>未來</h3>
+                        <p>EATender希望未來可以整合Line的生態圈，<br>
+                            像是與分帳軟體Lightsplit合作，<br>
+                            垂直整合『找餐廳』、『約吃飯』和『分帳』等功能，<br>
+                            並使用 React, Vue 改建網頁介面創造更好的使用者體驗，<br>
+                            讓使用者透過EATender就可以輕鬆和朋友一同享受美味的佳餚！
+                        </p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="eight columns">
-                        <div class="progressBar">
-                            <h4>Python (48.95%)</h4>
-                            <div class="progressBarContainer">
-                                <div class="progressBarValue" style="width: 48.95%;"></div>
-                            </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team Section
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <section id="team">
+        <div class="container">
+            <div class="row">
+                <h1>團隊介紹</h1>
+                <div class="block"></div>
+                <p>我們是來自台灣大學的一群吃貨，每一天到了吃飯時間，<br>
+                    我們經常遇到一個煩惱——「欸，等下要吃什麼？」<br>
+                    於是就有了這次專題的發想...<br>
+                    致力於解決「選擇障礙」和「社交困難」的EATender。
+                </p>
+            </div>
+            <div class="row">
+                <div class="four columns">
+                    <img src="https://i.imgur.com/s17I3hu.png" width="220" height="220" alt="" />
+                    <h4>鄭鈞瀚</h4>
+                    <p>Software/System Engineer</p>
+                    <span class="typcn typcn-social-facebook-circular icon"></span><span
+                        class="typcn typcn-social-instagram-circular icon"></span><span
+                        class="typcn typcn-social-google-plus-circular icon"></span><span
+                        class="typcn typcn-social-linkedin-circular icon"></span>
+                </div>
+                <div class="four columns">
+                    <img src="https://i.imgur.com/MYq31Cx.png" width="220" height="220" alt="" />
+                    <h4>蔡昊辰</h4>
+                    <p>Associate Engineer</p>
+                    <span class="typcn typcn-social-facebook-circular icon"></span><span
+                        class="typcn typcn-social-instagram-circular icon"></span><span
+                        class="typcn typcn-social-google-plus-circular icon"></span><span
+                        class="typcn typcn-social-linkedin-circular icon"></span>
+                </div>
+                <div class="four columns">
+                    <img src="https://i.imgur.com/R2GN57s.png" width="220" height="220" alt="" />
+                    <h4>何以恩</h4>
+                    <p>Project Manager</p>
+                    <span class="typcn typcn-social-facebook-circular icon"></span><span
+                        class="typcn typcn-social-instagram-circular icon"></span><span
+                        class="typcn typcn-social-google-plus-circular icon"></span><span
+                        class="typcn typcn-social-linkedin-circular icon"></span>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 30px;">
+                <div class="four columns">
+                    <img src="https://i.imgur.com/nVV96cj.png" width="220" height="220" alt="" />
+                    <h4>曾莉晴</h4>
+                    <p>Planner</p>
+                    <span class="typcn typcn-social-facebook-circular icon"></span><span
+                        class="typcn typcn-social-instagram-circular icon"></span><span
+                        class="typcn typcn-social-google-plus-circular icon"></span><span
+                        class="typcn typcn-social-linkedin-circular icon"></span>
+                </div>
+                <div class="four columns">
+                    <img src="https://i.imgur.com/X7Nb4SS.png" width="220" height="220" alt="" />
+                    <h4>陳家薇</h4>
+                    <p>UX Designer/ QA</p>
+                    <span class="typcn typcn-social-facebook-circular icon"></span><span
+                        class="typcn typcn-social-instagram-circular icon"></span><span
+                        class="typcn typcn-social-google-plus-circular icon"></span><span
+                        class="typcn typcn-social-linkedin-circular icon"></span>
+                </div>
+                <div class="four columns">
+                    <img src="https://i.imgur.com/zRDdKuP.png" width="220" height="220" alt="" />
+                    <h4>陸品瑄</h4>
+                    <p>QA</p>
+                    <span class="typcn typcn-social-facebook-circular icon"></span><span
+                        class="typcn typcn-social-instagram-circular icon"></span><span
+                        class="typcn typcn-social-google-plus-circular icon"></span><span
+                        class="typcn typcn-social-linkedin-circular icon"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Skills Section
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <section id="skills">
+        <div class="container">
+            <h1>程式內容</h1>
+            <div class="block"></div>
+            <div class="row">
+                <div class="six columns">
+                    <h3>Language</h3>
+                    <p>我們使用Python作為專案主要語言，並使用FastAPI為網頁框架。<br>其非同步高併發的優勢讓我們能將反應時間縮短達到更好的使用者體驗。<br>舉凡 LINE Bot, Google
+                        Maps API串接, 投票系統 皆使用Python。</p>
+                </div>
+                <div class="six columns">
+                    <h3>Database</h3>
+                    <p>專案以 MongoDB 作為資料庫，其 no-sql 的特性讓我們即便沒專精資料庫也能輕鬆使用資料庫進行操作。</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="eight columns">
+                    <div class="progressBar">
+                        <h4>Python (48.95%)</h4>
+                        <div class="progressBarContainer">
+                            <div class="progressBarValue" style="width: 48.95%;"></div>
                         </div>
-                        <div class="progressBar">
-                            <h4>CSS (23.72%)</h4>
-                            <div class="progressBarContainer">
-                                <div class="progressBarValue" style="width: 23.72%;"></div>
-                            </div>
+                    </div>
+                    <div class="progressBar">
+                        <h4>CSS (23.72%)</h4>
+                        <div class="progressBarContainer">
+                            <div class="progressBarValue" style="width: 23.72%;"></div>
                         </div>
-                        <div class="progressBar">
-                            <h4>JavaScript (18.01%)</h4>
-                            <div class="progressBarContainer">
-                                <div class="progressBarValue" style="width: 18.01%;"></div>
-                            </div>
+                    </div>
+                    <div class="progressBar">
+                        <h4>JavaScript (18.01%)</h4>
+                        <div class="progressBarContainer">
+                            <div class="progressBarValue" style="width: 18.01%;"></div>
                         </div>
-                        <div class="progressBar">
-                            <h4>HTML (9.13%)</h4>
-                            <div class="progressBarContainer">
-                                <div class="progressBarValue" style="width: 9.13%"></div>
-                            </div>
+                    </div>
+                    <div class="progressBar">
+                        <h4>HTML (9.13%)</h4>
+                        <div class="progressBarContainer">
+                            <div class="progressBarValue" style="width: 9.13%"></div>
                         </div>
-                        <div class="progressBar">
-                            <h4>Dockerfile (0.19%)</h4>
-                            <div class="progressBarContainer">
-                                <div class="progressBarValue" style="width: 0.19%"></div>
-                            </div>
+                    </div>
+                    <div class="progressBar">
+                        <h4>Dockerfile (0.19%)</h4>
+                        <div class="progressBarContainer">
+                            <div class="progressBarValue" style="width: 0.19%"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </body>
+        </div>
+    </section>
+</body>
+
 </html>
