@@ -32,7 +32,7 @@ const ScheduleWrapper = styled.div`
   border-radius: 20px;
   box-shadow: 3px 5px 18px 0px rgba(191,191,191,0.76)`;
 
-function App({_numDays, _minTime, _maxTime, passScheduleOut}) {
+function Schedular({_numDays, _minTime, _maxTime, passScheduleOut}) {
   const [schedule, setSchedule] = useState([]);
 
   function handleChange(newSchedule) {
@@ -61,4 +61,4 @@ function App({_numDays, _minTime, _maxTime, passScheduleOut}) {
   )
 }
 
-export default App;
+export default Schedular;
