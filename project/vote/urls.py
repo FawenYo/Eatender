@@ -58,3 +58,11 @@ async def vote_save(body: dict):
     else:
         message = {"status": "error", "error_message": "查無投票！"}
     return JSONResponse(content=message, headers=headers)
+
+
+@vote.post("/api/save/date", response_class=JSONResponse)
+async def vote_date_save(body: dict):
+    user_id = body["user_id"]
+    dates = body["dates"]
+    message = {"status": "success"}
+    return JSONResponse(content=message, headers=headers)
