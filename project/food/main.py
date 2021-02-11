@@ -1,3 +1,4 @@
+import json
 import random
 import re
 import string
@@ -137,14 +138,14 @@ class RestaurantInfo:
         threads = []
         if not complete_mode:
             for restaurant in self.restaurants:
-                config.restaurants[restaurant.place_id] = restaurant.__dict__
+                config.cache.set(restaurant.place_id, json.dumps(restaurant.__dict__))
                 thread = threading.Thread(
                     target=self.multi_threading_ifoodie, args=(restaurant,)
                 )
                 threads.append(thread)
         else:
             for restaurant in restaurants.restaurants:
-                config.restaurants[restaurant.place_id] = restaurant.__dict__
+                config.cache.set(restaurant.place_id, json.dumps(restaurant.__dict__))
                 thread = threading.Thread(
                     target=self.multi_threading_ifoodie, args=(restaurant,)
                 )

@@ -1,3 +1,4 @@
+import json
 import sys
 import threading
 from datetime import datetime
@@ -38,7 +39,7 @@ def handle_postback(event):
                     {"place_id": restaurant_id}
                 )
                 if not restaurant_data:
-                    restaurant_data = config.restaurants[restaurant_id]
+                    restaurant_data = json.loads(config.cache.get(restaurant_id))
                 user = config.db.user.find_one({"user_id": user_id})
                 # 尚未收藏餐廳
                 if restaurant_data not in user["favorite"]:
@@ -107,7 +108,7 @@ def handle_postback(event):
                     {"place_id": restaurant_id}
                 )
                 if not restaurant_data:
-                    restaurant_data = config.restaurants[restaurant_id]
+                    restaurant_data = json.loads(config.cache.get(restaurant_id))
                 if restaurant_data not in user["vote"]:
                     user["vote"].append(restaurant_data)
                     config.db.user.update_one({"user_id": user_id}, {"$set": user})

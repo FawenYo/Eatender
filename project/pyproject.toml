@@ -24,6 +24,7 @@ uvloop = "^0.14.0"
 pymongo = {extras = ["srv"], version = "^3.11.2"}
 pandas = "^1.2.0"
 sentry-sdk = "^0.19.5"
+redis = "^3.5.3"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"
