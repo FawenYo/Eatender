@@ -1,15 +1,17 @@
 import os
 
 import uvicorn
-from api.urls import api
-from cron import cron
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from line.urls import line_app
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from api.urls import api
+from cron import cron
+from line.urls import line_app
 from view import view
 from vote.urls import vote
+from weather.urls import weather
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -23,6 +25,8 @@ app.include_router(line_app)
 app.include_router(api)
 # Vote System
 app.include_router(vote)
+# Weather
+app.include_router(weather)
 # Cron Job
 app.include_router(cron)
 

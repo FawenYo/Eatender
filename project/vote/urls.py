@@ -15,21 +15,44 @@ templates = Jinja2Templates(directory="templates")
 headers = {"content-type": "application/json; charset=utf-8"}
 
 
-# Share vote
 @vote.get("/share", response_class=HTMLResponse)
-async def share(request: Request):
+async def share(request: Request) -> HTMLResponse:
+    """分享投票資訊頁面
+
+    Args:
+        request (Request): Request Object
+
+    Returns:
+        HTMLResponse: 投票資訊頁面
+    """
     return templates.TemplateResponse("share.html", context={"request": request})
 
 
-# Vote login
 @vote.get("/login", response_class=HTMLResponse)
-async def login(request: Request):
+async def login(request: Request) -> HTMLResponse:
+    """轉址至餐廳投票頁面
+
+    Args:
+        request (Request): Request Object
+
+    Returns:
+        HTMLResponse: 轉址頁面
+    """
     return templates.TemplateResponse("login.html", context={"request": request})
 
 
-# Vote page content
 @vote.get("/vote")
-async def vote_page(request: Request, id: str, name: str):
+async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
+    """餐廳投票頁面
+
+    Args:
+        request (Request): Request Object
+        id (str): 投票池ID
+        name (str): 使用者ID
+
+    Returns:
+        HTMLResponse: 餐廳投票頁面
+    """
     return templates.TemplateResponse(
         "restaurant.html",
         context={"request": request},
