@@ -66,17 +66,6 @@ async def liff_share(pull_id: str):
     return {"status": "success", "data": message}
 
 
-# API - Vote page restaurant data
-@api.get("/api/vote/{pull_id}", response_class=JSONResponse)
-async def get_pull_data(pull_id):
-    pull_data = config.db.vote_pull.find_one({"_id": pull_id})
-    if pull_data:
-        message = {"status": "success", "restaurants": pull_data["restaurants"]}
-    else:
-        message = {"status": "error", "error_message": "Vote pull not found."}
-    return message
-
-
 # API - deploy done
 @api.get("/api/deploy", response_class=JSONResponse)
 async def deploy():

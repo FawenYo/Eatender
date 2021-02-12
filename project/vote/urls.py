@@ -1,12 +1,13 @@
+import json
 import sys
 
+from bson import json_util
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
 sys.path.append(".")
 import config
-from api.urls import get_pull_data
 
 vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -29,24 +30,40 @@ async def login(request: Request):
 # Vote page content
 @vote.get("/vote")
 async def vote_page(request: Request, id: str, name: str):
-    message = await get_pull_data(pull_id=id)
-    if message["status"] == "success":
-        return templates.TemplateResponse(
-            "restaurant.html",
-            context={
-                "request": request,
-                "data": message["restaurants"],
-                "name": name,
-                "pull_id": id,
-            },
-        )
+    return templates.TemplateResponse(
+        "restaurant.html",
+        context={"request": request},
+    )
+
+
+@vote.get("/api/vote/{pull_id}", response_class=JSONResponse)
+async def get_pull_data(pull_id: str) -> JSONResponse:
+    """取得投票池餐廳資訊
+
+    Args:
+        pull_id (str): 投票池ID
+
+    Returns:
+        JSONResponse: 餐廳資訊
+    """
+    pull_data = config.db.vote_pull.find_one({"_id": pull_id})
+    if pull_data:
+        message = {"status": "success", "restaurants": pull_data["restaurants"]}
     else:
-        return message
+        message = {"status": "error", "error_message": "Vote pull not found."}
+    return JSONResponse(content=json.loads(json_util.dumps(message)))
 
 
-# 紀錄餐廳投票結果
 @vote.post("/api/save/restaurants", response_class=JSONResponse)
-async def vote_save(body: dict):
+async def vote_save(body: dict) -> JSONResponse:
+    """儲存餐廳投票結果
+
+    Args:
+        body (dict): {"pull_id": 投票池ID (str), "user_id": 使用者ID (str), "choose_result": {"love": [喜歡餐廳index (int), ...], "hate": [討厭餐廳index (int), ...]}}
+
+    Returns:
+        JSONResponse: [description]
+    """
     pull_id = body["pull_id"]
     user_id = body["user_id"]
     choose_result = body["choose_result"]
@@ -61,7 +78,15 @@ async def vote_save(body: dict):
 
 
 @vote.post("/api/save/date", response_class=JSONResponse)
-async def vote_date_save(body: dict):
+async def vote_date_save(body: dict) -> JSONResponse:
+    """儲存日期投票結果
+
+    Args:
+        body (dict): {"user_id": 使用者ID (str), "dates": [日期, ...] (array)}
+
+    Returns:
+        JSONResponse: 紀錄成功訊息
+    """
     user_id = body["user_id"]
     dates = body["dates"]
     message = {"status": "success"}
