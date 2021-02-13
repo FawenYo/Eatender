@@ -249,7 +249,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "/api/save/restaurants",
+        url: "http://0.0.0.0:8001/api/save/restaurants",
         contentType: "application/json",
         method: "post",
         dataType: "json",
