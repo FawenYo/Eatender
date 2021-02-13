@@ -1,18 +1,17 @@
-import React from "react"
-import { render } from "react-dom"
-import Form from "./components/Form"
-import Banner from "./components/Banner"
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Schedular from './components/Schedular'
 
-const styles = {
-    fontFamily: "sans-serif",
-    textAlign: "center",
-}
-
-const DateTimes = () => (
-    <div style={styles}>
-        <DateRange />
-    </div>
+ReactDOM.render(
+  <React.StrictMode>
+    <Schedular
+      _startDate = {new Date()}
+      _numDays = {5}
+      _minTime = {8}
+      _maxTime = {22}
+      passScheduleOut = {schedule => console.log(schedule)}
+    />
+  </React.StrictMode>,
+  document.getElementById('schedular')
 )
 
-// render(<Banner />, document.querySelector("#banner"));
-render(<Form textAlign="center" />, document.querySelector("#form"))
