@@ -36,7 +36,7 @@ function fetch_restaurant() {
             }
         },
         error: function () {
-            init()
+            console.log("error")
         },
     })
 }

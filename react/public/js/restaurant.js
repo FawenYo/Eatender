@@ -10,13 +10,15 @@ $(document).ready(function () {
     var url = new URL(query_url);
 
     pull_id = url.searchParams.get("id")
+    pull_id = "b3yAVdroee"
     user_id = url.searchParams.get("name")
+    user_id = "123"
     fetch_restaurant()
 })
 
 function fetch_restaurant() {
     $.ajax({
-        url: `/api/vote/${pull_id}`,
+        url: `http://0.0.0.0:8001/api/vote/${pull_id}`,
         contentType: "application/json",
         method: "get",
         dataType: "json",
@@ -36,7 +38,7 @@ function fetch_restaurant() {
             }
         },
         error: function () {
-            init()
+            console.log("error")
         },
     })
 }
