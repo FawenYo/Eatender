@@ -32,6 +32,10 @@ const ScheduleWrapper = styled.div`
   border-radius: 20px;
   box-shadow: 3px 5px 18px 0px rgba(191,191,191,0.76)`;
 
+const H1 = styled.h1`
+  font-size: 32pt`;
+
+
 function Schedular({_numDays, _minTime, _maxTime, passScheduleOut}) {
   const [schedule, setSchedule] = useState([]);
 
@@ -42,7 +46,7 @@ function Schedular({_numDays, _minTime, _maxTime, passScheduleOut}) {
   return (
     <Wrapper>
       <header>
-        <h1>React Schedule Selector</h1>
+        <H1>React Schedule Selector</H1>
         <p>Tap to select one time or drag to select multiple times at once.</p>
       </header>
       <br/>

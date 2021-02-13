@@ -1,3 +1,5 @@
+
+
 var pull_id = ""
 var user_id = ""
 var total_restaurant = 0
@@ -18,7 +20,7 @@ $(document).ready(function () {
 
 function fetch_restaurant() {
     $.ajax({
-        url: `http://0.0.0.0:8001/api/vote/${pull_id}`,
+        url: `http://127.0.0.1:8001/api/vote/${pull_id}`,
         contentType: "application/json",
         method: "get",
         dataType: "json",
@@ -249,7 +251,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "http://0.0.0.0:8001/api/save/restaurants",
+        url: "http://127.0.0.1:8001/api/save/restaurants",
         contentType: "application/json",
         method: "post",
         dataType: "json",
@@ -263,7 +265,10 @@ function save_results() {
                     text: "將在1秒後轉往日期投票...",
                     timer: 1000,
                 })
-                setTimeout(redirect, 1700)
+                setTimeout(()=>{
+                    document.querySelector('#schedular').classList.remove('hidden')
+                    document.querySelector('.tinder').classList.add('hidden')
+                }, 1700)
                 expire_days = 365 // 過期日期(天)
                 var d = new Date()
                 d.setTime(d.getTime() + expire_days * 24 * 60 * 60 * 1000)

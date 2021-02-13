@@ -12,6 +12,10 @@
    <meta name="HandheldFriendly" content="true">
    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
    <link rel="shortcut icon" href="images/logo.png">
+
+   <!-- <link href="css/fontawesome-all.min.css" rel="stylesheet" type="text/css"> -->
+   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
+
    <link href="css/restaurant.css" rel="stylesheet" type="text/css">
    <style type="text/css">
       .fxC3 {
@@ -61,14 +65,15 @@
       }
 
       .hidden {
+         visibility: hidden;
          opacity: 0;
+         z-index: -1;
       }
-
-      .tinder {}
 
       #schedular {
          position: absolute;
-         width: 90%;
+         top: 10px;
+         width: 100%;
          margin: 0 auto;
          transition: all .3s ease-in;
       }
@@ -83,11 +88,6 @@
       gtag('js', new Date());
 
       gtag('config', 'G-8XVRR4RQHN');
-
-      function revealSchedular() {
-         document.querySelector('#schedular').classList.remove('hidden')
-         console.log('remove')
-      }
    </script>
 </head>
 
@@ -95,8 +95,12 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   <script type="text/javascript" src="js/restaurant.js"></script>
 
+   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+   <script type="text/javascript" src="js/restaurant.js"></script>
+   
    <div class="tinder">
       <div class="tinder--status">
          <i class="fas fa-times"></i>
