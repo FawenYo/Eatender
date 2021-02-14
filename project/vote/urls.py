@@ -5,6 +5,7 @@ from bson import json_util
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from .model import *
 
 sys.path.append(".")
 import config
@@ -78,18 +79,18 @@ async def get_pull_data(pull_id: str) -> JSONResponse:
 
 
 @vote.post("/api/vote/save/restaurant", response_class=JSONResponse)
-async def vote_save(body: dict) -> JSONResponse:
+async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
     """儲存餐廳投票結果
 
     Args:
-        body (dict): {"pull_id": 投票池ID (str), "user_id": 使用者ID (str), "choose_result": {"love": [喜歡餐廳index (int), ...], "hate": [討厭餐廳index (int), ...]}}
+        param (SaveVoteRestaurant): 餐廳投票資訊
 
     Returns:
-        JSONResponse: [description]
+        JSONResponse: 儲存結果
     """
-    pull_id = body["pull_id"]
-    user_id = body["user_id"]
-    choose_result = body["choose_result"]
+    pull_id = param.pull_id
+    user_id = param.user_id
+    choose_result = param.choose_result
     pull_data = config.db.vote_pull.find_one({"_id": pull_id})
     if pull_data:
         pull_data["participants"][user_id] = choose_result["love"]
@@ -127,17 +128,17 @@ async def vote_date_get(pull_id: str) -> JSONResponse:
 
 
 @vote.post("/api/vote/save/date", response_class=JSONResponse)
-async def vote_date_save(body: dict) -> JSONResponse:
+async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
     """儲存日期投票結果
 
     Args:
-        body (dict): {"user_id": 使用者ID (str), "dates": [日期, ...] (array)}
+        param (SaveVoteDate): 投票日期資訊
 
     Returns:
-        JSONResponse: 紀錄成功訊息
+        JSONResponse: 儲存結果
     """
-    pull_id = body["pull_id"]
-    user_id = body["user_id"]
-    dates = body["dates"]
+    pull_id = param.pull_id
+    user_id = param.user_id
+    dates = param.dates
     message = {"status": "success"}
     return JSONResponse(content=message, headers=headers)
