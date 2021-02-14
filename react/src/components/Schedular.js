@@ -30,6 +30,7 @@ const Wrapper = styled.div`
 const ScheduleWrapper = styled.div`
   padding: 20px;
   border-radius: 20px;
+  background: white;
   box-shadow: 3px 5px 18px 0px rgba(191,191,191,0.76)`;
 
 const H1 = styled.h1`

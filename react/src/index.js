@@ -9,9 +9,9 @@ $(document).ready(function () {
   var url = new URL(query_url);
 
   pull_id = url.searchParams.get("id")
-  pull_id = "b3yAVdroee"
+  pull_id = "b3yAVdroee";
   user_id = url.searchParams.get("name")
-  user_id = "123"
+  user_id = "123";
 
   [startDate, num_days, min_time, max_time] = fetchScheduleParams();
 })
@@ -48,27 +48,20 @@ function convertToFormat(format, dateArray){
   }
 }
 function postSchedule (schedule) {
-  let sendData = {
-    user_id,
-    dates: convertToFormat('YYYY/MM/DD hh:mm', schedule)
-  }
-  // console.log(convertToFormat("YYYY/MM/DD hh:mm", schedule))
   if (schedule.length != 0){
-    console.log(sendData)
+    let sendData = {
+      user_id,
+      dates: convertToFormat('YYYY/MM/DD hh:mm', schedule)
+    }
     $.ajax({
-      url: `http://127.0.0.1:8001/api/save/date/${pull_id}`,
+      url: `http://127.0.0.1:8001/api/save/date`,
       contentType: "application/json",
       method: "post",
       dataType: "json",
       data: JSON.stringify(sendData),
       success: function (data) {
         if (data.status == "success") {
-          Swal.fire({
-            type: "success",
-            title: "儲存成功！",
-            text: "時間以上傳至雲端",
-            timer: 1000,
-          })
+          console.log('uploaded data: ', sendData)
         } else {
             Swal.fire({
               type: "error",
