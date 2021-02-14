@@ -22,7 +22,7 @@ function fetch_restaurant() {
     $.ajax({
         url: `http://127.0.0.1:8001/api/vote/get/restaurant?pull_id=${pull_id}`,
         contentType: "application/json",
-        method: "get",
+        method: "GET",
         dataType: "json",
         success: function (data) {
             if (data.status == "success") {
@@ -40,7 +40,12 @@ function fetch_restaurant() {
             }
         },
         error: function () {
-            console.log("error")
+            Swal.fire({
+                type: "error",
+                title: "很抱歉！",
+                text: "無法連接伺服器，請稍後再試！",
+                confirmButtonText: "確認",
+            })
         },
     })
 }
@@ -253,7 +258,7 @@ function save_results() {
     $.ajax({
         url: "http://127.0.0.1:8001/api/vote/save/restaurant",
         contentType: "application/json",
-        method: "post",
+        method: "POST",
         dataType: "json",
         data: JSON.stringify(sendData),
         success: function (data) {
@@ -269,11 +274,6 @@ function save_results() {
                     document.querySelector('#schedular').classList.remove('hidden')
                     document.querySelector('.tinder').classList.add('hidden')
                 }, 1700)
-                expire_days = 365 // 過期日期(天)
-                var d = new Date()
-                d.setTime(d.getTime() + expire_days * 24 * 60 * 60 * 1000)
-                var expires = "; expires=" + d.toGMTString()
-                document.cookie = "uid=" + $("#uid").val() + expires + "; path=/"
             } else {
                 Swal.fire({
                     type: "error",
@@ -284,7 +284,12 @@ function save_results() {
             }
         },
         error: function () {
-            init()
+            Swal.fire({
+                type: "error",
+                title: "很抱歉！",
+                text: "無法連接伺服器，請稍後再試！",
+                confirmButtonText: "確認",
+            })
         },
     })
 }

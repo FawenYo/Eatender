@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
    <title>EATender</title>
    <meta property="og:title" content="EATender" />
    <meta property="og:description" content="加LINE約吃飯，感情不會散" />
@@ -10,87 +10,94 @@
    <meta property="og:url" content="https://eatender.site.com/" />
    <meta property="og:image" content="./static/images/logo.png" />
    <meta name="HandheldFriendly" content="true">
-   <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
    <link rel="shortcut icon" href="./static/images/logo.png">
-   <link href="./static/css/restaurant.css" rel="stylesheet" type="text/css">
-   <script src="https://kit.fontawesome.com/ec301da75b.js" crossorigin="anonymous"></script>
-   <style type="text/css">
+   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
+   <link href="./static/css/restaurant.css" rel="stylesheet">
+   <style>
       .fxC3 {
-         color: #666666 !important;
+         color: #666 !important
       }
 
       .fxC2 {
-         color: #999999 !important;
+         color: #999 !important
       }
 
       .fxC1 {
-         color: #ff0000 !important;
+         color: red !important
       }
 
       .fxC0 {
-         color: #00ff00 !important;
+         color: #0f0 !important
       }
 
       .LyGi {
          width: 100%;
          max-width: 500px;
-         min-width: 0;
+         min-width: 0
       }
 
       .LyMe {
          width: 100%;
          max-width: 300px;
-         min-width: 0;
+         min-width: 0
       }
 
       .LyKi {
          width: 100%;
          max-width: 260px;
-         min-width: 0;
+         min-width: 0
       }
 
       .LyMi {
          width: 100%;
          max-width: 160px;
-         min-width: 0;
+         min-width: 0
       }
 
       .LyNa {
          width: 100%;
          max-width: 120px;
-         min-width: 0;
+         min-width: 0
+      }
+
+      .hidden {
+         visibility: hidden;
+         opacity: 0;
+         z-index: -1
+      }
+
+      #schedular {
+         position: absolute;
+         top: 10px;
+         width: 100%;
+         margin: 0 auto;
+         transition: all .3s ease-in
       }
    </style>
-   <link rel="stylesheet" type="text/css" href="./static/css/main.css">
-   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <link rel="stylesheet" href="./static/css/main.css">
+   <script src="https://kit.fontawesome.com/ec301da75b.js" crossorigin="anonymous"></script>
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
-   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-
-      gtag('config', 'G-8XVRR4RQHN');
-   </script>
+   <script>function gtag() { dataLayer.push(arguments) } window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "G-8XVRR4RQHN")</script>
 </head>
 
 <body>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
    <script type="text/javascript" src="./static/js/restaurant.js"></script>
-
    <div class="tinder">
-      <div class="tinder--status">
-         <i class="fas fa-times"></i>
-         <i class="fas fa-heart"></i>
-      </div>
-      <div id="cardWrapper" class="tinder--cards">
-      </div>
-      <div class="tinder--buttons">
-         <button id="nope"><i class="fa fa-times"></i></button>
-         <button id="love"><i class="fa fa-heart"></i></button>
-      </div>
+      <div class="tinder--status"><i class="fas fa-times"></i> <i class="fas fa-heart"></i></div>
+      <div id="cardWrapper" class="tinder--cards"></div>
+      <div class="tinder--buttons"><button id="nope"><i class="fa fa-times"></i></button> <button id="love"><i
+               class="fa fa-heart"></i></button></div>
    </div>
+   <div class="hidden" id="schedular"></div>
+   <script>!function (e) { function r(r) { for (var n, l, a = r[0], f = r[1], i = r[2], c = 0, s = []; c < a.length; c++)l = a[c], Object.prototype.hasOwnProperty.call(o, l) && o[l] && s.push(o[l][0]), o[l] = 0; for (n in f) Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]); for (p && p(r); s.length;)s.shift()(); return u.push.apply(u, i || []), t() } function t() { for (var e, r = 0; r < u.length; r++) { for (var t = u[r], n = !0, a = 1; a < t.length; a++) { var f = t[a]; 0 !== o[f] && (n = !1) } n && (u.splice(r--, 1), e = l(l.s = t[0])) } return e } var n = {}, o = { 1: 0 }, u = []; function l(r) { if (n[r]) return n[r].exports; var t = n[r] = { i: r, l: !1, exports: {} }; return e[r].call(t.exports, t, t.exports, l), t.l = !0, t.exports } l.m = e, l.c = n, l.d = function (e, r, t) { l.o(e, r) || Object.defineProperty(e, r, { enumerable: !0, get: t }) }, l.r = function (e) { "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e, "__esModule", { value: !0 }) }, l.t = function (e, r) { if (1 & r && (e = l(e)), 8 & r) return e; if (4 & r && "object" == typeof e && e && e.__esModule) return e; var t = Object.create(null); if (l.r(t), Object.defineProperty(t, "default", { enumerable: !0, value: e }), 2 & r && "string" != typeof e) for (var n in e) l.d(t, n, function (r) { return e[r] }.bind(null, n)); return t }, l.n = function (e) { var r = e && e.__esModule ? function () { return e.default } : function () { return e }; return l.d(r, "a", r), r }, l.o = function (e, r) { return Object.prototype.hasOwnProperty.call(e, r) }, l.p = "/"; var a = this.webpackJsonpeatender = this.webpackJsonpeatender || [], f = a.push.bind(a); a.push = r, a = a.slice(); for (var i = 0; i < a.length; i++)r(a[i]); var p = f; t() }([])</script>
+   <script src="./static/react/2.2957951d.chunk.js"></script>
+   <script src="./static/react/main.b0181d3c.chunk.js"></script>
 </body>
 
 </html>
