@@ -100,6 +100,32 @@ async def vote_save(body: dict) -> JSONResponse:
     return JSONResponse(content=message, headers=headers)
 
 
+@vote.get("/api/vote/get/date", response_class=JSONResponse)
+async def vote_date_get(pull_id: str) -> JSONResponse:
+    """投票 - 取得投票日期資訊
+
+    Args:
+        pull_id (str): 投票池ID
+
+    Returns:
+        JSONResponse: 投票日期資訊
+    """
+    start_date = "2021/2/13"
+    num_days = 1
+    min_time = 8
+    max_time = 17
+    message = {
+        "status": "success",
+        "data": {
+            "start_date": start_date,
+            "num_days": num_days,
+            "min_time": min_time,
+            "max_time": max_time,
+        },
+    }
+    return JSONResponse(content=message, headers=headers)
+
+
 @vote.post("/api/vote/save/date", response_class=JSONResponse)
 async def vote_date_save(body: dict) -> JSONResponse:
     """儲存日期投票結果
