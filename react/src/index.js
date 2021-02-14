@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom'
 import Schedular from './components/Schedular'
 
 let pull_id, user_id;
-let [startYear, startMonth,startDate, num_days, min_time, max_time] = 
-    [2021, 3, 8, 5, 8, 12];
+
 $(document).ready(function () {
   var query_url = window.location.href
   var url = new URL(query_url);
@@ -13,34 +12,9 @@ $(document).ready(function () {
   pull_id = "b3yAVdroee";
   user_id = url.searchParams.get("name")
   user_id = "123";
-
-  // [startYear, startMonth, startDate, num_days, min_time, max_time] = fetchScheduleParams();
 })
 
-function fetchScheduleParams(){
-  $.ajax({
-    url: `http://127.0.0.1:8001/api/vote/date/${pull_id}`,
-    contentType: "application/json",
-    method: "get",
-    dataType: "json",
-    success: function (data) {
-        if (data.status == "success") {
-          // RETURN
-          console.log("RETURN SCHEDULAR PARAMS")
-        } else {
-            Swal.fire({
-                type: "error",
-                title: "很抱歉！",
-                text: data.error_message,
-                confirmButtonText: "確認",
-            })
-        }
-    },
-    error: function () {
-        console.log("error")
-    },
-})
-}
+
 function convertToFormat(format, dateArray){
   if (format == "YYYY/MM/DD hh:mm"){
     return dateArray.map((date)=>{
@@ -79,16 +53,12 @@ function postSchedule (schedule) {
     })
   }
 }
-ReactDOM.render(
-  <React.StrictMode>
-    <Schedular
-      _startDate = {new Date(startYear, startMonth, startDate)}
-      _numDays = {num_days}
-      _minTime = {min_time}
-      _maxTime = {max_time}
-      passScheduleOut = {postSchedule}
-    />
-  </React.StrictMode>,
-  document.getElementById('schedular')
-)
 
+  ReactDOM.render(
+    <React.StrictMode>
+      <Schedular
+        passScheduleOut = {postSchedule}
+      />
+    </React.StrictMode>,
+    document.getElementById('schedular')
+  )
