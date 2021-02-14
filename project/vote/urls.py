@@ -100,7 +100,7 @@ async def vote_save(body: dict) -> JSONResponse:
     return JSONResponse(content=message, headers=headers)
 
 
-@vote.post("/api/save/date", response_class=JSONResponse)
+@vote.post("/api/vote/save/date", response_class=JSONResponse)
 async def vote_date_save(body: dict) -> JSONResponse:
     """儲存日期投票結果
 
@@ -110,6 +110,7 @@ async def vote_date_save(body: dict) -> JSONResponse:
     Returns:
         JSONResponse: 紀錄成功訊息
     """
+    pull_id = body["pull_id"]
     user_id = body["user_id"]
     dates = body["dates"]
     message = {"status": "success"}
