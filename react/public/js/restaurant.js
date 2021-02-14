@@ -20,7 +20,7 @@ $(document).ready(function () {
 
 function fetch_restaurant() {
     $.ajax({
-        url: `http://127.0.0.1:8001/api/vote/${pull_id}`,
+        url: `http://127.0.0.1:8001/api/vote/get/restaurant?pull_id=${pull_id}`,
         contentType: "application/json",
         method: "get",
         dataType: "json",
@@ -251,7 +251,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "http://127.0.0.1:8001/api/save/restaurants",
+        url: "http://127.0.0.1:8001/api/vote/save/restaurant",
         contentType: "application/json",
         method: "post",
         dataType: "json",
@@ -265,7 +265,7 @@ function save_results() {
                     text: "將在1秒後轉往日期投票...",
                     timer: 1000,
                 })
-                setTimeout(()=>{
+                setTimeout(() => {
                     document.querySelector('#schedular').classList.remove('hidden')
                     document.querySelector('.tinder').classList.add('hidden')
                 }, 1700)

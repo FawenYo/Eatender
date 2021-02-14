@@ -59,7 +59,7 @@ async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
     )
 
 
-@vote.get("/api/vote/{pull_id}", response_class=JSONResponse)
+@vote.get("/api/vote/get/restaurant", response_class=JSONResponse)
 async def get_pull_data(pull_id: str) -> JSONResponse:
     """取得投票池餐廳資訊
 
@@ -77,7 +77,7 @@ async def get_pull_data(pull_id: str) -> JSONResponse:
     return JSONResponse(content=json.loads(json_util.dumps(message)))
 
 
-@vote.post("/api/save/restaurants", response_class=JSONResponse)
+@vote.post("/api/vote/save/restaurant", response_class=JSONResponse)
 async def vote_save(body: dict) -> JSONResponse:
     """儲存餐廳投票結果
 

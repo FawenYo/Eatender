@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 function fetch_restaurant() {
     $.ajax({
-        url: `/api/vote/${pull_id}`,
+        url: `/api/vote/get/restaurant?pull_id=${pull_id}`,
         contentType: "application/json",
         method: "get",
         dataType: "json",
@@ -247,7 +247,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "/api/save/restaurants",
+        url: "/api/vote/save/restaurant",
         contentType: "application/json",
         method: "post",
         dataType: "json",
