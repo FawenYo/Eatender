@@ -118,10 +118,12 @@ async def vote_date_get(pull_id: str) -> JSONResponse:
     message = {
         "status": "success",
         "data": {
-            "start_date": start_date,
-            "num_days": num_days,
-            "min_time": min_time,
-            "max_time": max_time,
+            "vote_name": "投票名稱",  # 投票名稱
+            "vote_end": "2021/2/14",  # 投票截止 (LINE) 日期
+            "start_date": start_date,  # 投票開始日期
+            "num_days": num_days,  # 投票日期天數
+            "min_time": min_time,  # 最早時間
+            "max_time": max_time,  # 最晚時間
         },
     }
     return JSONResponse(content=message, headers=headers)
