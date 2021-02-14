@@ -37,7 +37,7 @@ const H1 = styled.h1`
   font-size: 32pt`;
 
 
-function Schedular({_numDays, _minTime, _maxTime, passScheduleOut}) {
+function Schedular({_startDate, _numDays, _minTime, _maxTime, passScheduleOut}) {
   const [schedule, setSchedule] = useState([]);
 
   function handleChange(newSchedule) {
@@ -54,6 +54,7 @@ function Schedular({_numDays, _minTime, _maxTime, passScheduleOut}) {
       <ScheduleWrapper>
         <ScheduleSelector
           selection={schedule}
+          startDate={_startDate}
           numDays={_numDays}
           minTime={_minTime}
           maxTime={_maxTime}

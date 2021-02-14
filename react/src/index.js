@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import Schedular from './components/Schedular'
 
 let pull_id, user_id;
-let startDate, num_days, min_time, max_time;
+let [startYear, startMonth,startDate, num_days, min_time, max_time] = 
+    [2021, 3, 8, 5, 8, 12];
 $(document).ready(function () {
   var query_url = window.location.href
   var url = new URL(query_url);
@@ -13,7 +14,7 @@ $(document).ready(function () {
   user_id = url.searchParams.get("name")
   user_id = "123";
 
-  [startDate, num_days, min_time, max_time] = fetchScheduleParams();
+  // [startYear, startMonth, startDate, num_days, min_time, max_time] = fetchScheduleParams();
 })
 
 function fetchScheduleParams(){
@@ -50,11 +51,12 @@ function convertToFormat(format, dateArray){
 function postSchedule (schedule) {
   if (schedule.length != 0){
     let sendData = {
+      pull_id,
       user_id,
       dates: convertToFormat('YYYY/MM/DD hh:mm', schedule)
     }
     $.ajax({
-      url: `http://127.0.0.1:8001/api/save/date`,
+      url: `http://127.0.0.1:8001/api/vote/save/date`,
       contentType: "application/json",
       method: "post",
       dataType: "json",
@@ -80,10 +82,10 @@ function postSchedule (schedule) {
 ReactDOM.render(
   <React.StrictMode>
     <Schedular
-      _startDate = {new Date()}
-      _numDays = {5}
-      _minTime = {8}
-      _maxTime = {22}
+      _startDate = {new Date(startYear, startMonth, startDate)}
+      _numDays = {num_days}
+      _minTime = {min_time}
+      _maxTime = {max_time}
       passScheduleOut = {postSchedule}
     />
   </React.StrictMode>,
