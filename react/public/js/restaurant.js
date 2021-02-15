@@ -12,15 +12,15 @@ $(document).ready(function () {
     var url = new URL(query_url);
 
     pull_id = url.searchParams.get("id")
-    pull_id = "b3yAVdroee"
+    pull_id = "b3yAVdroee" // Local testing
     user_id = url.searchParams.get("name")
-    user_id = "123"
+    user_id = "123" // Local testing
     fetch_restaurant()
 })
 
 function fetch_restaurant() {
     $.ajax({
-        url: `http://127.0.0.1:8001/api/vote/get/restaurant?pull_id=${pull_id}`,
+        url: `http://0.0.0.0:8001/api/vote/get/restaurant?pull_id=${pull_id}`,
         contentType: "application/json",
         method: "GET",
         dataType: "json",
@@ -256,7 +256,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "http://127.0.0.1:8001/api/vote/save/restaurant",
+        url: "http://0.0.0.0:8001/api/vote/save/restaurant",
         contentType: "application/json",
         method: "POST",
         dataType: "json",

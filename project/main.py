@@ -17,7 +17,6 @@ from weather.urls import weather
 app = FastAPI()
 
 origins = [
-    "http://0.0.0.0:8001",
     "http://localhost:3000",
 ]
 

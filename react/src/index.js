@@ -30,9 +30,9 @@ function postSchedule (schedule) {
       dates: convertToFormat('YYYY/MM/DD hh:mm', schedule)
     }
     $.ajax({
-      url: `http://127.0.0.1:8001/api/vote/save/date`,
+      url: `http://0.0.0.0:8001/api/vote/save/date`,
       contentType: "application/json",
-      method: "post",
+      method: "POST",
       dataType: "json",
       data: JSON.stringify(sendData),
       success: function (data) {

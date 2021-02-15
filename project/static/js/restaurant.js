@@ -11,12 +11,13 @@ $(document).ready(function () {
 
     pull_id = url.searchParams.get("id")
     user_id = url.searchParams.get("name")
+
     fetch_restaurant()
 })
 
 function fetch_restaurant() {
     $.ajax({
-        url: `/api/vote/get/restaurant?pull_id=${pull_id}`,
+        url: `http://0.0.0.0:8001/api/vote/get/restaurant?pull_id=${pull_id}`,
         contentType: "application/json",
         method: "GET",
         dataType: "json",
@@ -252,7 +253,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "/api/vote/save/restaurant",
+        url: "http://0.0.0.0:8001/api/vote/save/restaurant",
         contentType: "application/json",
         method: "POST",
         dataType: "json",
@@ -266,6 +267,10 @@ function save_results() {
                     text: "將在1秒後轉往日期投票...",
                     timer: 1000,
                 })
+                setTimeout(() => {
+                    document.querySelector('#schedular').classList.remove('hidden')
+                    document.querySelector('.tinder').classList.add('hidden')
+                }, 1700)
             } else {
                 Swal.fire({
                     type: "error",

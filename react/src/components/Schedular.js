@@ -46,9 +46,9 @@ window.onload = () => {
 
 function fetchScheduleParams() {
   $.ajax({
-    url: `http://0.0.0.1:8001/api/vote/get/date?pull_id=${pull_id}`,
+    url: `http://0.0.0.0:8001/api/vote/get/date?pull_id=${pull_id}`,
     contentType: "application/json",
-    method: "get",
+    method: "GET",
     dataType: "json",
     success: function (data) {
       if (data.status == "success") {
