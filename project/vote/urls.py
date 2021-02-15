@@ -72,7 +72,11 @@ async def get_pull_data(pull_id: str) -> JSONResponse:
     """
     pull_data = config.db.vote_pull.find_one({"_id": pull_id})
     if pull_data:
-        message = {"status": "success", "restaurants": pull_data["restaurants"]}
+        restaurants = []
+        for each in pull_data["restaurants"]:
+            data = json.loads(config.cache.get(each["place_id"]))
+            restaurants.append(data)
+        message = {"status": "success", "restaurants": restaurants}
     else:
         message = {"status": "error", "error_message": "Vote pull not found."}
     return JSONResponse(content=json.loads(json_util.dumps(message)))

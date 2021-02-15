@@ -75,7 +75,7 @@
          transition: all .3s ease-in
       }
    </style>
-   <link rel="stylesheet" href="./static/css/main.css">
+   <link rel="stylesheet" href="./static/css/cardinfo.css">
    <script src="https://kit.fontawesome.com/ec301da75b.js" crossorigin="anonymous"></script>
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
    <script>function gtag() { dataLayer.push(arguments) } window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "G-8XVRR4RQHN")</script>
@@ -90,7 +90,15 @@
    <script type="text/javascript" src="./static/js/restaurant.js"></script>
    <div class="tinder">
       <div class="tinder--status"><i class="fas fa-times"></i> <i class="fas fa-heart"></i></div>
-      <div id="cardWrapper" class="tinder--cards"></div>
+
+      <div id="cardWrapper" class="tinder--cards">
+         <div class='tinder--card'>
+            <div class="load-wraper">
+               <div class="activity"></div>
+            </div>
+         </div>
+      </div>
+
       <div class="tinder--buttons"><button id="nope"><i class="fa fa-times"></i></button> <button id="love"><i
                class="fa fa-heart"></i></button></div>
    </div>
