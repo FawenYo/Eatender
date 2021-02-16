@@ -9,21 +9,19 @@ $(document).ready(function () {
   var url = new URL(query_url);
 
   pull_id = url.searchParams.get("id")
-  pull_id = "b3yAVdroee";
   user_id = url.searchParams.get("name")
-  user_id = "123";
 })
 
 
-function convertToFormat(format, dateArray){
-  if (format == "YYYY/MM/DD hh:mm"){
-    return dateArray.map((date)=>{
-      return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`
+function convertToFormat(format, dateArray) {
+  if (format == "YYYY/MM/DD hh:mm") {
+    return dateArray.map((date) => {
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`
     })
   }
 }
-function postSchedule (schedule) {
-  if (schedule.length != 0){
+function postSchedule(schedule) {
+  if (schedule.length != 0) {
     let sendData = {
       pull_id,
       user_id,
@@ -39,11 +37,11 @@ function postSchedule (schedule) {
         if (data.status == "success") {
           console.log('uploaded data: ', sendData)
         } else {
-            Swal.fire({
-              type: "error",
-              title: "很抱歉！",
-              text: data.result,
-              confirmButtonText: "確認",
+          Swal.fire({
+            type: "error",
+            title: "很抱歉！",
+            text: data.result,
+            confirmButtonText: "確認",
           })
         }
       },
@@ -54,11 +52,11 @@ function postSchedule (schedule) {
   }
 }
 
-  ReactDOM.render(
-    <React.StrictMode>
-      <Schedular
-        passScheduleOut = {postSchedule}
-      />
-    </React.StrictMode>,
-    document.getElementById('schedular')
-  )
+ReactDOM.render(
+  <React.StrictMode>
+    <Schedular
+      passScheduleOut={postSchedule}
+    />
+  </React.StrictMode>,
+  document.getElementById('schedular')
+)
