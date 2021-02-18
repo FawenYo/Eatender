@@ -28,13 +28,44 @@ var PreservedFormValues = {
 
 function VoteCreateForm() {
 
+    /* Error report */
+    const validate = (fieldValues = values) => {
+        let temp = { ...errors }
+        if ('voteName' in fieldValues) {
+            temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
+        }
+        if ('earliestTime' in fieldValues) {
+            temp.earliestTime = fieldValues.earliestTime.length != 0? "" : "請選擇聚餐最早開始時間";
+        }
+        if ('latestTime' in fieldValues) {
+            temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
+        }
+        if (Number.isInteger(fieldValues.earliestTime) && 
+                Number.isInteger(fieldValues.latestTime)) {
+            temp.latestTime = fieldValues.earliestTime >= fieldValues.latestTime ? "最晚時間需要比最早時間晚" : "";
+        }
+        setErrors({
+            ...temp
+        })    
+        if (fieldValues == values)
+            return Object.values(temp).every(x => x == "")
+    }
+
     const {
         values,
         setValues,
         errors,
         setErrors,
         handleInputChange,
-    } = useForm(initialFormValues);
+        resetForm,
+    } = useForm(initialFormValues, true, validate);
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        if (validate()){
+            resetForm()
+        }
+    }
 
     /* Parts to improve */
 
@@ -89,34 +120,6 @@ function VoteCreateForm() {
     
     /* END OF TODO PART */
 
-    /* Error report */
-    const validate = (fieldValues = values) => {
-        let temp = { ...errors }
-        if ('voteName' in fieldValues) {
-            temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
-        }
-        if ('earliestTime' in fieldValues) {
-            temp.earliestTime = fieldValues.earliestTime.length != 0? "" : "請選擇聚餐最早開始時間";
-        }
-        if ('latestTime' in fieldValues) {
-            temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
-        }
-        setErrors({
-            ...temp
-        })
-
-        if (fieldValues == values)
-            return Object.values(temp).every(x => x == "")
-    }
-
-    const handleSubmit = e => {
-        e.preventDefault()
-        if (validate()){
-            employeeService.insertEmployee(values)
-            resetForm()
-        }
-    }
-
     return (
         <Form onSubmit={handleSubmit}>
             <Controls.Input
@@ -165,6 +168,7 @@ function VoteCreateForm() {
                 <Controls.Button 
                     text="重置投票"
                     color="default"
+                    onClick={resetForm}
                 />
             </div>
 
