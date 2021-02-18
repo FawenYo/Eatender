@@ -1,0 +1,42 @@
+{
+  "name": "eatender",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "@date-io/date-fns": "^2.10.8",
+    "@date-io/moment": "^2.10.8",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/pickers": "^3.2.10",
+    "bootstrap": "^4.6.0",
+    "date-fns": "^2.0.0-beta.5",
+    "rc-calendar": "^9.15.11",
+    "rc-form-validation": "^2.5.0",
+    "react": "16.12.0",
+    "react-daterange-picker": "2.0.1",
+    "react-dom": "16.12.0",
+    "react-modern-calendar-datepicker": "^3.1.6",
+    "react-scripts": "4.0.2",
+    "react-time-picker": "^4.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
