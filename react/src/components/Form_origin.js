@@ -22,6 +22,7 @@ import DatePicker from "react-modern-calendar-datepicker"
 import MultiDate from "./DateRange"
 
 const Form = (props) => {
+    // 最早最晚截止時間的css
     const timeRangeStyles = makeStyles((theme) => ({
         formControl: {
             margin: theme.spacing(1),
@@ -30,6 +31,7 @@ const Form = (props) => {
     }))
     const timeRangeClass = timeRangeStyles()
 
+    // 建立投票按鈕的css
     const submitButtonStyle = makeStyles((theme) => ({
         button: {
             margin: theme.spacing(1),
@@ -39,7 +41,7 @@ const Form = (props) => {
 
     const [selectedDay, setSelectedDay] = useState(null)
 
-    // render regular HTML input element
+    // 投票截止日期的css和init
     const renderCustomInput = ({ ref }) => (
         <input
             readOnly
@@ -64,7 +66,14 @@ const Form = (props) => {
         <React.Fragment>
             <React.Fragment>
                 <Typography variant="h5">投票名稱</Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth id="Form" label="輸入投票名稱" />
+                <TextField 
+                    variant="outlined" 
+                    margin="normal" 
+                    required 
+                    fullWidth 
+                    id="Form" 
+                    label="輸入投票名稱" 
+                />
             </React.Fragment>
             <React.Fragment>
                 <Typography variant="h5">最早開始時間 / 最晚結束時間</Typography>

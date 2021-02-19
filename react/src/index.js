@@ -1,6 +1,6 @@
 import React from "react"
 import { render } from "react-dom"
-import Form from "./components/Form"
+import VoteCreate from "./components/VoteCreate"
 import Banner from "./components/Banner"
 
 const styles = {
@@ -8,11 +8,6 @@ const styles = {
     textAlign: "center",
 }
 
-const DateTimes = () => (
-    <div style={styles}>
-        <DateRange />
-    </div>
-)
 
 // render(<Banner />, document.querySelector("#banner"));
-render(<Form textAlign="center" />, document.querySelector("#form"))
+render(<VoteCreate textAlign="center" />, document.querySelector("#form"))
