@@ -9,6 +9,7 @@ from .model import *
 
 sys.path.append(".")
 import config
+from MongoDB import operation
 
 vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -60,6 +61,13 @@ async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
     )
 
 
+@vote.post("/api/vote/create/event", response_class=JSONResponse)
+async def vote_create(param: CreateVote) -> JSONResponse:
+    operation.create_vote_event(param=param)
+    message = {"status": "success", "message": "已成功建立投票！"}
+    return JSONResponse(content=message, headers=headers)
+
+
 @vote.get("/api/vote/get/restaurant", response_class=JSONResponse)
 async def get_pull_data(pull_id: str) -> JSONResponse:
     """取得投票池餐廳資訊
@@ -70,11 +78,11 @@ async def get_pull_data(pull_id: str) -> JSONResponse:
     Returns:
         JSONResponse: 餐廳資訊
     """
-    pull_data = config.db.vote_pull.find_one({"_id": pull_id})
+    pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         restaurants = []
         for each in pull_data["restaurants"]:
-            data = json.loads(config.cache.get(each["place_id"]))
+            data = json.loads(config.cache.get(each))
             restaurants.append(data)
         message = {"status": "success", "restaurants": restaurants}
     else:
@@ -95,11 +103,19 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
     pull_id = param.pull_id
     user_id = param.user_id
     choose_result = param.choose_result
-    pull_data = config.db.vote_pull.find_one({"_id": pull_id})
+
+    pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
-        pull_data["participants"][user_id] = choose_result["love"]
-        config.db.vote_pull.update_one({"_id": pull_id}, {"$set": pull_data})
-        message = {"status": "success", "vote_link": pull_data["vote_link"]}
+        # 曾經投票過
+        if user_id in pull_data["participants"]:
+            pull_data["participants"][user_id]["restaurants"] = choose_result["love"]
+        else:
+            pull_data["participants"][user_id] = {
+                "restaurants": choose_result["love"],
+                "time": [],
+            }
+        config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
+        message = {"status": "success", "message": "已成功儲存！"}
     else:
         message = {"status": "error", "error_message": "查無投票！"}
     return JSONResponse(content=message, headers=headers)
@@ -115,21 +131,19 @@ async def vote_date_get(pull_id: str) -> JSONResponse:
     Returns:
         JSONResponse: 投票日期資訊
     """
-    start_date = "2021/2/13"
-    num_days = 1
-    min_time = 8
-    max_time = 17
-    message = {
-        "status": "success",
-        "data": {
-            "vote_name": "投票名稱",  # 投票名稱
-            "vote_end": "2021/2/14",  # 投票截止 (LINE) 日期
-            "start_date": start_date,  # 投票開始日期
-            "num_days": num_days,  # 投票日期天數
-            "min_time": min_time,  # 最早時間
-            "max_time": max_time,  # 最晚時間
-        },
-    }
+
+    vote_data = config.db.vote.find_one({"_id": pull_id})
+    if vote_data:
+        del vote_data["_id"]
+        del vote_data["restaurants"]
+        del vote_data["creator"]
+        del vote_data["create_time"]
+        del vote_data["participants"]
+        # TODO: 是否可以回復之前使用者投票的結果？
+
+        message = {"status": "success", "data": vote_data}
+    else:
+        message = {"status": "failed", "error_message": "找不到投票內容！"}
     return JSONResponse(content=message, headers=headers)
 
 
@@ -146,5 +160,13 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
     pull_id = param.pull_id
     user_id = param.user_id
     dates = param.dates
+
+    pull_data = config.db.vote.find_one({"_id": pull_id})
+    if pull_data:
+        pull_data["participants"][user_id]["time"] = dates
+        config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
+        message = {"status": "success", "message": "已成功儲存！"}
+    else:
+        message = {"status": "error", "error_message": "查無投票！"}
     message = {"status": "success"}
     return JSONResponse(content=message, headers=headers)
