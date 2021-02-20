@@ -2,17 +2,15 @@
   color: orange;
 }
 
-*,
-*:before,
-*:after {
+*, *:before, *:after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
 body {
-  background: #FCE4EC;
-  background-color: #FCE4EC !important;
+  background: #CCFBFE;
+  background-color: #CCFBFE !important;
   overflow: hidden;
   font-family: sans-serif;
 }
@@ -78,6 +76,7 @@ body {
   max-width: 400px;
   height: 70vh;
   background: #FFFFFF;
+  padding-bottom: 40px;
   border-radius: 8px;
   overflow: hidden;
   position: absolute;
@@ -127,36 +126,4 @@ body {
 
 .fa-times {
   color: #CDD6DD;
-}
-
-.load-wraper {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  background-color: rgb(211, 211, 211);
-  z-index: 44;
-  overflow: hidden;
-  border-radius: 5px;
-}
-
-.activity {
-  position: absolute;
-  left: -45%;
-  height: 100%;
-  width: 45%;
-  background-image: linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-  background-image: -moz-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-  background-image: -webkit-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
-  animation: loading 1s infinite;
-  z-index: 45;
-}
-
-@keyframes loading {
-  0% {
-    left: -45%;
-  }
-
-  100% {
-    left: 100%;
-  }
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import "react-modern-calendar-datepicker/lib/DatePicker.css"
 import { Calendar } from "react-modern-calendar-datepicker"
 
-const MultiDate = () => {
+const DateRange = () => {
     var current = new Date();
     const defaultFrom = {
         year: current.getFullYear(),
@@ -26,4 +26,4 @@ const MultiDate = () => {
     )
 }
 
-export default MultiDate
+export default DateRange

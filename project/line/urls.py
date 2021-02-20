@@ -1,33 +1,52 @@
 import sys
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
+
+from . import message_event, postback_event, user_event
 
 sys.path.append(".")
 from typing import Optional
 
 import config
-from line import message_event, postback_event, user_event
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 line_app = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-# LINE Notify Redirect
+
 @line_app.get("/notify/", response_class=RedirectResponse)
-async def line_notify_redirect(uid: Optional[str] = ""):
-    # 轉址至綁定 LINE Notify 頁面
+async def line_notify_redirect(uid: Optional[str] = "") -> RedirectResponse:
+    """轉址至 LINE Notify 綁定頁面
+
+    Args:
+        uid (Optional[str], optional): 使用者 LINE ID. Defaults to "".
+
+    Returns:
+        RedirectResponse: LINE Notify 綁定頁面
+    """
     link = config.lotify_client.get_auth_link(state=uid)
     return RedirectResponse(link)
 
 
-# Line Notify Callback
-@line_app.get("/notify/callback", response_class=RedirectResponse)
-async def line_notify_callback(code: str = "", state: str = ""):
+@line_app.get("/notify/callback", response_class=HTMLResponse)
+async def line_notify_callback(request: Request, code: str = "", state: str = ""):
+    """LINE Notify 綁定完成
+
+    Args:
+        request (Request): Request Object.
+        code (str, optional): LINE Notify access token. Defaults to "".
+        state (str, optional): 使用者LINE ID. Defaults to "".
+
+    Returns:
+        [type]: [description]
+    """
     line_notify_key = config.lotify_client.get_access_token(code=code)
 
     # 更新資料庫
@@ -36,13 +55,22 @@ async def line_notify_callback(code: str = "", state: str = ""):
     result["notify"]["token"] = line_notify_key
     config.db.user.update_one({"user_id": state}, {"$set": result})
 
-    # TODO: 綁定成功提示
-    return RedirectResponse(config.SITE_NAME)
+    return templates.TemplateResponse("bound_notify.html", context={"request": request})
 
 
-# LINE Bot Webhook callback
 @line_app.post("/callback")
-async def callback(request: Request):
+async def callback(request: Request) -> str:
+    """LINE Bot Webhook Callback
+
+    Args:
+        request (Request): Request Object.
+
+    Raises:
+        HTTPException: Signature 驗證失敗
+
+    Returns:
+        str: OK
+    """
     signature = request.headers["X-Line-Signature"]
     body = await request.body()
     # handle webhook body
@@ -91,3 +119,17 @@ def handle_postback(event):
         event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#postback-event
     """
     postback_event.handle_postback(event=event)
+
+
+@line_app.get("/api/liffshare")
+async def liff_share(pull_id: str) -> JSONResponse:
+    """API - 分享投票
+
+    Args:
+        pull_id (str): 投票池ID
+
+    Returns:
+        JSONResponse: Flex Message資料
+    """
+    message = Template().liff_share(pull_id=pull_id)
+    return JSONResponse(content={"status": "success", "data": message})

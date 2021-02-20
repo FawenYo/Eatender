@@ -328,8 +328,9 @@ def gettime_attendant(event_id: str, url: str) -> str:
     # 餐廳選擇結果
     choose_result = ""
     like_list = []
-    event_data = config.db.vote_pull.find_one({"_id": event_id})
-    for each_participant, like in event_data["participants"].items():
+    event_data = config.db.vote.find_one({"_id": event_id})
+    for each_participant in event_data["participants"]:
+        like = each_participant["restaurants"]
         like_list += like
     occurence_count = Counter(like_list)
     for restaurant_index, count in occurence_count.most_common(3):

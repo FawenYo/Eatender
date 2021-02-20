@@ -38,6 +38,11 @@ class RestaurantInfo:
         self.page_token = page_token
 
     def search(self, query: str):
+        """搜尋特定餐廳資訊
+
+        Args:
+            query (str): 餐廳名稱
+        """
         threads = []
         self.google_maps_search(query=query)
         self.get_ifoodie_data()
@@ -66,6 +71,11 @@ class RestaurantInfo:
             thread.start()
 
     def google_maps_search(self, query: str):
+        """Get Google Maps specific restaurant data
+
+        Args:
+            query (str): Restaurant name
+        """
         restaurants = GoogleMaps()
         restaurants.search_info(query=query)
         self.next_page = restaurants.next_page
@@ -131,9 +141,6 @@ class RestaurantInfo:
         Args:
             restaurants (object, optional): Restaurants data. Defaults to object.
             complete_mode (bool, optional): Set it to True to get complete data. Defaults to False.
-
-        Returns:
-            [type]: [description]
         """
         threads = []
         if not complete_mode:
