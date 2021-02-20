@@ -74,7 +74,7 @@ function VoteCreateForm() {
         const date1 = new Date(PreservedFormValues.dateRange.startDate);
         const date2 = new Date(PreservedFormValues.dateRange.endDate);
         const diffInTime = date2.getTime() - date1.getTime();
-        const diffInDays = diffInTime / (1000 * 3600 * 24);
+        const diffInDays = (diffInTime / (1000 * 3600 * 24)) + 1;
 
         const postedData = {
             'vote_name': values.voteName,
