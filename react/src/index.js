@@ -14,14 +14,15 @@ $(document).ready(function () {
 
 
 function postSchedule(schedule) {
-  if (schedule.length != 0) {
+  let isSelectingSchedule = !document.querySelector("#schedular").classList.contains('hidden');
+  if (isSelectingSchedule) {
     let sendData = {
       pull_id,
       user_id,
       dates: schedule
     }
     $.ajax({
-      url: `http://0.0.0.0:8001/api/vote/save/date`,
+      url: `http://localhost:8001/api/vote/save/date`,
       contentType: "application/json",
       method: "POST",
       dataType: "json",

@@ -48,12 +48,12 @@ window.onload = () => {
 
 function fetchScheduleParams() {
   $.ajax({
-    url: "http://0.0.0.0:8001/api/vote/get/date",
+    url: "http://localhost:8001/api/vote/get/date",
     contentType: "application/json",
     method: "GET",
     data: {
       pull_id: pull_id,
-      user_id: user_id
+      user_id: user_id 
     },
     dataType: "json",
     success: function (data) {
@@ -62,7 +62,7 @@ function fetchScheduleParams() {
         console.log("RETURN SCHEDULAR PARAMS")
         let fetchedData = data.data;
         lastSelect = fetchedData.last_select;
-        console.log(lastSelect);
+        console.log("lastSelect"+lastSelect);
         let dateString = fetchedData.start_date.split('/');
 
         header = fetchedData.vote_name;
