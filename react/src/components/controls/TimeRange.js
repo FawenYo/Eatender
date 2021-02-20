@@ -3,7 +3,7 @@ import { makeStyles, FormControl, InputLabel, Select, MenuItem, FormHelperText }
 
 function TimeRange(props) {
 
-    const { name, label, value, error=null, onChange } = props;
+    const { name, label, value, error = null, onChange } = props;
 
     const useStyle = makeStyles((theme) => ({
         formControl: {
@@ -14,21 +14,21 @@ function TimeRange(props) {
     const useClasses = useStyle();
 
     return (
-        <FormControl 
-            className={useClasses.formControl} 
+        <FormControl
+            className={useClasses.formControl}
             variant="outlined"
             margin="normal"
             // required 
-            {...(error && {error:true})}
+            {...(error && { error: true })}
         >
             <InputLabel>{label}</InputLabel>
-            <Select 
-                defaultValue="" 
-                label={label} 
-                name={name} 
+            <Select
+                defaultValue=""
+                label={label}
+                name={name}
                 value={value}
                 onChange={onChange}
-                autoWidth="true"
+                autoWidth={true}
             >
                 <MenuItem value={0}>0 am</MenuItem>
                 <MenuItem value={1}>1 am</MenuItem>
@@ -56,7 +56,7 @@ function TimeRange(props) {
                 <MenuItem value={23}>23 pm</MenuItem>
             </Select>
             {error && <FormHelperText>{error}</FormHelperText>}
-        </FormControl>            
+        </FormControl>
     )
 }
 
