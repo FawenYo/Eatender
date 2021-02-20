@@ -1,6 +1,4 @@
 import sys
-import random
-import string
 from datetime import datetime
 
 import pytz
@@ -120,31 +118,3 @@ def create_vote(
             "participants": {},
         }
         db.vote_pull.insert_one(data)
-
-
-def create_vote_event(param):
-    now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
-
-    pending = db.pending.find_one({"user_id": param.user_id})
-    restaurants = pending["pools"]
-    while True:
-        data_id = "".join(
-            random.choice(string.ascii_letters + string.digits) for x in range(10)
-        )
-        # _id 尚未被使用
-        if not db.vote.find_one({"_id": data_id}):
-            break
-    data = {
-        "_id": data_id,
-        "restaurants": restaurants,
-        "creator": param.user_id,
-        "vote_name": param.vote_name,
-        "vote_end": param.vote_end,
-        "start_date": param.start_date,
-        "num_days": param.num_days,
-        "min_time": param.min_time,
-        "max_time": param.max_time,
-        "create_time": now,
-        "participants": {},
-    }
-    db.vote.insert_one(data)

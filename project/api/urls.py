@@ -1,9 +1,8 @@
+import config
 import pandas as pd
 import requests
 from fastapi import APIRouter
 from fastapi.responses import FileResponse, JSONResponse
-
-import config
 
 api = APIRouter()
 

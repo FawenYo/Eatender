@@ -9,6 +9,15 @@ import Controls from "./controls/Controls";
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker, { Calendar, utils } from 'react-modern-calendar-datepicker';
 
+let user_id;
+
+$(document).ready(function () {
+    var query_url = window.location.href
+    var url = new URL(query_url);
+
+    user_id = url.searchParams.get("user_id")
+})
+
 const initialFormValues = {
     voteName: '',
     earliestTime: '',
@@ -35,18 +44,18 @@ function VoteCreateForm() {
             temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
         }
         if ('earliestTime' in fieldValues) {
-            temp.earliestTime = fieldValues.earliestTime.length != 0? "" : "請選擇聚餐最早開始時間";
+            temp.earliestTime = fieldValues.earliestTime.length != 0 ? "" : "請選擇聚餐最早開始時間";
         }
         if ('latestTime' in fieldValues) {
             temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
         }
-        if (Number.isInteger(fieldValues.earliestTime) && 
-                Number.isInteger(fieldValues.latestTime)) {
+        if (Number.isInteger(fieldValues.earliestTime) &&
+            Number.isInteger(fieldValues.latestTime)) {
             temp.latestTime = fieldValues.earliestTime >= fieldValues.latestTime ? "最晚時間需要比最早時間晚" : "";
         }
         setErrors({
             ...temp
-        })    
+        })
         if (fieldValues == values)
             return Object.values(temp).every(x => x == "")
     }
@@ -60,15 +69,15 @@ function VoteCreateForm() {
         resetForm,
     } = useForm(initialFormValues, true, validate);
 
-    
+
     /* Submit Part */
-    
+
     // const [postId, setPostId] = useState(null);
 
     const handleSubmit = e => {
         e.preventDefault();
 
-        if (!validate()){return;}
+        if (!validate()) { return; }
 
         // Parsing local data
         const date1 = new Date(PreservedFormValues.dateRange.startDate);
@@ -76,7 +85,10 @@ function VoteCreateForm() {
         const diffInTime = date2.getTime() - date1.getTime();
         const diffInDays = (diffInTime / (1000 * 3600 * 24)) + 1;
 
+
+
         const postedData = {
+            "user_id": user_id,
             'vote_name': values.voteName,
             'vote_end': PreservedFormValues.dueDate,
             'start_date': PreservedFormValues.dateRange.startDate,
@@ -90,11 +102,11 @@ function VoteCreateForm() {
             header: { 'Content-Type': 'application/json' },
             body: JSON.stringify(postedData),
         };
-        fetch('http://0.0.0.0:8001/api/vote/crate/event', requestOptions)
-            // .then(response => response.json())
-            // .then(data => postId = data.id);
+        fetch('http://0.0.0.0:8001/api/vote/create/event', requestOptions)
+        // .then(response => response.json())
+        // .then(data => postId = data.id);
     }
-    
+
 
     /* Parts to improve */
 
@@ -119,7 +131,7 @@ function VoteCreateForm() {
         />
     )
 
-    
+
     const syncDueDateToPreserved = () => {
         if (dueDate) {
             PreservedFormValues.dueDate = `${dueDate.month}/${dueDate.day}/${dueDate.year}`;
@@ -148,10 +160,10 @@ function VoteCreateForm() {
             PreservedFormValues.dueDate.length != 0 &&
             PreservedFormValues.dateRange.startDate.length != 0 &&
             PreservedFormValues.dateRange.endDate.length != 0
-        ) {return false;}
+        ) { return false; }
         return true;
     }
-    
+
     /* END OF TODO PART */
 
     return (
@@ -164,14 +176,14 @@ function VoteCreateForm() {
                 error={errors.voteName}
             />
             <div>
-                <Controls.TimeRange 
+                <Controls.TimeRange
                     name="earliestTime"
                     label="聚餐最早開始時間"
                     value={values.earliestTime}
                     onChange={handleInputChange}
                     error={errors.earliestTime}
                 />
-                <Controls.TimeRange 
+                <Controls.TimeRange
                     name="latestTime"
                     label="聚餐最晚結束時間"
                     value={values.latestTime}
@@ -197,7 +209,7 @@ function VoteCreateForm() {
                 shouldHighlightWeekends
             />
             <div>
-                <Controls.Button 
+                <Controls.Button
                     type="submit"
                     text="建立投票"
                     disabled={checkValidation()}
@@ -208,7 +220,7 @@ function VoteCreateForm() {
                     onClick={resetForm}
                 /> */}
             </div>
-            
+
             {/* <li>Returned Id: {postId}</li> */}
             <li>聚餐名稱: {values.voteName}</li>
             <li>最早時間: {values.earliestTime}</li>
