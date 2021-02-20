@@ -122,7 +122,7 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
 
 
 @vote.get("/api/vote/get/date", response_class=JSONResponse)
-async def vote_date_get(pull_id: str) -> JSONResponse:
+async def vote_date_get(pull_id: str, user_id: str) -> JSONResponse:
     """投票 - 取得投票日期資訊
 
     Args:
@@ -138,8 +138,8 @@ async def vote_date_get(pull_id: str) -> JSONResponse:
         del vote_data["restaurants"]
         del vote_data["creator"]
         del vote_data["create_time"]
+        vote_data["last_select"] = vote_data["participants"][user_id]["time"]  # 選擇時間紀錄
         del vote_data["participants"]
-        # TODO: 是否可以回復之前使用者投票的結果？
 
         message = {"status": "success", "data": vote_data}
     else:
@@ -164,6 +164,7 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         pull_data["participants"][user_id]["time"] = dates
+        print("saved")
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存！"}
     else:

@@ -3,7 +3,6 @@ var user_id = ""
 var total_restaurant = 0
 var current_index = 0
 var choose_result = { love: [], hate: [] }
-var vote_link = ""
 var load_done = false
 
 $(document).ready(function () {
@@ -33,9 +32,12 @@ $(document).ready(function () {
 
 function fetch_restaurant() {
     $.ajax({
-        url: `http://0.0.0.0:8001/api/vote/get/restaurant?pull_id=${pull_id}`,
+        url: "http://0.0.0.0:8001/api/vote/get/restaurant",
         contentType: "application/json",
         method: "GET",
+        data: {
+            pull_id: pull_id
+        },
         dataType: "json",
         success: function (data) {
             if (data.status == "success") {
@@ -47,7 +49,7 @@ function fetch_restaurant() {
                 main()
             } else {
                 Swal.fire({
-                    type: "error",
+                    icon: "error",
                     title: "很抱歉！",
                     text: data.error_message,
                     confirmButtonText: "確認",
@@ -56,7 +58,7 @@ function fetch_restaurant() {
         },
         error: function () {
             Swal.fire({
-                type: "error",
+                icon: "error",
                 title: "很抱歉！",
                 text: "無法連接伺服器，請稍後再試！",
                 confirmButtonText: "確認",
@@ -230,9 +232,8 @@ function save_results() {
         data: JSON.stringify(sendData),
         success: function (data) {
             if (data.status == "success") {
-                vote_link = data.vote_link
                 Swal.fire({
-                    type: "success",
+                    icon: "success",
                     title: "儲存成功！",
                     text: "將在1秒後轉往日期投票...",
                     timer: 1000,
@@ -243,7 +244,7 @@ function save_results() {
                 }, 1700)
             } else {
                 Swal.fire({
-                    type: "error",
+                    icon: "error",
                     title: "很抱歉！",
                     text: data.result,
                     confirmButtonText: "確認",
@@ -252,15 +253,11 @@ function save_results() {
         },
         error: function () {
             Swal.fire({
-                type: "error",
+                icon: "error",
                 title: "很抱歉！",
                 text: "無法連接伺服器，請稍後再試！",
                 confirmButtonText: "確認",
             })
         },
     })
-}
-
-function redirect() {
-    location.replace(vote_link)
 }

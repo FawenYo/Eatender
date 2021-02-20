@@ -36,25 +36,33 @@ let pull_id;
 let header = "React Schedule Selector";
 let subHeader = "Tap to select one time or drag to select multiple times at once.";
 let [startYear, startMonth, startDate, num_days, min_time, max_time] = [2021, 3, 8, 4, 4, 14];
+let lastSelect = [];
 
 window.onload = () => {
   let query_url = window.location.href
   let url = new URL(query_url);
   pull_id = url.searchParams.get("id");
+  user_id = url.searchParams.get("name");
   fetchScheduleParams();
 }
 
 function fetchScheduleParams() {
   $.ajax({
-    url: `http://0.0.0.0:8001/api/vote/get/date?pull_id=${pull_id}`,
+    url: "http://0.0.0.0:8001/api/vote/get/date",
     contentType: "application/json",
     method: "GET",
+    data: {
+      pull_id: pull_id,
+      user_id: user_id
+    },
     dataType: "json",
     success: function (data) {
       if (data.status == "success") {
         // RETURN
         console.log("RETURN SCHEDULAR PARAMS")
         let fetchedData = data.data;
+        lastSelect = fetchedData.last_select;
+        console.log(lastSelect);
         let dateString = fetchedData.start_date.split('/');
 
         header = fetchedData.vote_name;
@@ -68,7 +76,7 @@ function fetchScheduleParams() {
 
       } else {
         Swal.fire({
-          type: "error",
+          icon: "error",
           title: "很抱歉！",
           text: data.error_message,
           confirmButtonText: "確認",
@@ -82,7 +90,7 @@ function fetchScheduleParams() {
 }
 
 function Schedular({ passScheduleOut }) {
-  const [schedule, setSchedule] = useState([]);
+  const [schedule, setSchedule] = useState(lastSelect);
 
   function handleChange(newSchedule) {
     setSchedule(newSchedule);

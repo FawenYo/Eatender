@@ -1,18 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="theme-color" content="#000000">
-	<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-	<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-	<title>EATender 投票創建</title>
+   <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+   <title>EATender</title>
+   <meta property="og:title" content="EATender" />
+   <meta property="og:description" content="加LINE約吃飯，感情不會散" />
+   <meta property="og:type" content="product" />
+   <meta property="og:url" content="https://eatender.site.com/" />
+   <meta property="og:image" content="images/logo.png" />
+   <meta name="HandheldFriendly" content="true">
+   <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+   <link rel="shortcut icon" href="images/logo.png">
+
+   <!-- <link href="css/fontawesome-all.min.css" rel="stylesheet" type="text/css"> -->
+   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
+
+   <link href="css/restaurant.css" rel="stylesheet" type="text/css">
+   <style>
+      .hidden {
+         visibility: hidden;
+         opacity: 0;
+         z-index: -1
+      }
+
+      #schedular {
+         position: absolute;
+         top: 10px;
+         width: 100%;
+         margin: 0 auto;
+         transition: all .3s ease-in
+      }
+   </style>
+   <link rel="stylesheet" type="text/css" href="css/cardinfo.css">
+   <script src="https://kit.fontawesome.com/ec301da75b.js" crossorigin="anonymous"></script>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', 'G-8XVRR4RQHN');
+   </script>
 </head>
 
 <body>
-    <div id="banner"></div>
-	<div id="form"></div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+   <script type="text/javascript" src="js/restaurant.js"></script>
+
+   <div class="tinder">
+      <div class="tinder--status">
+         <i class="fas fa-times"></i>
+         <i class="fas fa-heart"></i>
+      </div>
+      <div id="cardWrapper" class="tinder--cards">
+         <div class='tinder--card'>
+            <div class="load-wraper">
+               <div class="activity"></div>
+            </div>
+         </div>
+      </div>
+      <div class="tinder--buttons">
+         <button id="nope"><i class="fa fa-times"></i></button>
+         <button id="love"><i class="fa fa-heart"></i></button>
+      </div>
+   </div>
+   <div class="hidden" id="schedular"></div>
 </body>
 
 </html>
