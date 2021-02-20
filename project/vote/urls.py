@@ -47,6 +47,12 @@ async def login(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("login.html", context={"request": request})
 
 
+@vote.get("/vote/create")
+async def vote_create_page(request: Request, user_id: str) -> JSONResponse:
+    message = {"status": "success", "message": "頁面維護中"}
+    return JSONResponse(content=message, headers=headers)
+
+
 @vote.get("/vote")
 async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
     """餐廳投票頁面

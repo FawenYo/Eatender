@@ -1,3 +1,4 @@
+import json
 import re
 import sys
 from datetime import datetime, timedelta
@@ -259,7 +260,8 @@ class Template:
     # 投票池列表
     def show_vote_pull(self, restaurants) -> FlexSendMessage:
         show_list = []
-        for each in restaurants:
+        for pid in restaurants:
+            each = json.loads(config.cache.get(pid))
             place_id = each["place_id"]
             restaurant_name = each["name"]
             keywords = each["keywords"]
@@ -429,6 +431,43 @@ class Template:
             "contents": show_list,
         }
         message = FlexSendMessage(alt_text="餐廳資訊", contents=contents)
+        return message
+
+    def create_vote(self) -> FlexSendMessage:
+        contents = {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "請確認投票名單是否正確",
+                        "weight": "bold",
+                        "size": "xl",
+                    }
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "height": "sm",
+                        "action": {
+                            "type": "uri",
+                            "label": "創建投票",
+                            "uri": f"{config.SITE_NAME}vote/create",
+                        },
+                    }
+                ],
+                "flex": 0,
+            },
+        }
+        message = FlexSendMessage(alt_text="使用教學", contents=contents)
         return message
 
     # 發生錯誤

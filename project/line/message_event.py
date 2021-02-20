@@ -1,6 +1,4 @@
-import random
 import re
-import string
 import sys
 import threading
 from datetime import datetime
@@ -14,10 +12,8 @@ from .templates import Template
 sys.path.append(".")
 
 import config
-import cron
 import MongoDB.operation as database
 from food.main import RestaurantInfo
-from vote.main import create_event
 from weather.main import Weather
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -47,62 +43,15 @@ def handle_message(event):
                     message = TextSendMessage(text=f"已取消操作！")
                 else:
                     # 餐廳關鍵字
-                    if pending["action"] == "search":
-                        config.db.pending.delete_one({"user_id": user_id})
-                        latitude = pending["latitude"]
-                        longitude = pending["longitude"]
-                        message = find_nearby(
-                            user_id=user_id,
-                            latitude=latitude,
-                            longitude=longitude,
-                            keyword=user_message,
-                        )
-
-                    # 創建投票
-                    else:
-                        (
-                            status,
-                            event_name,
-                            available_dates,
-                            no_earlier,
-                            no_later,
-                        ) = parse_string(content=user_message)
-
-                        if status:
-                            config.db.pending.delete_one({"user_id": user_id})
-                            user = config.db.user.find_one({"user_id": user_id})
-                            user["vote"] = []
-                            config.db.user.update_one(
-                                {"user_id": user_id}, {"$set": user}
-                            )
-
-                            link = create_event(
-                                event_name=event_name,
-                                dates=available_dates,
-                                early_time=no_earlier,
-                                later_time=no_later,
-                            )
-
-                            vote_id = "".join(
-                                random.choice(string.ascii_letters + string.digits)
-                                for x in range(10)
-                            )
-                            database.create_vote(
-                                creator=user_id,
-                                vote_id=vote_id,
-                                vote_link=link,
-                                restaurants=pending["pools"],
-                                end_date=pending["end_date"],
-                            )
-                            threading.Thread(
-                                target=cron.vote_cronjob,
-                                args=(vote_id, user_id, pending["end_date"], link),
-                            ).start()
-                            message = Template().share_vote(pull_id=vote_id)
-                        else:
-                            message = TextSendMessage(
-                                text="抱歉，格式有誤，請重新輸入！\n如要取消操作請輸入 '取消' "
-                            )
+                    config.db.pending.delete_one({"user_id": user_id})
+                    latitude = pending["latitude"]
+                    longitude = pending["longitude"]
+                    message = find_nearby(
+                        user_id=user_id,
+                        latitude=latitude,
+                        longitude=longitude,
+                        keyword=user_message,
+                    )
 
             # 文字訊息
             else:
@@ -123,6 +72,7 @@ def handle_message(event):
 
                 # 投票池
                 elif user_message == "投票":
+                    user_id = "Uf5b60799f9be7c6bcb92a74e13b249b1"
                     user_data = config.db.user.find_one({"user_id": user_id})
                     # 已綁定 LINE Notify
                     if user_data["notify"]["status"]:
@@ -132,19 +82,7 @@ def handle_message(event):
                                 Template().show_vote_pull(
                                     restaurants=user_data["vote"][:10]
                                 ),
-                                TextSendMessage(
-                                    text="請確認投票名單是否正確",
-                                    quick_reply=QuickReply(
-                                        items=[
-                                            QuickReplyButton(
-                                                action=PostbackAction(
-                                                    label="創建",
-                                                    data=f"create",
-                                                )
-                                            )
-                                        ]
-                                    ),
-                                ),
+                                Template().create_vote(),
                             ]
                         else:
                             message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
@@ -286,61 +224,3 @@ def find_nearby(
     )
     thread.start()
     return message
-
-
-def parse_string(content: str):
-    """投票資訊
-
-    Args:
-        content (str): create vote's message content
-    """
-    # default
-    status = True
-    event_name = ""
-    available_dates = ""
-    no_earlier = 0
-    no_later = 24
-
-    if not content:
-        # input是空字串，回傳預設值
-        status = False
-        return status, event_name, available_dates, no_earlier, no_later
-
-    try:
-        date_candidates = re.findall(r"\d{4}-\d{1,2}-\d{1,2}", content)
-        if len(date_candidates) == 1:
-            date_candidates = date_candidates[0]
-        elif len(date_candidates) > 1:
-            date_candidates = "|".join(date_candidates)
-        content = content.replace(date_candidates, "")
-
-        event_name = content.replace(re.findall(r"//\d{1,2}/\d{1,2}", content)[0], "")
-        daytime_constraint = re.findall(r"//(\d{1,2})/(\d{1,2})", content)[0]
-        daytime_constraint = list(map(int, daytime_constraint))
-
-        correct_date = None
-        dates = date_candidates.split("|")
-        for date in dates:
-            try:
-                new_date = datetime.strptime(date, "%Y-%m-%d")
-                correct_date = True
-            except ValueError:
-                correct_date = False
-
-        if correct_date:
-            available_dates = date_candidates
-        else:
-            # 日期輸入格式錯誤
-            status = False
-            pass
-
-        no_earlier = min(daytime_constraint)
-        no_later = max(daytime_constraint)
-        if no_earlier < 0 or no_later > 24 or no_earlier == no_later:
-            # 時間限制格式錯誤
-            status = False
-    except:
-        status = False
-        return status, event_name, available_dates, no_earlier, no_later
-
-    return status, event_name, available_dates, no_earlier, no_later

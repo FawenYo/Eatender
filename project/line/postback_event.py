@@ -147,22 +147,6 @@ def handle_postback(event):
                         ]
                     ),
                 )
-            # 投票截止日期
-            elif postback_data == "endDate":
-                vote_pull = config.db.user.find_one({"user_id": user_id})["vote"]
-                end_date = datetime.strptime(
-                    event.postback.params["datetime"], "%Y-%m-%dT%H:%M"
-                )
-                data = {
-                    "action": "create_event",
-                    "user_id": user_id,
-                    "end_date": end_date,
-                    "pools": vote_pull,
-                }
-                config.db.pending.insert_one(data)
-                message = TextSendMessage(
-                    text=f"請依據以下格式輸入投票資訊：\n'投票名稱/投票聚餐日期(西元年-月-日, 多個日期之間以 '|' 連結)/聚餐最早開始時間(小時, 24小時制)/聚餐最晚開始時間(小時, 24小時制)'\n(例如：聖誕聚餐/2020-12-24/18/20)"
-                )
             else:
                 message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
             line_bot_api.reply_message(reply_token, message)
