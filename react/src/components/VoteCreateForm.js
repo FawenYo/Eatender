@@ -7,7 +7,7 @@ import Controls from "./controls/Controls";
 
 // To be improved
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker, { Calendar } from 'react-modern-calendar-datepicker';
+import DatePicker, { Calendar, utils } from 'react-modern-calendar-datepicker';
 
 const initialFormValues = {
     voteName: '',
@@ -60,12 +60,41 @@ function VoteCreateForm() {
         resetForm,
     } = useForm(initialFormValues, true, validate);
 
+    
+    /* Submit Part */
+    
+    // const [postId, setPostId] = useState(null);
+
     const handleSubmit = e => {
-        e.preventDefault()
-        if (validate()){
-            resetForm()
-        }
+        e.preventDefault();
+
+        if (!validate()){return;}
+
+        // Parsing local data
+        const date1 = new Date(PreservedFormValues.dateRange.startDate);
+        const date2 = new Date(PreservedFormValues.dateRange.endDate);
+        const diffInTime = date2.getTime() - date1.getTime();
+        const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+        const postedData = {
+            'vote_name': values.voteName,
+            'vote_end': PreservedFormValues.dueDate,
+            'start_date': PreservedFormValues.dateRange.startDate,
+            'num_days': diffInDays,
+            'min_time': values.earliestTime,
+            'max_time': values.latestTime,
+        };
+
+        const requestOptions = {
+            method: 'POST',
+            header: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(postedData),
+        };
+        fetch('http://0.0.0.0:8001/api/vote/crate/event', requestOptions)
+            // .then(response => response.json())
+            // .then(data => postId = data.id);
     }
+    
 
     /* Parts to improve */
 
@@ -93,30 +122,35 @@ function VoteCreateForm() {
     
     const syncDueDateToPreserved = () => {
         if (dueDate) {
-            PreservedFormValues.dueDate = `${dueDate.year}/${dueDate.month}/${dueDate.day}`;
+            PreservedFormValues.dueDate = `${dueDate.month}/${dueDate.day}/${dueDate.year}`;
         }
     }
     syncDueDateToPreserved();
 
-    // 選定欲投票的日期範圍
-    let current = new Date();
-    const defaultFrom = {
-        year: current.getFullYear(),
-        month: current.getMonth(),
-        day: current.getDate(),
-    }
-    const defaultValue = {
-        from: defaultFrom,
+    const defaultDateRange = {
+        from: utils().getToday(),
         to: null,
-    }
-    const [dateRange, setDateRange] = useState(defaultValue)
+    };
+    const [dateRange, setDateRange] = useState(defaultDateRange)
     const syncDateRangeToPreserved = () => {
         if (dateRange.from !== null && dateRange.to !== null) {
-            PreservedFormValues.dateRange.startDate = `${dateRange.from.year}/${dateRange.from.month}/${dateRange.from.day}`;
-            PreservedFormValues.dateRange.endDate = `${dateRange.to.year}/${dateRange.to.month}/${dateRange.to.day}`;
+            PreservedFormValues.dateRange.startDate = `${dateRange.from.month}/${dateRange.from.day}/${dateRange.from.year}`;
+            PreservedFormValues.dateRange.endDate = `${dateRange.to.month}/${dateRange.to.day}/${dateRange.to.year}`;
         }
     }
     syncDateRangeToPreserved();
+
+    const checkValidation = () => {
+        if (
+            values.voteName.length != 0 &&
+            Number.isInteger(values.earliestTime) &&
+            Number.isInteger(values.latestTime) &&
+            PreservedFormValues.dueDate.length != 0 &&
+            PreservedFormValues.dateRange.startDate.length != 0 &&
+            PreservedFormValues.dateRange.endDate.length != 0
+        ) {return false;}
+        return true;
+    }
     
     /* END OF TODO PART */
 
@@ -150,28 +184,32 @@ function VoteCreateForm() {
                 value={dueDate}
                 onChange={setDueDate}
                 renderInput={renderCustomInput}
+                minimumDate={utils().getToday()}
                 shouldHighlightWeekends
             />
             <h2>投票聚餐日期</h2>
             <Calendar
                 value={dateRange}
                 onChange={setDateRange}
-                colorPrimary="#0fbcf9" // added this
-                colorPrimaryLight="rgba(75, 207, 250, 0.4)" // and this
+                colorPrimary="#0fbcf9"
+                colorPrimaryLight="rgba(75, 207, 250, 0.4)"
+                minimumDate={utils().getToday()}
                 shouldHighlightWeekends
             />
             <div>
                 <Controls.Button 
                     type="submit"
                     text="建立投票"
+                    disabled={checkValidation()}
                 />
-                <Controls.Button 
+                {/* <Controls.Button 
                     text="重置投票"
                     color="default"
                     onClick={resetForm}
-                />
+                /> */}
             </div>
-
+            
+            {/* <li>Returned Id: {postId}</li> */}
             <li>聚餐名稱: {values.voteName}</li>
             <li>最早時間: {values.earliestTime}</li>
             <li>最晚時間: {values.latestTime}</li>
