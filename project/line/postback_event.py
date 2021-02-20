@@ -34,12 +34,10 @@ def handle_postback(event):
             action = postback_args[0]
             # 加入收藏名單
             if action == "favorite":
-                restaurant_id = postback_args[1]
-                restaurant_data = config.db.restaurant.find_one(
-                    {"place_id": restaurant_id}
-                )
+                place_id = postback_args[1]
+                restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
                 if not restaurant_data:
-                    restaurant_data = json.loads(config.cache.get(restaurant_id))
+                    restaurant_data = json.loads(config.cache.get(place_id))
                 user = config.db.user.find_one({"user_id": user_id})
                 # 尚未收藏餐廳
                 if restaurant_data not in user["favorite"]:
@@ -102,15 +100,13 @@ def handle_postback(event):
                     line_bot_api.push_message(user_id, message)
             # 加入投票池
             elif action == "vote":
-                restaurant_id = postback_args[1]
+                place_id = postback_args[1]
                 user = config.db.user.find_one({"user_id": user_id})
-                restaurant_data = config.db.restaurant.find_one(
-                    {"place_id": restaurant_id}
-                )
+                restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
                 if not restaurant_data:
-                    restaurant_data = json.loads(config.cache.get(restaurant_id))
-                if restaurant_data not in user["vote"]:
-                    user["vote"].append(restaurant_data)
+                    restaurant_data = json.loads(config.cache.get(place_id))
+                if place_id not in user["vote"]:
+                    user["vote"].append(place_id)
                     config.db.user.update_one({"user_id": user_id}, {"$set": user})
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}加入投票池！")
                 else:
@@ -121,8 +117,8 @@ def handle_postback(event):
                 place_id = postback_args[1]
                 user = config.db.user.find_one({"user_id": user_id})
                 restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
-                if restaurant_data in user["vote"]:
-                    user["vote"].remove(restaurant_data)
+                if place_id in user["vote"]:
+                    user["vote"].remove(place_id)
                     config.db.user.update_one({"user_id": user_id}, {"$set": user})
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}移除投票池！")
                 else:
