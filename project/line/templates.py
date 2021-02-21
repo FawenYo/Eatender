@@ -433,7 +433,7 @@ class Template:
         message = FlexSendMessage(alt_text="餐廳資訊", contents=contents)
         return message
 
-    def create_vote(self) -> FlexSendMessage:
+    def create_vote(self, user_id) -> FlexSendMessage:
         contents = {
             "type": "bubble",
             "body": {
@@ -460,7 +460,7 @@ class Template:
                         "action": {
                             "type": "uri",
                             "label": "創建投票",
-                            "uri": f"{config.SITE_NAME}vote/create",
+                            "uri": f"{config.SITE_NAME}vote/create?user_id={user_id}",
                         },
                     }
                 ],

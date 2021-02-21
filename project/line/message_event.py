@@ -72,7 +72,6 @@ def handle_message(event):
 
                 # 投票池
                 elif user_message == "投票":
-                    user_id = "Uf5b60799f9be7c6bcb92a74e13b249b1"
                     user_data = config.db.user.find_one({"user_id": user_id})
                     # 已綁定 LINE Notify
                     if user_data["notify"]["status"]:
@@ -82,7 +81,7 @@ def handle_message(event):
                                 Template().show_vote_pull(
                                     restaurants=user_data["vote"][:10]
                                 ),
-                                Template().create_vote(),
+                                Template().create_vote(user_id=user_id),
                             ]
                         else:
                             message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
