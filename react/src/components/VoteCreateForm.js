@@ -120,12 +120,12 @@ function VoteCreateForm() {
             value={dueDate ? `${dueDate.year}年` + `${dueDate.month}月` + `${dueDate.day}日` : ""}
             style={{
                 textAlign: "center",
-                padding: "0.75rem 0.75rem",
+                padding: "0.75rem 0.5rem",
                 fontSize: "1.25rem",
-                // border: "1px solid #9c88ff",
+                border: "1px solid #808080",
                 borderRadius: "50px",
                 // boxShadow: "0 0.25rem 0.25rem rgba(156, 136, 255, 0.2)",
-                // color: "#9c88ff",
+                color: "#f1c40f",
                 outline: "none",
             }}
         />
@@ -168,65 +168,67 @@ function VoteCreateForm() {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Controls.Input
-                name="voteName"
-                label="聚餐名稱"
-                value={values.voteName}
-                onChange={handleInputChange}
-                error={errors.voteName}
-            />
-            <div>
-                <Controls.TimeRange
-                    name="earliestTime"
-                    label="聚餐最早開始時間"
-                    value={values.earliestTime}
+            <center>
+                <Controls.Input
+                    name="voteName"
+                    label="聚餐名稱"
+                    value={values.voteName}
                     onChange={handleInputChange}
-                    error={errors.earliestTime}
+                    error={errors.voteName}
                 />
-                <Controls.TimeRange
-                    name="latestTime"
-                    label="聚餐最晚結束時間"
-                    value={values.latestTime}
-                    onChange={handleInputChange}
-                    error={errors.latestTime}
+                <div>
+                    <Controls.TimeRange
+                        name="earliestTime"
+                        label="聚餐最早開始時間"
+                        value={values.earliestTime}
+                        onChange={handleInputChange}
+                        error={errors.earliestTime}
+                    />
+                    <Controls.TimeRange
+                        name="latestTime"
+                        label="聚餐最晚結束時間"
+                        value={values.latestTime}
+                        onChange={handleInputChange}
+                        error={errors.latestTime}
+                    />
+                </div>
+                <DatePicker
+                    name="dueDate"
+                    value={dueDate}
+                    onChange={setDueDate}
+                    renderInput={renderCustomInput}
+                    minimumDate={utils().getToday()}
+                    shouldHighlightWeekends
                 />
-            </div>
-            <DatePicker
-                name="dueDate"
-                value={dueDate}
-                onChange={setDueDate}
-                renderInput={renderCustomInput}
-                minimumDate={utils().getToday()}
-                shouldHighlightWeekends
-            />
-            <h2>投票聚餐日期</h2>
-            <Calendar
-                value={dateRange}
-                onChange={setDateRange}
-                colorPrimary="#0fbcf9"
-                colorPrimaryLight="rgba(75, 207, 250, 0.4)"
-                minimumDate={utils().getToday()}
-                shouldHighlightWeekends
-            />
-            <div>
-                <Controls.Button
-                    type="submit"
-                    text="建立投票"
-                    disabled={checkValidation()}
+                <h2>投票聚餐日期</h2>
+                <Calendar
+                    value={dateRange}
+                    onChange={setDateRange}
+                    colorPrimary="#f1c40f"
+                    colorPrimaryLight="rgba(241, 196, 15, 0.2)"
+                    minimumDate={utils().getToday()}
+                    shouldHighlightWeekends
                 />
-                {/* <Controls.Button 
-                    text="重置投票"
-                    color="default"
-                    onClick={resetForm}
-                /> */}
-            </div>
+                <div>
+                    <Controls.Button
+                        type="submit"
+                        text="建立投票"
+                        disabled={checkValidation()}
+                    />
+                    {/* <Controls.Button 
+                        text="重置投票"
+                        color="default"
+                        onClick={resetForm}
+                    /> */}
+                </div>
+            </center>
 
-            {/* <li>Returned Id: {postId}</li> */}
+            {/* <li>Returned Id: {postId}</li>
             <li>聚餐名稱: {values.voteName}</li>
             <li>最早時間: {values.earliestTime}</li>
             <li>最晚時間: {values.latestTime}</li>
             <li>截止日期: {PreservedFormValues.dueDate}</li>
-            <li>投票日期: {PreservedFormValues.dateRange.startDate}~{PreservedFormValues.dateRange.endDate}</li>
+            <li>投票日期: {PreservedFormValues.dateRange.startDate}~{PreservedFormValues.dateRange.endDate}</li> */}
         </Form>
     )
 }

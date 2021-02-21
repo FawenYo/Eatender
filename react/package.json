@@ -12,6 +12,7 @@
     "@material-ui/pickers": "^3.2.10",
     "bootstrap": "^4.6.0",
     "date-fns": "^2.0.0-beta.5",
+    "framer-motion": "^3.6.2",
     "rc-calendar": "^9.15.11",
     "rc-form-validation": "^2.5.0",
     "react": "16.12.0",
@@ -19,7 +20,8 @@
     "react-dom": "16.12.0",
     "react-modern-calendar-datepicker": "^3.1.6",
     "react-scripts": "4.0.2",
-    "react-time-picker": "^4.1.2"
+    "react-time-picker": "^4.1.2",
+    "styled-components": "^5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
