@@ -20,7 +20,7 @@ $(document).ready(function () {
 
 function fetchScheduleParams() {
   $.ajax({
-    url: "http://0.0.0.0:8001/api/vote/get/date",
+    url: "/api/vote/get/date",
     contentType: "application/json",
     method: "GET",
     data: {
@@ -38,7 +38,7 @@ function fetchScheduleParams() {
         }
 
         console.log("lastSelect: ", lastSelect)
-        
+
         header = fetchedData.vote_name;
         subHeader = `投票截止日期：${fetchedData.vote_end}`;
 
@@ -46,7 +46,7 @@ function fetchScheduleParams() {
         startYear = dateString[0];
         startMonth = dateString[1];
         startDate = dateString[2];
-        
+
         num_days = fetchedData.num_days;
         min_time = fetchedData.min_time;
         max_time = fetchedData.max_time;
@@ -68,7 +68,7 @@ function fetchScheduleParams() {
           </React.StrictMode>,
           document.getElementById('schedular')
         )
-        
+
       } else {
         Swal.fire({
           icon: "error",
@@ -93,7 +93,7 @@ function postSchedule(schedule) {
       dates: schedule
     }
     $.ajax({
-      url: `http://0.0.0.0:8001/api/vote/save/date`,
+      url: "/api/vote/save/date",
       contentType: "application/json",
       method: "POST",
       dataType: "json",
