@@ -55,7 +55,7 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", 8001))
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
+        host="127.0.0.1",
         port=port,
         workers=4,
         log_level="info",

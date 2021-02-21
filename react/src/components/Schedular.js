@@ -53,7 +53,7 @@ function fetchScheduleParams() {
     method: "GET",
     data: {
       pull_id: pull_id,
-      user_id: user_id 
+      user_id: user_id
     },
     dataType: "json",
     success: function (data) {
@@ -62,7 +62,10 @@ function fetchScheduleParams() {
         console.log("RETURN SCHEDULAR PARAMS")
         let fetchedData = data.data;
         lastSelect = fetchedData.last_select;
-        console.log("lastSelect"+lastSelect);
+        for (let i = 0; i < lastSelect.length; i++) {
+          lastSelect[i] = new Date(lastSelect[i])
+        }
+        console.log(lastSelect)
         let dateString = fetchedData.start_date.split('/');
 
         header = fetchedData.vote_name;
