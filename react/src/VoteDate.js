@@ -20,7 +20,7 @@ $(document).ready(function () {
 
 function fetchScheduleParams() {
   $.ajax({
-    url: "http://127.0.0.1:8001/api/vote/get/date",
+    url: "http://0.0.0.0:8001/api/vote/get/date",
     contentType: "application/json",
     method: "GET",
     data: {
@@ -93,7 +93,7 @@ function postSchedule(schedule) {
       dates: schedule
     }
     $.ajax({
-      url: `http://127.0.0.1:8001/api/vote/save/date`,
+      url: `http://0.0.0.0:8001/api/vote/save/date`,
       contentType: "application/json",
       method: "POST",
       dataType: "json",

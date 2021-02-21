@@ -32,7 +32,7 @@ $(document).ready(function () {
 
 function fetch_restaurant() {
     $.ajax({
-        url: "http://127.0.0.1:8001/api/vote/get/restaurant",
+        url: "http://0.0.0.0:8001/api/vote/get/restaurant",
         contentType: "application/json",
         method: "GET",
         data: {
@@ -225,7 +225,7 @@ function save_results() {
 
     // 請求伺服器
     $.ajax({
-        url: "http://127.0.0.1:8001/api/vote/save/restaurant",
+        url: "http://0.0.0.0:8001/api/vote/save/restaurant",
         contentType: "application/json",
         method: "POST",
         dataType: "json",

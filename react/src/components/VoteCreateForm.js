@@ -102,7 +102,7 @@ function VoteCreateForm() {
             header: { 'Content-Type': 'application/json' },
             body: JSON.stringify(postedData),
         };
-        fetch('http://127.0.0.1:8001/api/vote/create/event', requestOptions)
+        fetch('http://0.0.0.0:8001/api/vote/create/event', requestOptions)
         // .then(response => response.json())
         // .then(data => postId = data.id);
     }
