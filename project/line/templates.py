@@ -460,7 +460,7 @@ class Template:
                         "action": {
                             "type": "uri",
                             "label": "創建投票",
-                            "uri": f"https://liff.line.me/1655422218-O3KRZNpK?user_id={user_id}",
+                            "uri": f"https://liff.line.me/1655422218-leDE61nD?user_id={user_id}",
                         },
                     }
                 ],

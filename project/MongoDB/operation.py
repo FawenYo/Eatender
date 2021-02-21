@@ -118,3 +118,6 @@ def create_vote(
             "participants": {},
         }
         db.vote_pull.insert_one(data)
+        user_data = db.user.find_one({"user_id": creator})
+        user_data["vote"] = []
+        db.user.update_one({"user_id": creator}, {"$set": user_data})
