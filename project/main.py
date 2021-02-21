@@ -15,9 +15,7 @@ from weather.urls import weather
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-]
+origins = ["http://127.0.0.1:3000", "http://127.0.0.1:8001"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,7 +53,7 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", 8001))
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
+        host="127.0.0.1",
         port=port,
         workers=4,
         log_level="info",

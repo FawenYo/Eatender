@@ -2,22 +2,6 @@ import ScheduleSelector from 'react-schedule-selector';
 import styled from 'styled-components';
 import React, { useState } from 'react';
 
-
-// 在要使用 schedular 的 js 檔中直接插入元件，並加入一個取得 schedule 的 callback。舉例如下： 
-// 
-//  <Schedular
-//    passScheduleOut = {getSchedule}
-//  ></Schedular>
-// 
-// passScheduleOut 會在使用者每次更改選擇時間後呼叫。
-// 其需要在使用到 Schedular 的 js 檔中自行定義。
-//
-// 簡單的 passScheduleOut 範例：
-// 
-//  function passScheduleOut(schedule){ 
-//    console.log(schedule); 
-//  }
-//
 const Wrapper = styled.div`
   text-align: center;
   margin: 0 auto;
@@ -32,64 +16,8 @@ const ScheduleWrapper = styled.div`
 const H1 = styled.h1`
   font-size: 32pt`;
 
-let pull_id;
-let header = "React Schedule Selector";
-let subHeader = "Tap to select one time or drag to select multiple times at once.";
-let [startYear, startMonth, startDate, num_days, min_time, max_time] = [2021, 3, 8, 4, 4, 14];
-let lastSelect = [];
 
-window.onload = () => {
-  let query_url = window.location.href
-  let url = new URL(query_url);
-  pull_id = url.searchParams.get("id");
-  user_id = url.searchParams.get("name");
-  fetchScheduleParams();
-}
-
-function fetchScheduleParams() {
-  $.ajax({
-    url: "http://0.0.0.0:8001/api/vote/get/date",
-    contentType: "application/json",
-    method: "GET",
-    data: {
-      pull_id: pull_id,
-      user_id: user_id
-    },
-    dataType: "json",
-    success: function (data) {
-      if (data.status == "success") {
-        // RETURN
-        console.log("RETURN SCHEDULAR PARAMS")
-        let fetchedData = data.data;
-        lastSelect = fetchedData.last_select;
-        console.log(lastSelect);
-        let dateString = fetchedData.start_date.split('/');
-
-        header = fetchedData.vote_name;
-        subHeader = `投票截止日期：${fetchedData.vote_end}`;
-        startYear = dateString[0];
-        startMonth = dateString[1];
-        startDate = dateString[2];
-        num_days = fetchedData.num_days;
-        min_time = fetchedData.min_time;
-        max_time = fetchedData.max_time;
-
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "很抱歉！",
-          text: data.error_message,
-          confirmButtonText: "確認",
-        })
-      }
-    },
-    error: function () {
-      console.log("error dd")
-    },
-  })
-}
-
-function Schedular({ passScheduleOut }) {
+function Schedular({ header, subHeader, startYear, startMonth, startDate, num_days, min_time, max_time, passScheduleOut, lastSelect }) {
   const [schedule, setSchedule] = useState(lastSelect);
 
   function handleChange(newSchedule) {
