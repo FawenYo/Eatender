@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, TextField, makeStyles } from '@material-ui/core';
 import { useForm, Form } from "./useForm";
 
@@ -8,6 +8,7 @@ import Controls from "./controls/Controls";
 // To be improved
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker, { Calendar, utils } from 'react-modern-calendar-datepicker';
+import { SentimentSatisfiedAlt } from '@material-ui/icons';
 
 let user_id;
 
@@ -72,7 +73,11 @@ function VoteCreateForm() {
 
     /* Submit Part */
 
-    // const [postId, setPostId] = useState(null);
+    const [responseState, setResponseState] = useState({
+        status: "",
+        message: "",
+        error_message: "",
+    });
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -103,9 +108,18 @@ function VoteCreateForm() {
             body: JSON.stringify(postedData),
         };
         fetch('/api/vote/create/event', requestOptions)
-        // .then(response => response.json())
-        // .then(data => postId = data.id);
+            .then(response => response.json())
+            .then(data => setResponseState({
+                status: data.status,
+                message: data.message,
+                error_message: data.error_message,
+            }));
+        
+        if (responseState && responseState.status === "success") {
+            console.log("vote has been successfully created.")
+        }
     }
+
 
 
     /* Parts to improve */
