@@ -103,7 +103,7 @@ function postSchedule(schedule) {
           console.log('uploaded data: ', sendData)
         } else {
           Swal.fire({
-            type: "error",
+            icon: "error",
             title: "很抱歉！",
             text: data.result,
             confirmButtonText: "確認",

@@ -49,8 +49,7 @@ async def login(request: Request) -> HTMLResponse:
 
 @vote.get("/vote/create")
 async def vote_create_page(request: Request, user_id: str) -> JSONResponse:
-    message = {"status": "success", "message": "頁面維護中"}
-    return JSONResponse(content=message, headers=headers)
+    return templates.TemplateResponse("vote_create.html", context={"request": request})
 
 
 @vote.get("/vote")
@@ -75,30 +74,44 @@ async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
 async def vote_create(param: CreateVote) -> JSONResponse:
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
 
-    pending = config.db.pending.find_one({"user_id": param.user_id})
-    restaurants = pending["pools"]
-    while True:
-        data_id = "".join(
-            random.choice(string.ascii_letters + string.digits) for x in range(10)
-        )
-        # _id 尚未被使用
-        if not config.db.vote.find_one({"_id": data_id}):
-            break
-    data = {
-        "_id": data_id,
-        "restaurants": restaurants,
-        "creator": param.user_id,
-        "vote_name": param.vote_name,
-        "vote_end": param.vote_end,
-        "start_date": param.start_date,
-        "num_days": param.num_days,
-        "min_time": param.min_time,
-        "max_time": param.max_time,
-        "create_time": now,
-        "participants": {},
-    }
-    config.db.vote.insert_one(data)
-    message = {"status": "success", "message": "已成功建立投票！"}
+    user_data = config.db.user.find_one({"user_id": param.user_id})
+    if user_data:
+        restaurants = user_data["vote"]
+        if restaurants != []:
+            while True:
+                data_id = "".join(
+                    random.choice(string.ascii_letters + string.digits)
+                    for x in range(10)
+                )
+                # _id 尚未被使用
+                if not config.db.vote.find_one({"_id": data_id}):
+                    break
+            data = {
+                "_id": data_id,
+                "restaurants": restaurants,
+                "creator": param.user_id,
+                "vote_name": param.vote_name,
+                "vote_end": param.vote_end,
+                "start_date": param.start_date,
+                "num_days": param.num_days,
+                "min_time": param.min_time,
+                "max_time": param.max_time,
+                "create_time": now,
+                "participants": {},
+            }
+            config.db.vote.insert_one(data)
+            message = {
+                "status": "success",
+                "message": {
+                    "title": "投票已成功建立！",
+                    "content": "前往分享頁面",
+                    "share_link": f"https://liff.line.me/1655422218-O3KRZNpK?id={data_id}",
+                },
+            }
+        else:
+            message = {"status": "failed", "error_message": "投票池內沒有餐廳！"}
+    else:
+        message = {"status": "failed", "error_message": "查無使用者資料！"}
     return JSONResponse(content=message, headers=headers)
 
 
@@ -172,7 +185,12 @@ async def vote_date_get(pull_id: str, user_id: str) -> JSONResponse:
         del vote_data["restaurants"]
         del vote_data["creator"]
         del vote_data["create_time"]
-        vote_data["last_select"] = vote_data["participants"][user_id]["time"]  # 選擇時間紀錄
+        if user_id in vote_data["participants"]:
+            vote_data["last_select"] = vote_data["participants"][user_id][
+                "time"
+            ]  # 選擇時間紀錄
+        else:
+            vote_data["last_select"] = []
         del vote_data["participants"]
 
         message = {"status": "success", "data": vote_data}

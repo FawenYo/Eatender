@@ -73,12 +73,6 @@ function VoteCreateForm() {
 
     /* Submit Part */
 
-    const [responseState, setResponseState] = useState({
-        status: "",
-        message: "",
-        error_message: "",
-    });
-
     const handleSubmit = e => {
         e.preventDefault();
 
@@ -106,18 +100,29 @@ function VoteCreateForm() {
             method: 'POST',
             header: { 'Content-Type': 'application/json' },
             body: JSON.stringify(postedData),
+            mode: 'cors'
         };
-        fetch('/api/vote/create/event', requestOptions)
+        fetch('../api/vote/create/event', requestOptions)
             .then(response => response.json())
-            .then(data => setResponseState({
-                status: data.status,
-                message: data.message,
-                error_message: data.error_message,
-            }));
-        
-        if (responseState && responseState.status === "success") {
-            console.log("vote has been successfully created.")
-        }
+            .then((data) => {
+                if (data && data.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: data.message.title,
+                        text: data.message.content,
+                        confirmButtonText: "確認",
+                    }).then((result) => {
+                        window.location.replace(data.message.share_link);
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "很抱歉！",
+                        text: data.error_message,
+                        confirmButtonText: "確認",
+                    });
+                }
+            });
     }
 
 

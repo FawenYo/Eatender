@@ -19,19 +19,18 @@ async def init_cron():
         vote_cronjob(
             event_id=each_vote["_id"],
             creator=each_vote["creator"],
-            vote_end=each_vote["end_date"],
-            vote_link=each_vote["vote_link"],
+            vote_end=each_vote["vote_end"],
         )
     return "Init done"
 
 
 # Set up vote cron jobs
-def vote_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str):
+def vote_cronjob(event_id: str, creator: str, vote_end: datetime):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         show_result,
         "date",
-        args=[event_id, creator, vote_link],
+        args=[event_id, creator],
         run_date=vote_end,
         timezone=pytz.timezone("Asia/Taipei"),
     )
@@ -40,7 +39,7 @@ def vote_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str
 
 
 # Push vote result via LINE Noitfy
-def show_result(event_id: str, creator: str, vote_link: str):
+def show_result(event_id: str, creator: str):
     user_data = config.db.user.find_one({"user_id": creator})
     access_token = user_data["notify"]["token"]
     # TODO: 投票結果
