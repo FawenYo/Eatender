@@ -1,7 +1,6 @@
 import json
 import sys
 import threading
-from datetime import datetime
 
 import sentry_sdk
 from linebot import LineBotApi

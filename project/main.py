@@ -15,9 +15,7 @@ from weather.urls import weather
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-]
+origins = ["http://127.0.0.1:3000", "http://127.0.0.1:8001"]
 
 app.add_middleware(
     CORSMiddleware,
