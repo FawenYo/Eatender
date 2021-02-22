@@ -3,10 +3,11 @@ import random
 import string
 import sys
 from datetime import datetime
+from typing import Optional
 
 import pytz
 from bson import json_util
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
@@ -22,7 +23,11 @@ headers = {"content-type": "application/json; charset=utf-8"}
 
 
 @vote.get("/share", response_class=HTMLResponse)
-async def share(request: Request) -> HTMLResponse:
+async def share(
+    request: Request,
+    liff_state: Optional[str] = Query(None, alias="liff.state"),
+    pull_id: Optional[str] = "",
+) -> HTMLResponse:
     """分享投票資訊頁面
 
     Args:
@@ -35,7 +40,9 @@ async def share(request: Request) -> HTMLResponse:
 
 
 @vote.get("/login", response_class=HTMLResponse)
-async def login(request: Request) -> HTMLResponse:
+async def login(
+    request: Request, liff_state: Optional[str] = Query(None, alias="liff.state")
+) -> HTMLResponse:
     """轉址至餐廳投票頁面
 
     Args:
@@ -48,7 +55,11 @@ async def login(request: Request) -> HTMLResponse:
 
 
 @vote.get("/vote/create")
-async def vote_create_page(request: Request, user_id: str) -> JSONResponse:
+async def vote_create_page(
+    request: Request,
+    liff_state: Optional[str] = Query(None, alias="liff.state"),
+    pull_id: Optional[str] = "",
+) -> JSONResponse:
     return templates.TemplateResponse("vote_create.html", context={"request": request})
 
 
@@ -105,7 +116,7 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "message": {
                     "title": "投票已成功建立！",
                     "content": "前往分享頁面",
-                    "share_link": f"https://liff.line.me/1655422218-O3KRZNpK?id={data_id}",
+                    "share_link": f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={data_id}",
                 },
             }
         else:

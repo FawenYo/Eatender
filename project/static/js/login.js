@@ -1,14 +1,9 @@
-var pull_id = "";
+let pull_id;
 $(document).ready(function () {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
+  const query_url = new URL(window.location.href)
+  const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
 
-  if (urlParams.has("liff.state")) {
-    param = urlParams.get("liff.state");
-    pull_id = param.substring(4);
-  } else if (urlParams.has("id")) {
-    pull_id = urlParams.get("id");
-  }
+  pull_id = query_params.get("id")
   initializeLiff("1655422218-8n1PlOw1");
 });
 

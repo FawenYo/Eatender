@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -10,7 +11,6 @@ from linebot.models import *
 from . import message_event, postback_event, user_event
 
 sys.path.append(".")
-from typing import Optional
 
 import config
 

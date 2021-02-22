@@ -13,10 +13,11 @@ import { SentimentSatisfiedAlt } from '@material-ui/icons';
 let user_id;
 
 $(document).ready(function () {
-    var query_url = window.location.href
-    var url = new URL(query_url);
 
-    user_id = url.searchParams.get("user_id")
+    const query_url = new URL(window.location.href)
+    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+
+    user_id = query_params.get("user_id")
 })
 
 const initialFormValues = {
