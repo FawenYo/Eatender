@@ -1,0 +1,33 @@
+{
+    "type": "bubble",
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "text",
+                "text": "請確認投票名單是否正確",
+                "weight": "bold",
+                "size": "xl"
+            }
+        ]
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+            {
+                "type": "button",
+                "style": "primary",
+                "height": "sm",
+                "action": {
+                    "type": "uri",
+                    "label": "創建投票",
+                    "uri": "https://liff.line.me/1655422218-leDE61nD?user_id=example"
+                }
+            }
+        ],
+        "flex": 0
+    }
+}

@@ -3,7 +3,7 @@ import sys
 from linebot import LineBotApi
 from linebot.models import *
 
-from .templates import Template
+from . import templates
 
 sys.path.append(".")
 
@@ -20,7 +20,7 @@ def handle_follow(event):
         event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#follow-event
     """
     reply_token = event.reply_token
-    message = Template().welcome()
+    message = templates.welcome()
     line_bot_api.reply_message(reply_token, message)
     profile = line_bot_api.get_profile(event.source.user_id)
     display_name = profile.display_name

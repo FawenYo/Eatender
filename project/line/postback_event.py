@@ -7,7 +7,7 @@ from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 from linebot.models import *
 
-from .templates import Template
+from . import templates
 
 sys.path.append(".")
 
@@ -152,7 +152,7 @@ def handle_postback(event):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         config.console.print_exception()
-        message = Template().error()
+        message = templates.error()
         line_bot_api.reply_message(reply_token, message)
 
 
@@ -177,7 +177,9 @@ def find_nearby(
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = Template(user_lat=latitude, user_lng=longitude).show_restaurant(
+        message = templates.show_restaurant(
+            user_latitude=latitude,
+            user_longitude=longitude,
             restaurants=restaurants.restaurants[:5],
             keyword=keyword,
             next_page=restaurants.next_page,

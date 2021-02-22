@@ -1,0 +1,309 @@
+{
+    "type": "bubble",
+    "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "image",
+                        "url": "https://example.com",
+                        "size": "full",
+                        "aspectMode": "cover",
+                        "aspectRatio": "20:13",
+                        "position": "relative"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "休息中",
+                                "size": "xs",
+                                "color": "#ffffff",
+                                "align": "center",
+                                "gravity": "center"
+                            }
+                        ],
+                        "position": "absolute",
+                        "flex": 0,
+                        "width": "55px",
+                        "height": "25px",
+                        "backgroundColor": "#FF6347",
+                        "cornerRadius": "100px",
+                        "offsetTop": "18px",
+                        "offsetStart": "18px",
+                        "paddingAll": "2px",
+                        "paddingStart": "4px",
+                        "paddingEnd": "4px"
+                    }
+                ]
+            }
+        ],
+        "paddingAll": "0px"
+    },
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "example",
+                        "size": "xl",
+                        "weight": "bold",
+                        "style": "normal",
+                        "flex": 0,
+                        "wrap": true,
+                        "maxLines": 1
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "layout": "baseline",
+                "margin": "md",
+                "contents": [
+                    {
+                        "type": "icon",
+                        "size": "sm",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                    },
+                    {
+                        "type": "icon",
+                        "size": "sm",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                    },
+                    {
+                        "type": "icon",
+                        "size": "sm",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                    },
+                    {
+                        "type": "icon",
+                        "size": "sm",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                    },
+                    {
+                        "type": "icon",
+                        "size": "sm",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                    },
+                    {
+                        "type": "text",
+                        "text": "5.0",
+                        "size": "sm",
+                        "color": "#999999",
+                        "margin": "sm",
+                        "flex": 0
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "$0",
+                        "size": "sm",
+                        "color": "#999999",
+                        "flex": 0
+                    },
+                    {
+                        "type": "text",
+                        "text": "餐廳網站",
+                        "action": {
+                            "type": "uri",
+                            "label": "action",
+                            "uri": "https://example.com"
+                        },
+                        "margin": "md",
+                        "size": "sm",
+                        "color": "#999999",
+                        "decoration": "underline",
+                        "flex": 0
+                    },
+                    {
+                        "type": "text",
+                        "text": "愛食記",
+                        "action": {
+                            "type": "uri",
+                            "label": "action",
+                            "uri": "https://example.com"
+                        },
+                        "flex": 0,
+                        "margin": "md",
+                        "size": "sm",
+                        "color": "#999999",
+                        "decoration": "underline"
+                    }
+                ],
+                "offsetTop": "md"
+            },
+            {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "評論",
+                        "size": "sm",
+                        "color": "#999999",
+                        "flex": 0
+                    },
+                    {
+                        "type": "text",
+                        "text": "example",
+                        "flex": 0,
+                        "margin": "xl",
+                        "size": "sm",
+                        "color": "#999999"
+                    },
+                    {
+                        "type": "text",
+                        "text": "example",
+                        "flex": 0,
+                        "margin": "xl",
+                        "size": "sm",
+                        "color": "#999999"
+                    },
+                    {
+                        "type": "text",
+                        "text": "example",
+                        "flex": 0,
+                        "margin": "xl",
+                        "size": "sm",
+                        "color": "#999999"
+                    }
+                ],
+                "offsetTop": "md",
+                "margin": "lg"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "地點",
+                                "color": "#666666",
+                                "size": "sm",
+                                "flex": 2
+                            },
+                            {
+                                "type": "text",
+                                "text": "example",
+                                "color": "#666666",
+                                "size": "sm",
+                                "wrap": true,
+                                "flex": 6
+                            }
+                        ],
+                        "offsetTop": "lg",
+                        "borderWidth": "bold",
+                        "spacing": "sm"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "電話",
+                                "flex": 2,
+                                "size": "sm",
+                                "color": "#666666",
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "flex": 6,
+                                "text": "example",
+                                "size": "sm",
+                                "color": "#666666",
+                                "wrap": true
+                            }
+                        ],
+                        "borderWidth": "bold",
+                        "spacing": "sm",
+                        "offsetBottom": "lg",
+                        "offsetTop": "sm",
+                        "position": "relative"
+                    }
+                ],
+                "spacing": "sm",
+                "margin": "lg"
+            }
+        ]
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "none",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "前往",
+                            "uri": "https://www.google.com/maps/search/?api=1&query=example,example&travelmode=walking"
+                        },
+                        "offsetBottom": "md"
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "postback",
+                            "label": "收藏",
+                            "data": "favorite_||_example"
+                        },
+                        "offsetBottom": "md"
+                    }
+                ],
+                "spacing": "none",
+                "margin": "none",
+                "height": "40px"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "postback",
+                            "label": "加入投票",
+                            "data": "vote_||_example"
+                        },
+                        "color": "#000000"
+                    }
+                ],
+                "backgroundColor": "#fdbe29",
+                "cornerRadius": "100px",
+                "margin": "none",
+                "alignItems": "center",
+                "justifyContent": "space-evenly",
+                "position": "relative",
+                "width": "200px",
+                "height": "50px",
+                "offsetStart": "40px"
+            }
+        ]
+    }
+}

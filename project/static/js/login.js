@@ -3,7 +3,7 @@ $(document).ready(function () {
   const query_url = new URL(window.location.href)
   const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
 
-  pull_id = query_params.get("id")
+  pull_id = query_params.get("pull_id")
   initializeLiff("1655422218-8n1PlOw1");
 });
 

@@ -11,905 +11,284 @@ import config
 true = True
 
 
-class Template:
-    def __init__(self, user_lat=0, user_lng=0):
-        self.user_lat = user_lat
-        self.user_lng = user_lng
+def welcome() -> FlexSendMessage:
+    """歡迎訊息
 
-    # 歡迎訊息
-    def welcome(self) -> FlexSendMessage:
-        contents = {
-            "type": "bubble",
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "image",
-                        "size": "full",
-                        "aspectMode": "cover",
-                        "aspectRatio": "2:2.9",
-                        "gravity": "center",
-                        "url": "https://i.imgur.com/oy86bfe.jpg",
-                    },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "Eatender",
-                                        "gravity": "top",
-                                        "align": "center",
-                                        "weight": "regular",
-                                        "size": "3xl",
-                                    }
-                                ],
-                            },
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "加LINE約吃飯，感情不會散",
-                                        "size": "md",
-                                        "margin": "md",
-                                        "weight": "bold",
-                                        "align": "center",
-                                        "color": "#ffffffcc",
-                                    }
-                                ],
-                            },
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "歡迎使用Eatender，",
-                                        "weight": "bold",
-                                        "color": "#666666",
-                                        "size": "md",
-                                        "margin": "lg",
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "馬上開始第一次「約食」吧！",
-                                        "weight": "bold",
-                                        "color": "#666666",
-                                        "size": "md",
-                                        "margin": "xs",
-                                        "offsetEnd": "0px",
-                                    },
-                                ],
-                            },
-                        ],
-                        "backgroundColor": "#fdbe29cc",
-                        "paddingAll": "30px",
-                        "position": "absolute",
-                        "offsetBottom": "0px",
-                        "offsetStart": "0px",
-                        "offsetEnd": "0px",
-                        "paddingTop": "20px",
-                        "paddingBottom": "28px",
-                    },
-                ],
-                "paddingAll": "0px",
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "button",
-                        "action": {"type": "message", "label": "教學", "text": "教學"},
-                        "position": "relative",
-                        "height": "sm",
-                        "color": "#E5E3DF",
-                    }
-                ],
-                "backgroundColor": "#666666",
-                "paddingAll": "md",
-            },
-        }
-        message = FlexSendMessage(alt_text="歡迎使用 Eatender！", contents=contents)
-        return message
+    Returns:
+        FlexSendMessage: 歡迎使用 Eatender！
+    """
+    with open("./model/welcome.json") as json_file:
+        contents = json.load(json_file)
+    message = FlexSendMessage(alt_text="歡迎使用 Eatender！", contents=contents)
+    return message
 
-    # 教學
-    def tutorial(self) -> FlexSendMessage:
-        contents = {
-            "type": "bubble",
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "image",
-                        "aspectMode": "cover",
-                        "size": "full",
-                        "gravity": "top",
-                        "margin": "none",
-                        "position": "relative",
-                        "aspectRatio": "2:3",
-                        "url": "https://i.imgur.com/RFqeCz2.jpg",
-                    },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "今晚，你或許會想先來點...",
-                                        "size": "lg",
-                                        "weight": "bold",
-                                        "margin": "5px",
-                                        "color": "#ffffff",
-                                        "wrap": true,
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "「使．用．教．學！」",
-                                        "color": "#0E9721",
-                                        "weight": "bold",
-                                        "size": "lg",
-                                    },
-                                ],
-                            },
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "icon",
-                                        "url": "https://i.imgur.com/UQL7M2P.png",
-                                        "size": "md",
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "首先，設定您要用餐的地點",
-                                        "margin": "5px",
-                                        "size": "md",
-                                        "weight": "bold",
-                                    },
-                                ],
-                                "margin": "sm",
-                            },
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "icon",
-                                        "size": "md",
-                                        "url": "https://i.imgur.com/49UpMsr.png",
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "將喜歡的餐廳加入投票箱",
-                                        "weight": "bold",
-                                        "margin": "5px",
-                                        "size": "md",
-                                    },
-                                ],
-                                "margin": "sm",
-                            },
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "icon",
-                                        "url": "https://i.imgur.com/lNtabPe.png",
-                                        "size": "md",
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "點選投票 跟朋友決定最愛的餐廳",
-                                        "size": "md",
-                                        "margin": "5px",
-                                        "weight": "bold",
-                                    },
-                                ],
-                                "margin": "sm",
-                            },
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "icon",
-                                        "url": "https://i.imgur.com/247HjzP.png",
-                                        "size": "md",
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "導航至目的地，Let's dig in！",
-                                        "size": "md",
-                                        "margin": "5px",
-                                        "weight": "bold",
-                                        "color": "#EF4B26",
-                                    },
-                                ],
-                                "margin": "sm",
-                            },
-                        ],
-                        "backgroundColor": "#EBA909cc",
-                        "position": "absolute",
-                        "offsetStart": "0px",
-                        "offsetEnd": "0px",
-                        "offsetBottom": "250px",
-                        "paddingAll": "20px",
-                        "paddingTop": "100px",
-                    },
-                ],
-                "paddingAll": "0px",
-            },
-        }
-        message = FlexSendMessage(alt_text="使用教學", contents=contents)
-        return message
 
-    # 投票池列表
-    def show_vote_pull(self, restaurants) -> FlexSendMessage:
-        show_list = []
-        for pid in restaurants:
-            each = json.loads(config.cache.get(pid))
-            place_id = each["place_id"]
-            restaurant_name = each["name"]
-            keywords = each["keywords"]
-            photo_url = each["photo_url"]
-            website = each["website"]
-            ifoodie_url = each["ifoodie_url"]
-            rating = each["rating"]
-            price = each["price"]
-            address = each["address"]
-            phone_number = each["phone_number"]
-            lat = each["location"]["lat"]
-            lng = each["location"]["lng"]
-            open_now = find_operating_status(
-                data=each["operating_time"]["weekday_text"]
-            )
+def tutorial() -> FlexSendMessage:
+    """使用教學
 
-            card = vote_card(
-                place_id=place_id,
-                restaurant_name=restaurant_name,
-                keywords=keywords,
-                photo_url=photo_url,
-                website=website,
-                ifoodie_url=ifoodie_url,
-                rating=rating,
-                price=price,
-                address=address,
-                open_now=open_now,
-                phone_number=phone_number,
-                lat=lat,
-                lng=lng,
-            )
-            show_list.append(card)
-        contents = {
-            "type": "carousel",
-            "contents": show_list,
-        }
-        message = FlexSendMessage(alt_text="投票池列表", contents=contents)
-        return message
+    Returns:
+        FlexSendMessage: 使用教學
+    """
+    with open("./model/tutorial.json") as json_file:
+        contents = json.load(json_file)
+    message = FlexSendMessage(alt_text="使用教學", contents=contents)
+    return message
 
-    # 最愛列表
-    def show_favorite(self, restaurants) -> FlexSendMessage:
-        show_list = []
-        for each in restaurants:
-            place_id = each["place_id"]
-            restaurant_name = each["name"]
-            keywords = each["keywords"]
-            photo_url = each["photo_url"]
-            website = each["website"]
-            ifoodie_url = each["ifoodie_url"]
-            rating = each["rating"]
-            price = each["price"]
-            address = each["address"]
-            phone_number = each["phone_number"]
-            lat = each["location"]["lat"]
-            lng = each["location"]["lng"]
-            open_now = find_operating_status(
-                data=each["operating_time"]["weekday_text"]
-            )
 
-            card = restaurant_card_info(
-                place_id=place_id,
-                restaurant_name=restaurant_name,
-                keywords=keywords,
-                photo_url=photo_url,
-                website=website,
-                ifoodie_url=ifoodie_url,
-                rating=rating,
-                price=price,
-                address=address,
-                open_now=open_now,
-                phone_number=phone_number,
-                lat=lat,
-                lng=lng,
-            )
-            show_list.append(card)
-        contents = {
-            "type": "carousel",
-            "contents": show_list,
-        }
-        message = FlexSendMessage(alt_text="最愛列表", contents=contents)
-        return message
+def share_vote(pull_id: str) -> dict:
+    """WEB - 分享投票
 
-    # 附近餐廳列表
-    def show_restaurant(
-        self, restaurants, keyword: str = "", next_page: str = ""
-    ) -> FlexSendMessage:
-        show_list = []
-        for each in restaurants:
-            place_id = each.place_id
-            restaurant_name = each.name
-            keywords = each.keywords
-            photo_url = each.photo_url
-            website = each.website
-            ifoodie_url = each.ifoodie_url
-            rating = each.rating
-            price = each.price
-            address = each.address
-            open_now = each.open_now
-            phone_number = each.phone_number
-            lat = each.location["lat"]
-            lng = each.location["lng"]
-            card = restaurant_card_info(
-                place_id=place_id,
-                restaurant_name=restaurant_name,
-                keywords=keywords,
-                photo_url=photo_url,
-                website=website,
-                ifoodie_url=ifoodie_url,
-                rating=rating,
-                price=price,
-                address=address,
-                open_now=open_now,
-                phone_number=phone_number,
-                lat=lat,
-                lng=lng,
-            )
-            show_list.append(card)
-        contents = {
-            "type": "carousel",
-            "contents": show_list,
-        }
-        if next_page:
-            more = show_more(
-                user_lat=self.user_lat,
-                user_lng=self.user_lng,
-                keyword=keyword,
-                next_page=next_page,
-            )
-            contents["contents"].append(more)
-        message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
-        return message
+    Args:
+        pull_id (str): 投票池ID
 
-    def search_result(self, restaurants) -> FlexSendMessage:
-        show_list = []
-        for each in restaurants:
-            place_id = each.place_id
-            restaurant_name = each.name
-            keywords = each.keywords
-            photo_url = each.photo_url
-            website = each.website
-            ifoodie_url = each.ifoodie_url
-            rating = each.rating
-            price = each.price
-            address = each.address
-            open_now = each.open_now
-            phone_number = each.phone_number
-            lat = each.location["lat"]
-            lng = each.location["lng"]
-            card = search_card_info(
-                place_id=place_id,
-                restaurant_name=restaurant_name,
-                keywords=keywords,
-                photo_url=photo_url,
-                website=website,
-                ifoodie_url=ifoodie_url,
-                rating=rating,
-                price=price,
-                address=address,
-                open_now=open_now,
-                phone_number=phone_number,
-                lat=lat,
-                lng=lng,
-            )
-            show_list.append(card)
-        contents = {
-            "type": "carousel",
-            "contents": show_list,
-        }
-        message = FlexSendMessage(alt_text="餐廳資訊", contents=contents)
-        return message
+    Returns:
+        dict: 投票分享資訊
+    """
+    with open("./model/share_vote.json") as json_file:
+        contents = json.load(json_file)
+    contents["footer"]["contents"][0]["contents"]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-8n1PlOw1?pull_id={pull_id}"
+    return contents
 
-    def create_vote(self, user_id) -> FlexSendMessage:
-        contents = {
-            "type": "bubble",
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": "請確認投票名單是否正確",
-                        "weight": "bold",
-                        "size": "xl",
-                    }
-                ],
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "sm",
-                "contents": [
-                    {
-                        "type": "button",
-                        "style": "primary",
-                        "height": "sm",
-                        "action": {
-                            "type": "uri",
-                            "label": "創建投票",
-                            "uri": f"https://liff.line.me/1655422218-leDE61nD?user_id={user_id}",
-                        },
-                    }
-                ],
-                "flex": 0,
-            },
-        }
-        message = FlexSendMessage(alt_text="使用教學", contents=contents)
-        return message
 
-    # 發生錯誤
-    def error(self) -> FlexSendMessage:
-        contents = {
-            "type": "bubble",
-            "hero": {
-                "type": "image",
-                "url": "https://i.imgur.com/c8RJZCY.png",
-                "size": "full",
-                "aspectRatio": "5:3",
-                "aspectMode": "cover",
-            },
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": "很抱歉！",
-                        "weight": "bold",
-                        "size": "xl",
-                        "color": "#FF0000",
-                        "align": "center",
-                    },
-                    {
-                        "type": "text",
-                        "text": "發生了些意料之外的錯誤，如果持續無法解決請聯繫客服！",
-                        "wrap": true,
-                    },
-                ],
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "none",
-                "contents": [
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "uri",
-                                    "label": "聯繫客服",
-                                    "uri": "https://lin.ee/DsogwtP",
-                                },
-                                "color": "#000000",
-                            }
-                        ],
-                        "backgroundColor": "#fdbe29",
-                        "cornerRadius": "100px",
-                        "margin": "none",
-                        "alignItems": "center",
-                        "justifyContent": "space-evenly",
-                        "position": "relative",
-                        "width": "200px",
-                        "height": "50px",
-                        "offsetStart": "40px",
-                    }
-                ],
-            },
-        }
-        message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
-        return message
+def not_bound(user_id: str) -> FlexSendMessage:
+    """尚未綁定 LINE Notify
 
-    # LINE - 分享投票
-    def share_vote(self, pull_id) -> FlexSendMessage:
-        contents = {
-            "type": "carousel",
-            "contents": [
-                {
-                    "type": "bubble",
-                    "header": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "horizontal",
-                                "contents": [
-                                    {
-                                        "type": "image",
-                                        "url": "https://i.ibb.co/y09hjt2/LOGO5.png",
-                                        "size": "full",
-                                        "aspectMode": "cover",
-                                        "aspectRatio": "20:12",
-                                        "position": "relative",
-                                    }
-                                ],
-                                "cornerRadius": "100px",
-                            }
-                        ],
-                        "paddingAll": "0px",
-                    },
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "餐廳選項建立完成",
-                                        "size": "lg",
-                                        "weight": "bold",
-                                        "style": "normal",
-                                        "wrap": true,
-                                        "align": "center",
-                                    }
-                                ],
-                            },
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "Step1. 左滑右滑來挑選餐廳",
-                                                "color": "#666666",
-                                                "size": "sm",
-                                                "flex": 2,
-                                            }
-                                        ],
-                                        "offsetTop": "sm",
-                                        "borderWidth": "bold",
-                                        "spacing": "sm",
-                                        "flex": 2,
-                                        "offsetBottom": "lg",
-                                    },
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "Step2. 選擇聚餐時間",
-                                                "flex": 2,
-                                                "size": "sm",
-                                                "color": "#666666",
-                                                "contents": [],
-                                            }
-                                        ],
-                                        "borderWidth": "bold",
-                                        "spacing": "sm",
-                                        "offsetBottom": "lg",
-                                        "offsetTop": "sm",
-                                        "position": "relative",
-                                        "flex": 2,
-                                    },
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "Step3. 投票完成，等待投票結果",
-                                                "flex": 2,
-                                                "size": "sm",
-                                                "color": "#666666",
-                                                "contents": [],
-                                            }
-                                        ],
-                                        "borderWidth": "bold",
-                                        "spacing": "sm",
-                                        "offsetBottom": "lg",
-                                        "offsetTop": "sm",
-                                        "position": "relative",
-                                        "flex": 2,
-                                    },
-                                ],
-                                "spacing": "sm",
-                            },
-                        ],
-                    },
-                    "footer": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "button",
-                                        "action": {
-                                            "type": "uri",
-                                            "label": "開始投票",
-                                            "uri": f"https://liff.line.me/1655422218-8n1PlOw1?id={pull_id}",
-                                        },
-                                        "color": "#000000",
-                                    }
-                                ],
-                                "backgroundColor": "#fdbe29",
-                                "cornerRadius": "100px",
-                                "margin": "none",
-                                "alignItems": "center",
-                                "justifyContent": "space-evenly",
-                                "position": "relative",
-                                "width": "200px",
-                                "height": "50px",
-                                "offsetStart": "40px",
-                            },
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "button",
-                                        "action": {
-                                            "type": "uri",
-                                            "label": "分享投票",
-                                            "uri": f"https://liff.line.me/1655422218-O3KRZNpK?id={pull_id}",
-                                        },
-                                        "color": "#000000",
-                                    }
-                                ],
-                                "backgroundColor": "#fdbe29",
-                                "cornerRadius": "100px",
-                                "margin": "lg",
-                                "alignItems": "center",
-                                "justifyContent": "space-evenly",
-                                "position": "relative",
-                                "width": "200px",
-                                "height": "50px",
-                                "offsetStart": "40px",
-                            },
-                        ],
-                    },
-                }
-            ],
-        }
-        message = FlexSendMessage(alt_text="投票創建成功！", contents=contents)
-        return message
+    Args:
+        user_id (str): [description]
 
-    # Web - 分享投票
-    def liff_share(self, pull_id):
-        contents = {
-            "type": "carousel",
-            "contents": [
-                {
-                    "type": "bubble",
-                    "header": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "horizontal",
-                                "contents": [
-                                    {
-                                        "type": "image",
-                                        "url": "https://i.ibb.co/y09hjt2/LOGO5.png",
-                                        "size": "full",
-                                        "aspectMode": "cover",
-                                        "aspectRatio": "20:12",
-                                        "position": "relative",
-                                    }
-                                ],
-                                "cornerRadius": "100px",
-                            }
-                        ],
-                        "paddingAll": "0px",
-                    },
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "餐廳選項建立完成",
-                                        "size": "lg",
-                                        "weight": "bold",
-                                        "style": "normal",
-                                        "wrap": true,
-                                        "align": "center",
-                                    }
-                                ],
-                            },
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "Step1. 左滑右滑來挑選餐廳",
-                                                "color": "#666666",
-                                                "size": "sm",
-                                                "flex": 2,
-                                            }
-                                        ],
-                                        "offsetTop": "sm",
-                                        "borderWidth": "bold",
-                                        "spacing": "sm",
-                                        "flex": 2,
-                                        "offsetBottom": "lg",
-                                    },
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "Step2. 選擇聚餐時間",
-                                                "flex": 2,
-                                                "size": "sm",
-                                                "color": "#666666",
-                                                "contents": [],
-                                            }
-                                        ],
-                                        "borderWidth": "bold",
-                                        "spacing": "sm",
-                                        "offsetBottom": "lg",
-                                        "offsetTop": "sm",
-                                        "position": "relative",
-                                        "flex": 2,
-                                    },
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "Step3. 投票完成，等待投票結果",
-                                                "flex": 2,
-                                                "size": "sm",
-                                                "color": "#666666",
-                                                "contents": [],
-                                            }
-                                        ],
-                                        "borderWidth": "bold",
-                                        "spacing": "sm",
-                                        "offsetBottom": "lg",
-                                        "offsetTop": "sm",
-                                        "position": "relative",
-                                        "flex": 2,
-                                    },
-                                ],
-                                "spacing": "sm",
-                            },
-                        ],
-                    },
-                    "footer": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "spacing": "none",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "button",
-                                        "action": {
-                                            "type": "uri",
-                                            "label": "開始投票",
-                                            "uri": f"https://liff.line.me/1655422218-8n1PlOw1?id={pull_id}",
-                                        },
-                                        "color": "#000000",
-                                    }
-                                ],
-                                "backgroundColor": "#fdbe29",
-                                "cornerRadius": "100px",
-                                "margin": "none",
-                                "alignItems": "center",
-                                "justifyContent": "space-evenly",
-                                "position": "relative",
-                                "width": "200px",
-                                "height": "50px",
-                                "offsetStart": "40px",
-                            }
-                        ],
-                    },
-                }
-            ],
-        }
-        return contents
+    Returns:
+        FlexSendMessage: 尚未綁定 LINE Notify
+    """
+    with open("./model/not_bound.json") as json_file:
+        contents = json.load(json_file)
+    contents["footer"]["contents"][0]["action"][
+        "uri"
+    ] = f"{config.SITE_NAME}notify/?uid={user_id}"
+    message = FlexSendMessage(alt_text=f"尚未綁定 LINE Notify", contents=contents)
+    return message
 
-    # 未綁定 LINE Notify
-    def not_bound(self, user_id: str):
-        contents = {
-            "type": "bubble",
-            "hero": {
-                "type": "image",
-                "url": "https://i.imgur.com/l2Yipv5.png",
-                "size": "full",
-                "aspectRatio": "2:1",
-                "aspectMode": "fit",
-            },
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": "歐嗚！",
-                        "weight": "bold",
-                        "size": "xxl",
-                        "align": "center",
-                        "color": "#FF0000",
-                    },
-                    {
-                        "type": "text",
-                        "text": "尚未綁定 LINE Notify，請先前往綁定！",
-                        "wrap": true,
-                        "align": "center",
-                    },
-                ],
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "button",
-                        "action": {
-                            "type": "uri",
-                            "label": "綁定 LINE Notify",
-                            "uri": f"{config.SITE_NAME}notify/?uid={user_id}",
-                        },
-                        "style": "primary",
-                    }
-                ],
-            },
-        }
-        message = FlexSendMessage(alt_text=f"尚未綁定 LINE Notify", contents=contents)
-        return message
+
+def show_vote_pull(restaurants) -> FlexSendMessage:
+    """投票池列表
+
+    Args:
+        restaurants: 餐廳列表
+
+    Returns:
+        FlexSendMessage: 投票池列表
+    """
+    show_list = []
+    for pid in restaurants:
+        each = json.loads(config.cache.get(pid))
+        place_id = each["place_id"]
+        restaurant_name = each["name"]
+        keywords = each["keywords"]
+        photo_url = each["photo_url"]
+        website = each["website"]
+        ifoodie_url = each["ifoodie_url"]
+        rating = each["rating"]
+        price = each["price"]
+        address = each["address"]
+        phone_number = each["phone_number"]
+        open_now = find_operating_status(data=each["operating_time"]["weekday_text"])
+
+        card = vote_card(
+            place_id=place_id,
+            restaurant_name=restaurant_name,
+            keywords=keywords,
+            photo_url=photo_url,
+            website=website,
+            ifoodie_url=ifoodie_url,
+            rating=rating,
+            price=price,
+            address=address,
+            open_now=open_now,
+            phone_number=phone_number,
+        )
+        show_list.append(card)
+    contents = {
+        "type": "carousel",
+        "contents": show_list,
+    }
+    message = FlexSendMessage(alt_text="投票池列表", contents=contents)
+    return message
+
+
+def show_favorite(restaurants) -> FlexSendMessage:
+    """最愛列表
+
+    Args:
+        restaurants: 餐廳列表
+
+    Returns:
+        FlexSendMessage: 最愛列表
+    """
+    show_list = []
+    for each in restaurants:
+        place_id = each["place_id"]
+        restaurant_name = each["name"]
+        keywords = each["keywords"]
+        photo_url = each["photo_url"]
+        website = each["website"]
+        ifoodie_url = each["ifoodie_url"]
+        rating = each["rating"]
+        price = each["price"]
+        address = each["address"]
+        phone_number = each["phone_number"]
+        lat = each["location"]["lat"]
+        lng = each["location"]["lng"]
+        open_now = find_operating_status(data=each["operating_time"]["weekday_text"])
+
+        card = restaurant_card_info(
+            place_id=place_id,
+            restaurant_name=restaurant_name,
+            keywords=keywords,
+            photo_url=photo_url,
+            website=website,
+            ifoodie_url=ifoodie_url,
+            rating=rating,
+            price=price,
+            address=address,
+            open_now=open_now,
+            phone_number=phone_number,
+            lat=lat,
+            lng=lng,
+        )
+        show_list.append(card)
+    contents = {
+        "type": "carousel",
+        "contents": show_list,
+    }
+    message = FlexSendMessage(alt_text="最愛列表", contents=contents)
+    return message
+
+
+def show_restaurant(
+    user_latitude: float,
+    user_longitude: float,
+    restaurants,
+    keyword: str = "",
+    next_page: str = "",
+) -> FlexSendMessage:
+    """附近餐廳列表
+
+    Args:
+        user_latitude (float): 使用者緯度
+        user_longitude (float): 使用者經度
+        restaurants: 餐廳列表
+        keyword (str, optional): 餐廳關鍵字. Defaults to "".
+        next_page (str, optional): 更多餐廳 token. Defaults to "".
+
+    Returns:
+        FlexSendMessage: 餐廳推薦列表
+    """
+    show_list = []
+    for each in restaurants:
+        place_id = each.place_id
+        restaurant_name = each.name
+        keywords = each.keywords
+        photo_url = each.photo_url
+        website = each.website
+        ifoodie_url = each.ifoodie_url
+        rating = each.rating
+        price = each.price
+        address = each.address
+        open_now = each.open_now
+        phone_number = each.phone_number
+        lat = each.location["lat"]
+        lng = each.location["lng"]
+        card = restaurant_card_info(
+            place_id=place_id,
+            restaurant_name=restaurant_name,
+            keywords=keywords,
+            photo_url=photo_url,
+            website=website,
+            ifoodie_url=ifoodie_url,
+            rating=rating,
+            price=price,
+            address=address,
+            open_now=open_now,
+            phone_number=phone_number,
+            lat=lat,
+            lng=lng,
+        )
+        show_list.append(card)
+    contents = {
+        "type": "carousel",
+        "contents": show_list,
+    }
+    if next_page:
+        more = show_more(
+            user_latitude=user_latitude,
+            user_longitude=user_longitude,
+            keyword=keyword,
+            next_page=next_page,
+        )
+        contents["contents"].append(more)
+    message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
+    return message
+
+
+def search_result(restaurants) -> FlexSendMessage:
+    """特定餐廳資料
+
+    Args:
+        restaurants: 餐廳列表
+
+    Returns:
+        FlexSendMessage: 餐廳資訊
+    """
+    show_list = []
+    for each in restaurants:
+        restaurant_name = each.name
+        keywords = each.keywords
+        photo_url = each.photo_url
+        website = each.website
+        ifoodie_url = each.ifoodie_url
+        rating = each.rating
+        price = each.price
+        address = each.address
+        open_now = each.open_now
+        phone_number = each.phone_number
+        card = search_card_info(
+            restaurant_name=restaurant_name,
+            keywords=keywords,
+            photo_url=photo_url,
+            website=website,
+            ifoodie_url=ifoodie_url,
+            rating=rating,
+            price=price,
+            address=address,
+            open_now=open_now,
+            phone_number=phone_number,
+        )
+        show_list.append(card)
+    contents = {
+        "type": "carousel",
+        "contents": show_list,
+    }
+    message = FlexSendMessage(alt_text="餐廳資訊", contents=contents)
+    return message
+
+
+def create_vote(user_id: str) -> FlexSendMessage:
+    """投票創建確認
+
+    Args:
+        user_id (str): 使用者 ID
+
+    Returns:
+        FlexSendMessage: 投票創建確認
+    """
+    with open("./model/create_vote.json") as json_file:
+        contents = json.load(json_file)
+    contents["footer"]["contents"][0]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-leDE61nD?user_id={user_id}"
+    message = FlexSendMessage(alt_text="投票創建確認", contents=contents)
+    return message
 
 
 # 店家營業狀態
@@ -937,7 +316,6 @@ def find_operating_status(data):
 
 
 def search_card_info(
-    place_id: str,
     restaurant_name: str,
     keywords: list,
     photo_url: str,
@@ -948,254 +326,63 @@ def search_card_info(
     address: str,
     open_now: bool,
     phone_number: str,
-    lat: float,
-    lng: float,
 ) -> dict:
-    star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-    }
-    grey_star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-    }
-    star_list = int(rating) * [star] + (5 - int(rating)) * [grey_star]
+    """卡片模板 - 特定餐廳資訊
 
+    Args:
+        restaurant_name (str): 餐廳名稱
+        keywords (list): 餐廳評論列表
+        photo_url (str): 餐廳照片
+        website (str): 餐廳網站連結
+        ifoodie_url (str): 餐廳愛食記連結
+        rating (float): Google Maps' 評分
+        price (int): 餐廳平均消費價格
+        address (str): 餐廳地址
+        open_now (bool): 是否營業中
+        phone_number (str): 餐廳電話
+
+    Returns:
+        dict: Flex Message 卡片模板
+    """
+    star_list = stars_template(rating=rating)
     if price == 0:
         price = "N/A"
-    comments = []
-    for each in keywords:
-        data = {
+    comments = keywords_template(keywords=keywords)
+    operate_status, operate_color = operate_status_template(open_now=open_now)
+
+    with open("./model/search_card_info.json") as json_file:
+        card = json.load(json_file)
+    card["header"]["contents"][0]["contents"][0]["url"] = photo_url
+    card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
+    card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
+    card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
+    card["body"]["contents"][1]["contents"] = star_list + [
+        {
             "type": "text",
-            "text": each,
-            "flex": 0,
-            "margin": "xl",
+            "text": str(rating),
             "size": "sm",
             "color": "#999999",
-        }
-        comments.append(data)
-
-    if open_now:
-        operate_status = {
-            "type": "text",
-            "text": "營業中",
-            "size": "xs",
-            "color": "#ffffff",
-            "align": "center",
-            "gravity": "center",
-        }
-        operate_color = "#9ACD32"
-    else:
-        operate_status = {
-            "type": "text",
-            "text": "休息中",
-            "size": "xs",
-            "color": "#ffffff",
-            "align": "center",
-            "gravity": "center",
-        }
-        operate_color = "#FF6347"
-    card = {
-        "type": "bubble",
-        "header": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "image",
-                            "url": photo_url,
-                            "size": "full",
-                            "aspectMode": "cover",
-                            "aspectRatio": "20:13",
-                            "position": "relative",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "horizontal",
-                            "contents": [operate_status],
-                            "position": "absolute",
-                            "flex": 0,
-                            "width": "55px",
-                            "height": "25px",
-                            "backgroundColor": operate_color,
-                            "cornerRadius": "100px",
-                            "offsetTop": "18px",
-                            "offsetStart": "18px",
-                            "paddingAll": "2px",
-                            "paddingStart": "4px",
-                            "paddingEnd": "4px",
-                        },
-                    ],
-                }
-            ],
-            "paddingAll": "0px",
+            "margin": "sm",
+            "flex": 0,
         },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": restaurant_name,
-                            "size": "xl",
-                            "weight": "bold",
-                            "style": "normal",
-                            "flex": 0,
-                            "wrap": true,
-                            "maxLines": 1,
-                        }
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "margin": "md",
-                    "contents": star_list
-                    + [
-                        {
-                            "type": "text",
-                            "text": str(rating),
-                            "size": "sm",
-                            "color": "#999999",
-                            "margin": "sm",
-                            "flex": 0,
-                        },
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": f"${price}",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "餐廳網站",
-                            "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": website,
-                            },
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "愛食記",
-                            "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": ifoodie_url,
-                            },
-                            "flex": 0,
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                        },
-                    ],
-                    "offsetTop": "md",
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "評論",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        }
-                    ]
-                    + comments,
-                    "offsetTop": "md",
-                    "margin": "lg",
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "地點",
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 2,
-                                },
-                                {
-                                    "type": "text",
-                                    "text": address,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "wrap": true,
-                                    "flex": 6,
-                                },
-                            ],
-                            "offsetTop": "lg",
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "電話",
-                                    "flex": 2,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "contents": [],
-                                },
-                                {
-                                    "type": "text",
-                                    "flex": 6,
-                                    "text": phone_number,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "wrap": true,
-                                },
-                            ],
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                            "offsetBottom": "lg",
-                            "offsetTop": "sm",
-                            "position": "relative",
-                        },
-                    ],
-                    "spacing": "sm",
-                    "margin": "lg",
-                },
-            ],
-        },
-    }
+    ]
+    card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
+    card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
+    card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
+    card["body"]["contents"][3]["contents"] = [
+        {
+            "type": "text",
+            "text": "評論",
+            "size": "sm",
+            "color": "#999999",
+            "flex": 0,
+        }
+    ] + comments
+    card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
+    card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
     return card
 
 
-# 附近餐廳資訊
 def restaurant_card_info(
     place_id: str,
     restaurant_name: str,
@@ -1211,365 +398,99 @@ def restaurant_card_info(
     lat: float,
     lng: float,
 ) -> dict:
-    star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-    }
-    grey_star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-    }
-    star_list = int(rating) * [star] + (5 - int(rating)) * [grey_star]
+    """卡片模板 - 附近餐廳資訊
 
+    Args:
+        place_id (str): Google Maps' place id
+        restaurant_name (str): 餐廳名稱
+        keywords (list): 餐廳評論列表
+        photo_url (str): 餐廳照片
+        website (str): 餐廳網站連結
+        ifoodie_url (str): 餐廳愛食記連結
+        rating (float): Google Maps' 評分
+        price (int): 餐廳平均消費價格
+        address (str): 餐廳地址
+        open_now (bool): 是否營業中
+        phone_number (str): 餐廳電話
+        lat (float): 使用者緯度
+        lng (float): 使用者經度
+
+    Returns:
+        dict: Flex Message 卡片模板
+    """
+    star_list = stars_template(rating=rating)
     if price == 0:
         price = "N/A"
-    comments = []
-    for each in keywords:
-        data = {
+    comments = keywords_template(keywords=keywords)
+    operate_status, operate_color = operate_status_template(open_now=open_now)
+
+    with open("./model/restaurant_card_info.json") as json_file:
+        card = json.load(json_file)
+    card["header"]["contents"][0]["contents"][0]["url"] = photo_url
+    card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
+    card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
+    card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
+    card["body"]["contents"][1]["contents"] = star_list + [
+        {
             "type": "text",
-            "text": each,
-            "flex": 0,
-            "margin": "xl",
+            "text": str(rating),
             "size": "sm",
             "color": "#999999",
-        }
-        comments.append(data)
-
-    if open_now:
-        operate_status = {
-            "type": "text",
-            "text": "營業中",
-            "size": "xs",
-            "color": "#ffffff",
-            "align": "center",
-            "gravity": "center",
-        }
-        operate_color = "#9ACD32"
-    else:
-        operate_status = {
-            "type": "text",
-            "text": "休息中",
-            "size": "xs",
-            "color": "#ffffff",
-            "align": "center",
-            "gravity": "center",
-        }
-        operate_color = "#FF6347"
-    card = {
-        "type": "bubble",
-        "header": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "image",
-                            "url": photo_url,
-                            "size": "full",
-                            "aspectMode": "cover",
-                            "aspectRatio": "20:13",
-                            "position": "relative",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "horizontal",
-                            "contents": [operate_status],
-                            "position": "absolute",
-                            "flex": 0,
-                            "width": "55px",
-                            "height": "25px",
-                            "backgroundColor": operate_color,
-                            "cornerRadius": "100px",
-                            "offsetTop": "18px",
-                            "offsetStart": "18px",
-                            "paddingAll": "2px",
-                            "paddingStart": "4px",
-                            "paddingEnd": "4px",
-                        },
-                    ],
-                }
-            ],
-            "paddingAll": "0px",
+            "margin": "sm",
+            "flex": 0,
         },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": restaurant_name,
-                            "size": "xl",
-                            "weight": "bold",
-                            "style": "normal",
-                            "flex": 0,
-                            "wrap": true,
-                            "maxLines": 1,
-                        }
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "margin": "md",
-                    "contents": star_list
-                    + [
-                        {
-                            "type": "text",
-                            "text": str(rating),
-                            "size": "sm",
-                            "color": "#999999",
-                            "margin": "sm",
-                            "flex": 0,
-                        },
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": f"${price}",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "餐廳網站",
-                            "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": website,
-                            },
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "愛食記",
-                            "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": ifoodie_url,
-                            },
-                            "flex": 0,
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                        },
-                    ],
-                    "offsetTop": "md",
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "評論",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        }
-                    ]
-                    + comments,
-                    "offsetTop": "md",
-                    "margin": "lg",
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "地點",
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 2,
-                                },
-                                {
-                                    "type": "text",
-                                    "text": address,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "wrap": true,
-                                    "flex": 6,
-                                },
-                            ],
-                            "offsetTop": "lg",
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "電話",
-                                    "flex": 2,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "contents": [],
-                                },
-                                {
-                                    "type": "text",
-                                    "flex": 6,
-                                    "text": phone_number,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "wrap": true,
-                                },
-                            ],
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                            "offsetBottom": "lg",
-                            "offsetTop": "sm",
-                            "position": "relative",
-                        },
-                    ],
-                    "spacing": "sm",
-                    "margin": "lg",
-                },
-            ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "none",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "button",
-                            "action": {
-                                "type": "uri",
-                                "label": "前往",
-                                "uri": f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking",
-                            },
-                            "offsetBottom": "md",
-                        },
-                        {
-                            "type": "button",
-                            "action": {
-                                "type": "postback",
-                                "label": "收藏",
-                                "data": f"favorite_||_{place_id}",
-                            },
-                            "offsetBottom": "md",
-                        },
-                    ],
-                    "spacing": "none",
-                    "margin": "none",
-                    "height": "40px",
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "button",
-                            "action": {
-                                "type": "postback",
-                                "label": "加入投票",
-                                "data": f"vote_||_{place_id}",
-                            },
-                            "color": "#000000",
-                        }
-                    ],
-                    "backgroundColor": "#fdbe29",
-                    "cornerRadius": "100px",
-                    "margin": "none",
-                    "alignItems": "center",
-                    "justifyContent": "space-evenly",
-                    "position": "relative",
-                    "width": "200px",
-                    "height": "50px",
-                    "offsetStart": "40px",
-                },
-            ],
-        },
-    }
+    ]
+    card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
+    card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
+    card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
+    card["body"]["contents"][3]["contents"] = (
+        [
+            {
+                "type": "text",
+                "text": "評論",
+                "size": "sm",
+                "color": "#999999",
+                "flex": 0,
+            }
+        ]
+        + comments,
+    )
+    card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
+    card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
+    card["footer"]["contents"][0]["contents"][0]["action"][
+        "uri"
+    ] = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking"
+    card["footer"]["contents"][0]["contents"][1]["action"][
+        "data"
+    ] = f"favorite_||_{place_id}"
+    card["footer"]["contents"][1]["contents"][0]["action"][
+        "data"
+    ] = f"vote_||_{place_id}"
     return card
 
 
-# 顯示更多
-def show_more(user_lat, user_lng, keyword, next_page) -> dict:
-    card = {
-        "type": "bubble",
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "image",
-                    "url": "https://img.onl/qZkjv",
-                    "size": "full",
-                    "offsetTop": "40px",
-                    "aspectMode": "fit",
-                    "position": "relative",
-                },
-                {
-                    "type": "text",
-                    "text": "還想看更多餐廳嗎?",
-                    "style": "normal",
-                    "weight": "bold",
-                    "offsetStart": "65px",
-                    "size": "md",
-                    "offsetTop": "35px",
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "button",
-                            "action": {
-                                "type": "postback",
-                                "label": "查看更多",
-                                "data": f"more_||_{user_lat},{user_lng}_||_{keyword}_||_{next_page}",
-                            },
-                            "position": "relative",
-                            "color": "#296ae8",
-                        }
-                    ],
-                    "width": "200px",
-                    "backgroundColor": "#fdbe29",
-                    "height": "50px",
-                    "cornerRadius": "100px",
-                    "justifyContent": "center",
-                    "alignItems": "center",
-                    "position": "relative",
-                    "offsetTop": "45px",
-                    "offsetStart": "30px",
-                },
-            ],
-        },
-    }
+def show_more(
+    user_latitude: float, user_longitude: float, keyword: str, next_page: str
+) -> dict:
+    """顯示更多餐廳
+
+    Args:
+        user_latitude (float): 使用者緯度
+        user_longitude (float): 使用者經度
+        keyword (str): 餐廳搜尋關鍵字
+        next_page (str): 更多餐廳 token
+
+    Returns:
+        dict: 顯示更多 template
+    """
+    with open("./model/show_more.json") as json_file:
+        card = json.load(json_file)
+    card["body"]["contents"][2]["contents"][0]["action"][
+        "data"
+    ] = f"more_||_{user_latitude},{user_longitude}_||_{keyword}_||_{next_page}"
     return card
 
 
-# 投票餐廳資訊
 def vote_card(
     place_id: str,
     restaurant_name: str,
@@ -1582,35 +503,91 @@ def vote_card(
     address: str,
     open_now: bool,
     phone_number: str,
-    lat: float,
-    lng: float,
 ) -> dict:
-    star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-    }
-    grey_star = {
-        "type": "icon",
-        "size": "sm",
-        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-    }
-    star_list = int(rating) * [star] + (5 - int(rating)) * [grey_star]
+    """卡片模板 - 投票餐廳資訊
 
+    Args:
+        place_id (str): Google Maps' place id
+        restaurant_name (str):餐廳名稱
+        keywords (list): 餐廳評論列表
+        photo_url (str): 餐廳照片
+        website (str): 餐廳網站連結
+        ifoodie_url (str): 餐廳愛食記連結
+        rating (float): Google Maps' 評分
+        price (int): 餐廳平均消費價格
+        address (str): 餐廳地址
+        open_now (bool): 是否營業中
+        phone_number (str): 餐廳電話
+
+    Returns:
+        dict: Flex Message 卡片模板
+    """
+    star_list = stars_template(rating=rating)
     if price == 0:
         price = "N/A"
-    comments = []
-    for each in keywords:
-        data = {
+    comments = keywords_template(keywords=keywords)
+    operate_status, operate_color = operate_status_template(open_now=open_now)
+
+    with open("./model/vote_card.json") as json_file:
+        card = json.load(json_file)
+    card["header"]["contents"][0]["contents"][0]["url"] = photo_url
+    card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
+    card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
+    card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
+    card["body"]["contents"][1]["contents"] = star_list + [
+        {
             "type": "text",
-            "text": each,
-            "flex": 0,
-            "margin": "xl",
+            "text": str(rating),
             "size": "sm",
             "color": "#999999",
-        }
-        comments.append(data)
+            "margin": "sm",
+            "flex": 0,
+        },
+    ]
+    card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
+    card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
+    card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
+    card["body"]["contents"][3]["contents"] = (
+        [
+            {
+                "type": "text",
+                "text": "評論",
+                "size": "sm",
+                "color": "#999999",
+                "flex": 0,
+            }
+        ]
+        + comments,
+    )
+    card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
+    card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
+    card["footer"]["contents"][0]["contents"][0]["action"][
+        "data"
+    ] = f"remove_||_{place_id}"
+    return card
 
+
+def error() -> FlexSendMessage:
+    """發生錯誤
+
+    Returns:
+        FlexSendMessage: 發生錯誤！
+    """
+    with open("./model/error.json") as json_file:
+        contents = json.load(json_file)
+    message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
+    return message
+
+
+def operate_status_template(open_now: bool) -> tuple:
+    """Flex Message 餐廳營業狀況
+
+    Args:
+        open_now (bool): 營業中
+
+    Returns:
+        tuple: (營業狀況, 營業文字顏色)
+    """
     if open_now:
         operate_status = {
             "type": "text",
@@ -1631,231 +608,50 @@ def vote_card(
             "gravity": "center",
         }
         operate_color = "#FF6347"
-    card = {
-        "type": "bubble",
-        "header": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "image",
-                            "url": photo_url,
-                            "size": "full",
-                            "aspectMode": "cover",
-                            "aspectRatio": "20:13",
-                            "position": "relative",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "horizontal",
-                            "contents": [operate_status],
-                            "position": "absolute",
-                            "flex": 0,
-                            "width": "55px",
-                            "height": "25px",
-                            "backgroundColor": operate_color,
-                            "cornerRadius": "100px",
-                            "offsetTop": "18px",
-                            "offsetStart": "18px",
-                            "paddingAll": "2px",
-                            "paddingStart": "4px",
-                            "paddingEnd": "4px",
-                        },
-                    ],
-                }
-            ],
-            "paddingAll": "0px",
-        },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": restaurant_name,
-                            "size": "xl",
-                            "weight": "bold",
-                            "style": "normal",
-                            "flex": 0,
-                            "wrap": true,
-                            "maxLines": 1,
-                        }
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "margin": "md",
-                    "contents": star_list
-                    + [
-                        {
-                            "type": "text",
-                            "text": str(rating),
-                            "size": "sm",
-                            "color": "#999999",
-                            "margin": "sm",
-                            "flex": 0,
-                        },
-                    ],
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": f"${price}",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "餐廳網站",
-                            "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": website,
-                            },
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                            "flex": 0,
-                        },
-                        {
-                            "type": "text",
-                            "text": "愛食記",
-                            "action": {
-                                "type": "uri",
-                                "label": "action",
-                                "uri": ifoodie_url,
-                            },
-                            "flex": 0,
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#999999",
-                            "decoration": "underline",
-                        },
-                    ],
-                    "offsetTop": "md",
-                },
-                {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "評論",
-                            "size": "sm",
-                            "color": "#999999",
-                            "flex": 0,
-                        }
-                    ]
-                    + comments,
-                    "offsetTop": "md",
-                    "margin": "lg",
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "地點",
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 2,
-                                },
-                                {
-                                    "type": "text",
-                                    "text": address,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "wrap": true,
-                                    "flex": 6,
-                                },
-                            ],
-                            "offsetTop": "lg",
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                        },
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "電話",
-                                    "flex": 2,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "contents": [],
-                                },
-                                {
-                                    "type": "text",
-                                    "flex": 6,
-                                    "text": phone_number,
-                                    "size": "sm",
-                                    "color": "#666666",
-                                    "wrap": true,
-                                },
-                            ],
-                            "borderWidth": "bold",
-                            "spacing": "sm",
-                            "offsetBottom": "lg",
-                            "offsetTop": "sm",
-                            "position": "relative",
-                        },
-                    ],
-                    "spacing": "sm",
-                    "margin": "lg",
-                },
-            ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "none",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "button",
-                            "action": {
-                                "type": "postback",
-                                "label": "移除餐廳",
-                                "data": f"remove_||_{place_id}",
-                            },
-                            "color": "#000000",
-                        }
-                    ],
-                    "backgroundColor": "#fdbe29",
-                    "cornerRadius": "100px",
-                    "margin": "none",
-                    "alignItems": "center",
-                    "justifyContent": "space-evenly",
-                    "position": "relative",
-                    "width": "200px",
-                    "height": "50px",
-                    "offsetStart": "40px",
-                }
-            ],
-        },
-    }
+    return (operate_status, operate_color)
 
-    return card
+
+def stars_template(rating: float) -> list:
+    """Flex Message 星星圖示
+
+    Args:
+        rating (float): 餐廳 Google Maps 評價
+
+    Returns:
+        list: 星星圖示
+    """
+    star = {
+        "type": "icon",
+        "size": "sm",
+        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+    }
+    grey_star = {
+        "type": "icon",
+        "size": "sm",
+        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
+    }
+    star_list = int(rating) * [star] + (5 - int(rating)) * [grey_star]
+    return star_list
+
+
+def keywords_template(keywords: list) -> list:
+    """Flex Message 留言關鍵字
+
+    Args:
+        keywords (list): 關鍵字列表
+
+    Returns:
+        list: 關鍵字
+    """
+    comments = []
+    for each in keywords:
+        data = {
+            "type": "text",
+            "text": each,
+            "flex": 0,
+            "margin": "xl",
+            "size": "sm",
+            "color": "#999999",
+        }
+        comments.append(data)
+    return comments

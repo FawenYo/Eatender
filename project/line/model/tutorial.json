@@ -1,0 +1,132 @@
+{
+    "type": "bubble",
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "image",
+                "aspectMode": "cover",
+                "size": "full",
+                "gravity": "top",
+                "margin": "none",
+                "position": "relative",
+                "aspectRatio": "2:3",
+                "url": "https://i.imgur.com/RFqeCz2.jpg"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "今晚，你或許會想先來點...",
+                                "size": "lg",
+                                "weight": "bold",
+                                "margin": "5px",
+                                "color": "#ffffff",
+                                "wrap": true
+                            },
+                            {
+                                "type": "text",
+                                "text": "「使．用．教．學！」",
+                                "color": "#0E9721",
+                                "weight": "bold",
+                                "size": "lg"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "icon",
+                                "url": "https://i.imgur.com/UQL7M2P.png",
+                                "size": "md"
+                            },
+                            {
+                                "type": "text",
+                                "text": "首先，設定您要用餐的地點",
+                                "margin": "5px",
+                                "size": "md",
+                                "weight": "bold"
+                            }
+                        ],
+                        "margin": "sm"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "icon",
+                                "size": "md",
+                                "url": "https://i.imgur.com/49UpMsr.png"
+                            },
+                            {
+                                "type": "text",
+                                "text": "將喜歡的餐廳加入投票箱",
+                                "weight": "bold",
+                                "margin": "5px",
+                                "size": "md"
+                            }
+                        ],
+                        "margin": "sm"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "icon",
+                                "url": "https://i.imgur.com/lNtabPe.png",
+                                "size": "md"
+                            },
+                            {
+                                "type": "text",
+                                "text": "點選投票 跟朋友決定最愛的餐廳",
+                                "size": "md",
+                                "margin": "5px",
+                                "weight": "bold"
+                            }
+                        ],
+                        "margin": "sm"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "icon",
+                                "url": "https://i.imgur.com/247HjzP.png",
+                                "size": "md"
+                            },
+                            {
+                                "type": "text",
+                                "text": "導航至目的地，Let's dig in！",
+                                "size": "md",
+                                "margin": "5px",
+                                "weight": "bold",
+                                "color": "#EF4B26"
+                            }
+                        ],
+                        "margin": "sm"
+                    }
+                ],
+                "backgroundColor": "#EBA909cc",
+                "position": "absolute",
+                "offsetStart": "0px",
+                "offsetEnd": "0px",
+                "offsetBottom": "250px",
+                "paddingAll": "20px",
+                "paddingTop": "100px"
+            }
+        ],
+        "paddingAll": "0px"
+    }
+}

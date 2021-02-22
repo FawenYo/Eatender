@@ -7,7 +7,7 @@ import sentry_sdk
 from linebot import LineBotApi
 from linebot.models import *
 
-from .templates import Template
+from . import templates
 
 sys.path.append(".")
 
@@ -55,16 +55,17 @@ def handle_message(event):
 
             # 文字訊息
             else:
+                print("hi")
                 # 教學
                 if user_message == "教學":
-                    message = Template().tutorial()
+                    message = templates.tutorial()
                     line_bot_api.reply_message(reply_token, message)
 
                 # 我的最愛
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["favorite"]) > 0:
-                        message = Template().show_favorite(
+                        message = templates.show_favorite(
                             restaurants=user_data["favorite"][:10]
                         )
                     else:
@@ -78,15 +79,15 @@ def handle_message(event):
                         # 投票池內存在餐廳
                         if len(user_data["vote"]) > 0:
                             message = [
-                                Template().show_vote_pull(
+                                templates.show_vote_pull(
                                     restaurants=user_data["vote"][:10]
                                 ),
-                                Template().create_vote(user_id=user_id),
+                                templates.create_vote(user_id=user_id),
                             ]
                         else:
                             message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
                     else:
-                        message = Template().not_bound(user_id=user_id)
+                        message = templates.not_bound(user_id=user_id)
 
                 # 客服
                 elif user_message == "客服":
@@ -109,7 +110,7 @@ def handle_message(event):
         except Exception as e:
             sentry_sdk.capture_exception(e)
             config.console.print_exception()
-            message = Template().error()
+            message = templates.error()
         if can_reply:
             line_bot_api.reply_message(reply_token, message)
 
@@ -164,7 +165,7 @@ def handle_message(event):
         except Exception as e:
             sentry_sdk.capture_exception(e)
             config.console.print_exception()
-            message = Template().error()
+            message = templates.error()
         line_bot_api.reply_message(reply_token, message)
 
 
@@ -180,7 +181,7 @@ def search_info(query: str, page_token: str = ""):
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = Template().search_result(
+        message = templates.search_result(
             restaurants=restaurants.restaurants[:5],
         )
     # 記錄使用者位置
@@ -212,7 +213,9 @@ def find_nearby(
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = Template(user_lat=latitude, user_lng=longitude).show_restaurant(
+        message = templates.show_restaurant(
+            user_latitude=latitude,
+            user_longitude=longitude,
             restaurants=restaurants.restaurants[:5],
             keyword=keyword,
             next_page=restaurants.next_page,
