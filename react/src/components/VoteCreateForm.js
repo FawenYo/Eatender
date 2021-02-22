@@ -15,9 +15,12 @@ let user_id;
 $(document).ready(function () {
 
     const query_url = new URL(window.location.href)
-    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
-
-    user_id = query_params.get("user_id")
+    if (query_url.searchParams.has("liff.state")) {
+        const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+        user_id = query_params.get("user_id")
+    } else {
+        user_id = query_url.searchParams.get("user_id")
+    }
 })
 
 const initialFormValues = {

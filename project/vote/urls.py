@@ -58,7 +58,7 @@ async def login(
 async def vote_create_page(
     request: Request,
     liff_state: Optional[str] = Query(None, alias="liff.state"),
-    pull_id: Optional[str] = "",
+    user_id: Optional[str] = "",
 ) -> JSONResponse:
     return templates.TemplateResponse("vote_create.html", context={"request": request})
 
@@ -110,7 +110,7 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "create_time": now,
                 "participants": {},
             }
-            config.db.vote.insert_one(data)
+            # config.db.vote.insert_one(data)
             message = {
                 "status": "success",
                 "message": {
