@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import sys
 from datetime import datetime, timedelta
@@ -17,7 +18,7 @@ def welcome() -> FlexSendMessage:
     Returns:
         FlexSendMessage: 歡迎使用 Eatender！
     """
-    with open("./model/welcome.json") as json_file:
+    with open("line/model/welcome.json") as json_file:
         contents = json.load(json_file)
     message = FlexSendMessage(alt_text="歡迎使用 Eatender！", contents=contents)
     return message
@@ -29,7 +30,7 @@ def tutorial() -> FlexSendMessage:
     Returns:
         FlexSendMessage: 使用教學
     """
-    with open("./model/tutorial.json") as json_file:
+    with open("line/model/tutorial.json") as json_file:
         contents = json.load(json_file)
     message = FlexSendMessage(alt_text="使用教學", contents=contents)
     return message
@@ -44,7 +45,7 @@ def share_vote(pull_id: str) -> dict:
     Returns:
         dict: 投票分享資訊
     """
-    with open("./model/share_vote.json") as json_file:
+    with open("line/model/share_vote.json") as json_file:
         contents = json.load(json_file)
     contents["footer"]["contents"][0]["contents"]["action"][
         "uri"
@@ -61,7 +62,7 @@ def not_bound(user_id: str) -> FlexSendMessage:
     Returns:
         FlexSendMessage: 尚未綁定 LINE Notify
     """
-    with open("./model/not_bound.json") as json_file:
+    with open("line/model/not_bound.json") as json_file:
         contents = json.load(json_file)
     contents["footer"]["contents"][0]["action"][
         "uri"
@@ -282,7 +283,7 @@ def create_vote(user_id: str) -> FlexSendMessage:
     Returns:
         FlexSendMessage: 投票創建確認
     """
-    with open("./model/create_vote.json") as json_file:
+    with open("line/model/create_vote.json") as json_file:
         contents = json.load(json_file)
     contents["footer"]["contents"][0]["action"][
         "uri"
@@ -350,7 +351,7 @@ def search_card_info(
     comments = keywords_template(keywords=keywords)
     operate_status, operate_color = operate_status_template(open_now=open_now)
 
-    with open("./model/search_card_info.json") as json_file:
+    with open("line/model/search_card_info.json") as json_file:
         card = json.load(json_file)
     card["header"]["contents"][0]["contents"][0]["url"] = photo_url
     card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
@@ -369,7 +370,7 @@ def search_card_info(
     card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
     card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
     card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
-    card["body"]["contents"][3]["contents"] = [
+    detail = [
         {
             "type": "text",
             "text": "評論",
@@ -377,7 +378,9 @@ def search_card_info(
             "color": "#999999",
             "flex": 0,
         }
-    ] + comments
+    ]
+    detail.extend(comments)
+    card["body"]["contents"][3]["contents"] = detail
     card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
     card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
     return card
@@ -424,7 +427,7 @@ def restaurant_card_info(
     comments = keywords_template(keywords=keywords)
     operate_status, operate_color = operate_status_template(open_now=open_now)
 
-    with open("./model/restaurant_card_info.json") as json_file:
+    with open("line/model/restaurant_card_info.json") as json_file:
         card = json.load(json_file)
     card["header"]["contents"][0]["contents"][0]["url"] = photo_url
     card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
@@ -443,18 +446,17 @@ def restaurant_card_info(
     card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
     card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
     card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
-    card["body"]["contents"][3]["contents"] = (
-        [
-            {
-                "type": "text",
-                "text": "評論",
-                "size": "sm",
-                "color": "#999999",
-                "flex": 0,
-            }
-        ]
-        + comments,
-    )
+    detail = [
+        {
+            "type": "text",
+            "text": "評論",
+            "size": "sm",
+            "color": "#999999",
+            "flex": 0,
+        }
+    ]
+    detail.extend(comments)
+    card["body"]["contents"][3]["contents"] = detail
     card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
     card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
     card["footer"]["contents"][0]["contents"][0]["action"][
@@ -466,6 +468,9 @@ def restaurant_card_info(
     card["footer"]["contents"][1]["contents"][0]["action"][
         "data"
     ] = f"vote_||_{place_id}"
+    print(len(card["body"]["contents"][3]["contents"]))
+    with open("test.json", "w") as f:
+        json.dump(card, f)
     return card
 
 
@@ -483,7 +488,7 @@ def show_more(
     Returns:
         dict: 顯示更多 template
     """
-    with open("./model/show_more.json") as json_file:
+    with open("line/model/show_more.json") as json_file:
         card = json.load(json_file)
     card["body"]["contents"][2]["contents"][0]["action"][
         "data"
@@ -528,7 +533,7 @@ def vote_card(
     comments = keywords_template(keywords=keywords)
     operate_status, operate_color = operate_status_template(open_now=open_now)
 
-    with open("./model/vote_card.json") as json_file:
+    with open("line/model/vote_card.json") as json_file:
         card = json.load(json_file)
     card["header"]["contents"][0]["contents"][0]["url"] = photo_url
     card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
@@ -547,18 +552,17 @@ def vote_card(
     card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
     card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
     card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
-    card["body"]["contents"][3]["contents"] = (
-        [
-            {
-                "type": "text",
-                "text": "評論",
-                "size": "sm",
-                "color": "#999999",
-                "flex": 0,
-            }
-        ]
-        + comments,
-    )
+    detail = [
+        {
+            "type": "text",
+            "text": "評論",
+            "size": "sm",
+            "color": "#999999",
+            "flex": 0,
+        }
+    ]
+    detail.extend(comments)
+    card["body"]["contents"][3]["contents"] = detail
     card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
     card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
     card["footer"]["contents"][0]["contents"][0]["action"][
@@ -573,7 +577,7 @@ def error() -> FlexSendMessage:
     Returns:
         FlexSendMessage: 發生錯誤！
     """
-    with open("./model/error.json") as json_file:
+    with open("line/model/error.json") as json_file:
         contents = json.load(json_file)
     message = FlexSendMessage(alt_text="發生錯誤！", contents=contents)
     return message
