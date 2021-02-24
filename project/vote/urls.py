@@ -2,6 +2,7 @@ import json
 import random
 import string
 import sys
+from collections import Counter
 from datetime import datetime
 from typing import Optional
 
@@ -110,7 +111,7 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "create_time": now,
                 "participants": {},
             }
-            # config.db.vote.insert_one(data)
+            config.db.vote.insert_one(data)
             message = {
                 "status": "success",
                 "message": {
@@ -227,10 +228,26 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         pull_data["participants"][user_id]["time"] = dates
-        print("saved")
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存！"}
     else:
         message = {"status": "error", "error_message": "查無投票！"}
     message = {"status": "success"}
     return JSONResponse(content=message, headers=headers)
+
+
+def get_vote_result(pull_id: str):
+    vote_data = config.db.vote.find_one({"_id": pull_id})
+
+    restaurants = vote_data["restaurants"]
+    vote_restaurants = []
+    vote_time = []
+
+    for user, user_vote in vote_data["participants"].items():
+        vote_restaurants += user_vote["restaurants"]
+        vote_time += user_vote["time"]
+
+    result_restaurants = []
+    for restaurant_index, count in Counter(vote_restaurants).most_common(3):
+        result_restaurants.append(restaurants[restaurant_index])
+    # TODO: 時間
