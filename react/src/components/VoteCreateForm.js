@@ -84,6 +84,7 @@ function VoteCreateForm() {
 
         // Parsing local data
         const date1 = new Date(PreservedFormValues.dateRange.startDate);
+        const startDate = `${date1.getFullYear()}/${date1.getMonth() + 1}/${date1.getDate()}`
         const date2 = new Date(PreservedFormValues.dateRange.endDate);
         const diffInTime = date2.getTime() - date1.getTime();
         const diffInDays = (diffInTime / (1000 * 3600 * 24)) + 1;
@@ -94,7 +95,7 @@ function VoteCreateForm() {
             "user_id": user_id,
             'vote_name': values.voteName,
             'vote_end': PreservedFormValues.dueDate,
-            'start_date': PreservedFormValues.dateRange.startDate,
+            'start_date': startDate,
             'num_days': diffInDays,
             'min_time': values.earliestTime,
             'max_time': values.latestTime,
