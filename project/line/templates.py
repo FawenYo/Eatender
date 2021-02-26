@@ -47,7 +47,7 @@ def share_vote(pull_id: str) -> dict:
     """
     with open("line/model/share_vote.json") as json_file:
         contents = json.load(json_file)
-    contents["footer"]["contents"][0]["contents"]["action"][
+    contents["footer"]["contents"][0]["contents"][0]["action"][
         "uri"
     ] = f"https://liff.line.me/1655422218-8n1PlOw1?pull_id={pull_id}"
     return contents
