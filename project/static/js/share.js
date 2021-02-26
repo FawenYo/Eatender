@@ -4,22 +4,43 @@ $(document).ready(function () {
     $("#btnShare").click(function (event) {
         sendShare()
     })
-    const query_url = new URL(window.location.href)
-    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
-
-    pull_id = query_params.get("pull_id")
-
-    main()
+    initializeLiff("1655422218-O3KRZNpK");
 })
 
-async function main() {
-    await liff.init({ liffId: "1655422218-O3KRZNpK" })
-    if (liff.isLoggedIn()) {
-        document.getElementById("btnShare").style.display = "block"
+function initializeLiff(myLiffId) {
+    liff
+        .init({
+            liffId: myLiffId,
+        })
+        .then(() => {
+            initializeApp();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+function initializeApp() {
+    // check if the user is logged in/out, and disable inappropriate button
+    if (!liff.isLoggedIn()) {
+        liff.login();
     } else {
-        liff.login()
+        liff.getProfile()
+            .then(profile => {
+                const query_url = new URL(window.location.href)
+                if (query_url.searchParams.has("liff.state")) {
+                    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+                    pull_id = query_params.get("pull_id")
+                } else {
+                    pull_id = query_url.searchParams.get("pull_id")
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
+
 
 function sendShare() {
     $.ajax({
@@ -60,6 +81,7 @@ function sendShare() {
             }
         },
         error: function (e) {
+            alert("發生錯誤！")
             console.log(e)
         },
     })
