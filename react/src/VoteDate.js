@@ -18,17 +18,27 @@ $(document).ready(function () {
   fetchScheduleParams();
 })
 
+function getWidth() {
+  return Math.max(
+    document.body.scrollWidth,
+    document.documentElement.scrollWidth,
+    document.body.offsetWidth,
+    document.documentElement.offsetWidth,
+    document.documentElement.clientWidth
+  );
+}
+
 function fetchScheduleParams() {
-  $.ajax({
-    url: "/api/vote/get/date",
-    contentType: "application/json",
-    method: "GET",
-    data: {
-      pull_id: pull_id,
-      user_id: user_id
-    },
-    dataType: "json",
-    success: function (data) {
+  const requestOptions = {
+    method: 'GET',
+    header: { 'Content-Type': 'application/json' },
+    mode: 'cors'
+  };
+  const requestURL = `/api/vote/get/date?pull_id=${pull_id}&user_id=${user_id}`
+
+  fetch(requestURL, requestOptions)
+    .then(response => response.json())
+    .then((data) => {
       if (data.status == "success") {
         let fetchedData = data.data;
         lastSelect = fetchedData.last_select;
@@ -37,10 +47,8 @@ function fetchScheduleParams() {
           lastSelect[i] = new Date(lastSelect[i])
         }
 
-        console.log("lastSelect: ", lastSelect)
-
         header = fetchedData.vote_name;
-        subHeader = `投票截止日期：${fetchedData.vote_end}`;
+        subHeader = `投票截止日期：${fetchedData.vote_end}\n拖曳或點擊以選擇時間`;
 
         let dateString = fetchedData.start_date.split('/');
         startYear = dateString[0];
@@ -64,6 +72,7 @@ function fetchScheduleParams() {
               max_time={max_time}
               passScheduleOut={postSchedule}
               lastSelect={lastSelect}
+              hoveredColor="rgba(89, 154, 242, 1)"
             />
           </React.StrictMode>,
           document.getElementById('schedular')
@@ -77,11 +86,16 @@ function fetchScheduleParams() {
           confirmButtonText: "確認",
         })
       }
-    },
-    error: function () {
-      console.log("error")
-    },
-  })
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: "很抱歉！",
+        text: "發生錯誤，請重新再試！",
+        confirmButtonText: "確認",
+      })
+      console.log(error)
+    });
 }
 
 function postSchedule(schedule) {
@@ -92,15 +106,29 @@ function postSchedule(schedule) {
       user_id,
       dates: schedule
     }
-    $.ajax({
-      url: "/api/vote/save/date",
-      contentType: "application/json",
-      method: "POST",
-      dataType: "json",
-      data: JSON.stringify(sendData),
-      success: function (data) {
+    const requestOptions = {
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sendData),
+      mode: 'cors'
+    };
+    const requestURL = "/api/vote/save/date"
+
+    fetch(requestURL, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
         if (data.status == "success") {
-          console.log('uploaded data: ', sendData)
+          Lobibox.notify(
+            'success',
+            {
+              delay: 1000,
+              icon: true,
+              iconSource: "fontAwesome",
+              showAfterPrevious: true,
+              msg: "已成功儲存！",
+              width: getWidth()
+            }
+          );
         } else {
           Swal.fire({
             icon: "error",
@@ -109,11 +137,16 @@ function postSchedule(schedule) {
             confirmButtonText: "確認",
           })
         }
-      },
-      error: function () {
-        init()
-      },
-    })
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "很抱歉！",
+          text: "發生錯誤，請重新再試！",
+          confirmButtonText: "確認",
+        })
+        console.log(error)
+      });
   }
 }
 
