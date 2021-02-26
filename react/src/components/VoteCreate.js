@@ -61,9 +61,9 @@ const HeaderText = styled.h2`
 `;
 
 const SmallText = styled.h5`
-  color: #ff7400;
-  font-weight: 500;
-  font-size: 11px;
+  color: #c24510;
+  font-weight: 1000 !important;
+  font-size: 13px;
   z-index: 10;
   margin: 0;
   margin-top: 7px;
@@ -82,7 +82,7 @@ const BackDrop = styled(motion.div)`
   background: rgb(241, 196, 15);
   background: linear-gradient(
     58deg,
-    rgba(241, 196, 15, 1) 20%,
+    rgba(250, 215, 87, 1) 20%,
     rgba(243, 172, 18, 1) 100%
   );
 `;

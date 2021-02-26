@@ -9,14 +9,22 @@ function TimeRange(props) {
         formControl: {
             margin: theme.spacing(1),
             minWidth: 120,
-        },
+            maxWidth: 300,
+          },
+          chips: {
+            display: 'flex',
+            flexWrap: 'wrap',
+          },
+          chip: {
+            margin: 2,
+          },
     }))
     const useClasses = useStyle();
 
     return (
         <FormControl
-            className={useClasses.formControl}
-            variant="outlined"
+            style={{minWidth: 120}}
+            variant="standard"
             margin="normal"
             // required 
             {...(error && { error: true })}

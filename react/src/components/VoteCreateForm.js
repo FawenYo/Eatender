@@ -200,6 +200,23 @@ function VoteCreateForm() {
                     onChange={handleInputChange}
                     error={errors.voteName}
                 />
+                <h2>選擇投票聚餐日期</h2>
+                <Calendar
+                    value={dateRange}
+                    onChange={setDateRange}
+                    colorPrimary="#f1c40f"
+                    colorPrimaryLight="rgba(241, 196, 15, 0.2)"
+                    minimumDate={utils().getToday()}
+                    shouldHighlightWeekends
+                />
+                <DatePicker
+                    name="dueDate"
+                    value={dueDate}
+                    onChange={setDueDate}
+                    renderInput={renderCustomInput}
+                    minimumDate={utils().getToday()}
+                    shouldHighlightWeekends
+                />
                 <div>
                     <Controls.TimeRange
                         name="earliestTime"
@@ -216,23 +233,6 @@ function VoteCreateForm() {
                         error={errors.latestTime}
                     />
                 </div>
-                <DatePicker
-                    name="dueDate"
-                    value={dueDate}
-                    onChange={setDueDate}
-                    renderInput={renderCustomInput}
-                    minimumDate={utils().getToday()}
-                    shouldHighlightWeekends
-                />
-                <h2>投票聚餐日期</h2>
-                <Calendar
-                    value={dateRange}
-                    onChange={setDateRange}
-                    colorPrimary="#f1c40f"
-                    colorPrimaryLight="rgba(241, 196, 15, 0.2)"
-                    minimumDate={utils().getToday()}
-                    shouldHighlightWeekends
-                />
                 <div>
                     <Controls.Button
                         type="submit"
