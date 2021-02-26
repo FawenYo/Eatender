@@ -117,7 +117,7 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "message": {
                     "title": "投票已成功建立！",
                     "content": "前往分享頁面",
-                    "share_link": f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={data_id}",
+                    "share_link": f"{config.SITE_NAME}share?pull_id={data_id}",
                 },
             }
         else:
