@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import Schedular from './components/Schedular'
 import Swal from 'sweetalert2'
 
+let remain_notification = 0
 let pull_id, user_id;
 let lastSelect = [];
 let header = "React Schedule Selector";
@@ -118,17 +119,23 @@ function postSchedule(schedule) {
             .then(response => response.json())
             .then((data) => {
                 if (data.status == "success") {
-                    Lobibox.notify(
-                        'success',
-                        {
-                            delay: 1000,
-                            icon: true,
-                            iconSource: "fontAwesome",
-                            showAfterPrevious: true,
-                            msg: "已成功儲存！",
-                            width: getWidth()
-                        }
-                    );
+                    if (remain_notification < 2) {
+                        remain_notification += 1
+                        Lobibox.notify(
+                            'success',
+                            {
+                                delay: 1000,
+                                icon: true,
+                                iconSource: "fontAwesome",
+                                showAfterPrevious: true,
+                                msg: "已成功儲存！",
+                                width: getWidth()
+                            }
+                        )
+                        setTimeout(() => {
+                            remain_notification -= 1
+                        }, 1200);
+                    }
                 } else {
                     Swal.fire({
                         icon: "error",
