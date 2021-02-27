@@ -42,7 +42,6 @@ function Schedular({ header, subHeader, startYear, startMonth, startDate, num_da
           hourlyChunks={1}
           onChange={handleChange}
           timeFormat={"hh:mma"}
-          hoveredColor="rgb(89, 154, 242)"
         />
       </ScheduleWrapper>
     </Wrapper>
