@@ -12,28 +12,9 @@
    <meta name="HandheldFriendly" content="true">
    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
    <link rel="shortcut icon" href="images/logo.png">
-
-   <!-- <link href="css/fontawesome-all.min.css" rel="stylesheet" type="text/css"> -->
-   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
-   <link href="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/css/lobibox.min.css" rel="stylesheet" type="text/css">
-   <link href="css/restaurant.css" rel="stylesheet" type="text/css">
-   <style>
-      .hidden {
-         visibility: hidden;
-         opacity: 0;
-         z-index: -1
-      }
-
-      #schedular {
-         position: absolute;
-         top: 10px;
-         width: 100%;
-         margin: 0 auto;
-         transition: all .3s ease-in;
-      }
-   </style>
-   <link rel="stylesheet" type="text/css" href="css/cardinfo.css">
-   <script src="https://kit.fontawesome.com/ec301da75b.js" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/css/lobibox.min.css">
+   <link rel="stylesheet" href="css/restaurant.css">
+   <link rel="stylesheet" href="css/cardinfo.css">
    <!-- Global site tag (gtag.js) - Google Analytics -->
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
    <script>
@@ -46,7 +27,7 @@
 </head>
 
 <body>
-   <div class="tinder">
+   <div class="tinder hidden">
       <div class="tinder--status">
          <i class="fas fa-times"></i>
          <i class="fas fa-heart"></i>
@@ -63,14 +44,13 @@
          <button id="love"><i class="fa fa-heart"></i></button>
       </div>
    </div>
-   <div class="date-select-schedular hidden" id="schedular"></div>
+   <div class="date-select-schedular" id="schedular"></div>
 
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script src="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/js/lobibox.min.js"></script>
-
-
    <script type="text/javascript" src="js/restaurant.js"></script>
 </body>
 

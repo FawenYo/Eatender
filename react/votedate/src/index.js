@@ -49,7 +49,7 @@ function fetchScheduleParams() {
                 }
 
                 header = fetchedData.vote_name;
-                subHeader = `投票截止日期：${fetchedData.vote_end}\n拖曳或點擊以選擇時間`;
+                subHeader = `投票截止日期：${fetchedData.vote_end}`;
 
                 let dateString = fetchedData.start_date.split('/');
                 startYear = dateString[0];

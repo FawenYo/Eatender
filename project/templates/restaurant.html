@@ -12,28 +12,18 @@
    <meta name="HandheldFriendly" content="true">
    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
    <link rel="shortcut icon" href="./static/images/logo.png">
-   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
-   <link href="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/css/lobibox.min.css" rel="stylesheet" type="text/css">
-   <link href="./static/css/restaurant.css" rel="stylesheet">
-   <style>
-      .hidden {
-         visibility: hidden;
-         opacity: 0;
-         z-index: -1
-      }
-
-      #schedular {
-         position: absolute;
-         top: 10px;
-         width: 100%;
-         margin: 0 auto;
-         transition: all .3s ease-in;
-      }
-   </style>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/css/lobibox.min.css">
+   <link rel="stylesheet" href="./static/css/restaurant.css">
    <link rel="stylesheet" href="./static/css/cardinfo.css">
-   <script src="https://kit.fontawesome.com/ec301da75b.js" crossorigin="anonymous"></script>
+   <!-- Global site tag (gtag.js) - Google Analytics -->
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
-   <script>function gtag() { dataLayer.push(arguments) } window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "G-8XVRR4RQHN")</script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', 'G-8XVRR4RQHN');
+   </script>
 </head>
 
 <body>
@@ -53,16 +43,17 @@
    </div>
    <div class="date-select-schedular hidden" id="schedular"></div>
 
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+   <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
    <script src="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/js/lobibox.min.js"></script>
    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
    <script type="text/javascript" src="./static/js/restaurant.js"></script>
    <script>!function (e) { function t(t) { for (var n, l, a = t[0], f = t[1], i = t[2], c = 0, s = []; c < a.length; c++)l = a[c], Object.prototype.hasOwnProperty.call(o, l) && o[l] && s.push(o[l][0]), o[l] = 0; for (n in f) Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]); for (p && p(t); s.length;)s.shift()(); return u.push.apply(u, i || []), r() } function r() { for (var e, t = 0; t < u.length; t++) { for (var r = u[t], n = !0, a = 1; a < r.length; a++) { var f = r[a]; 0 !== o[f] && (n = !1) } n && (u.splice(t--, 1), e = l(l.s = r[0])) } return e } var n = {}, o = { 1: 0 }, u = []; function l(t) { if (n[t]) return n[t].exports; var r = n[t] = { i: t, l: !1, exports: {} }; return e[t].call(r.exports, r, r.exports, l), r.l = !0, r.exports } l.m = e, l.c = n, l.d = function (e, t, r) { l.o(e, t) || Object.defineProperty(e, t, { enumerable: !0, get: r }) }, l.r = function (e) { "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e, "__esModule", { value: !0 }) }, l.t = function (e, t) { if (1 & t && (e = l(e)), 8 & t) return e; if (4 & t && "object" == typeof e && e && e.__esModule) return e; var r = Object.create(null); if (l.r(r), Object.defineProperty(r, "default", { enumerable: !0, value: e }), 2 & t && "string" != typeof e) for (var n in e) l.d(r, n, function (t) { return e[t] }.bind(null, n)); return r }, l.n = function (e) { var t = e && e.__esModule ? function () { return e.default } : function () { return e }; return l.d(t, "a", t), t }, l.o = function (e, t) { return Object.prototype.hasOwnProperty.call(e, t) }, l.p = "/"; var a = this.webpackJsonpvotedate = this.webpackJsonpvotedate || [], f = a.push.bind(a); a.push = t, a = a.slice(); for (var i = 0; i < a.length; i++)t(a[i]); var p = f; r() }([])</script>
-   <script src="./static/react/VotePage/js/2.bae18455.chunk.js"></script>
-   <script src="./static/react/VotePage/js/main.df36371f.chunk.js"></script>
+   <script src="./static/react/VotePage/js/2.c315fe63.chunk.js"></script>
+   <script src="./static/react/VotePage/js/main.34f88329.chunk.js"></script>
 </body>
 
 </html>

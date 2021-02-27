@@ -73,7 +73,7 @@ function sendShare() {
                 }
             } else {
                 Swal.fire({
-                    type: "error",
+                    icon: "error",
                     title: "很抱歉！",
                     text: data,
                     confirmButtonText: "確認",
@@ -81,7 +81,12 @@ function sendShare() {
             }
         },
         error: function (e) {
-            alert("發生錯誤！")
+            Swal.fire({
+                icon: "error",
+                title: "很抱歉！",
+                text: "發生錯誤，請重新再試！",
+                confirmButtonText: "確認",
+            })
             console.log(e)
         },
     })

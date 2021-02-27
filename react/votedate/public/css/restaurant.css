@@ -16,6 +16,20 @@ body {
   font-family: sans-serif;
 }
 
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  z-index: -1
+}
+
+#schedular {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  margin: 0 auto;
+  transition: all .3s ease-in;
+}
+
 .tinder {
   width: 100vw;
   height: 100vh;

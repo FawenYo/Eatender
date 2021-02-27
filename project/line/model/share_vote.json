@@ -51,7 +51,7 @@
                         "contents": [
                             {
                                 "type": "text",
-                                "text": "Step1. 左滑右滑來挑選餐廳",
+                                "text": "Step 1. 左滑右滑來挑選餐廳",
                                 "color": "#666666",
                                 "size": "sm",
                                 "flex": 2
@@ -69,7 +69,7 @@
                         "contents": [
                             {
                                 "type": "text",
-                                "text": "Step2. 選擇聚餐時間",
+                                "text": "Step 2. 選擇聚餐時間",
                                 "flex": 2,
                                 "size": "sm",
                                 "color": "#666666",
@@ -89,7 +89,7 @@
                         "contents": [
                             {
                                 "type": "text",
-                                "text": "Step3. 投票完成，等待投票結果",
+                                "text": "Step 3. 投票完成，等待投票結果",
                                 "flex": 2,
                                 "size": "sm",
                                 "color": "#666666",

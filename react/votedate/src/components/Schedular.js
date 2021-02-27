@@ -5,16 +5,16 @@ import React, { useState } from 'react';
 const Wrapper = styled.div`
   text-align: center;
   margin: 0 auto;
-  width: 80%`;
+  width: 80%;`
 
 const ScheduleWrapper = styled.div`
   padding: 20px;
   border-radius: 20px;
   background: white;
-  box-shadow: 3px 5px 18px 0px rgba(191,191,191,0.76)`;
+  box-shadow: 3px 5px 18px 0px rgba(191,191,191,0.76);`
 
 const H1 = styled.h1`
-  font-size: 32pt`;
+  font-size: 32pt;`
 
 
 function Schedular({ header, subHeader, startYear, startMonth, startDate, num_days, min_time, max_time, passScheduleOut, lastSelect }) {
@@ -29,6 +29,7 @@ function Schedular({ header, subHeader, startYear, startMonth, startDate, num_da
       <header>
         <H1>{header}</H1>
         <p>{subHeader}</p>
+        <p>拖曳或點擊以選擇時間</p>
       </header>
       <br />
       <ScheduleWrapper>
