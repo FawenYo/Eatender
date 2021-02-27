@@ -9081,7 +9081,7 @@ react-refresh@^0.8.3:
 
 react-schedule-selector@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/react-schedule-selector/-/react-schedule-selector-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/react-schedule-selector/-/react-schedule-selector-3.0.0.tgz#1052a25257167585f744ce80b91caebf9d58e690"
   integrity sha512-Og8OjntX1euOFqmSB8od4f/sULc0HetDs8oTQYaYM0O21c2GjujA6FKTm4C53fKCpwqhE8pULifiXTMSHL+M7Q==
   dependencies:
     "@emotion/core" "^10.0.27"
