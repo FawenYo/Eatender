@@ -264,14 +264,14 @@ function getStyles(name, timeSession, theme) {
   };
 }
 
-    const HeaderText_timeSelect = styled.h2`
-        font-size: 24px;
-        font-weight: 600 !important;
-        line-height: 1;
-        color: #000;
-        z-index: 10;
-        margin: 10;
-    `;
+const HeaderText_timeSelect = styled.h2`
+    font-size: 24px;
+    font-weight: 600 !important;
+    line-height: 1;
+    color: #000;
+    z-index: 10;
+    margin: 10;
+`;
 
 function TimeSessionSelect() {
   const classes = useStyles_timeSession();
@@ -309,13 +309,19 @@ return (
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"
         multiple
+        variant="filled"
         value={timeSession}
         onChange={handleChange}
         input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => (
         <div className={classes.chips}>
             {selected.map((value) => (
-            <Chip key={value} label={value} className={classes.chip} />
+            <Chip 
+              key={value} 
+              label={value} 
+              className={classes.chip}
+              color="secondary"
+            />
             ))}
         </div>
         )}
