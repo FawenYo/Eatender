@@ -3,8 +3,6 @@ import { makeStyles, FormControl, InputLabel, Select, MenuItem, FormHelperText }
 
 function TimeRange(props) {
 
-    const { name, label, value, error = null, onChange } = props;
-
     const useStyle = makeStyles((theme) => ({
         formControl: {
             margin: theme.spacing(1),
@@ -21,6 +19,8 @@ function TimeRange(props) {
     }))
     const useClasses = useStyle();
 
+    const [timeSession, setTimeSession] = useState(null)
+
     return (
         <FormControl
             style={{minWidth: 120}}
@@ -32,10 +32,9 @@ function TimeRange(props) {
             <InputLabel>{label}</InputLabel>
             <Select
                 defaultValue=""
-                label={label}
-                name={name}
-                value={value}
-                onChange={onChange}
+                label="選擇聚餐時段"
+                value={timeSession}
+                onChange={setTimeSession}
                 autoWidth={true}
             >
                 <MenuItem value={0}>0 am</MenuItem>
