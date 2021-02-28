@@ -4,6 +4,7 @@ import string
 import sys
 from collections import Counter
 from datetime import datetime
+from dateutil import parser
 from typing import Optional
 
 import pytz
@@ -21,6 +22,17 @@ vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 headers = {"content-type": "application/json; charset=utf-8"}
+
+
+weekday_text = {
+    0: "（一）",
+    1: "（二）",
+    2: "（三）",
+    3: "（四）",
+    4: "（五）",
+    5: "（六）",
+    6: "（日）",
+}
 
 
 @vote.get("/share", response_class=HTMLResponse)
@@ -98,20 +110,27 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 # _id 尚未被使用
                 if not config.db.vote.find_one({"_id": data_id}):
                     break
+            dates = []
+            for each in param.date_range:
+                for session in param.time_session:
+                    date_string = f"{each['year']}/{each['month']}/{each['day']}"
+                    date = parser.parse(date_string)
+                    week_day = date.weekday()
+                    dates.append(f"{date_string} {weekday_text[week_day]} {session}")
             data = {
                 "_id": data_id,
                 "restaurants": restaurants,
                 "creator": param.user_id,
                 "vote_name": param.vote_name,
-                "vote_end": param.vote_end,
-                "start_date": param.start_date,
-                "num_days": param.num_days,
-                "min_time": param.min_time,
-                "max_time": param.max_time,
+                "due_date": param.due_date,
+                "dates": dates,
                 "create_time": now,
                 "participants": {},
             }
             config.db.vote.insert_one(data)
+
+            user_data["vote"] = []
+            config.db.user.update_one()({"user_id": param.user_id}, {"$set": user_data})
             message = {
                 "status": "success",
                 "message": {
@@ -181,33 +200,23 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
 
 
 @vote.get("/api/vote/get/date", response_class=JSONResponse)
-async def vote_date_get(pull_id: str, user_id: str) -> JSONResponse:
+async def vote_date_get(pull_id: str) -> JSONResponse:
     """投票 - 取得投票日期資訊
-
     Args:
         pull_id (str): 投票池ID
-
     Returns:
         JSONResponse: 投票日期資訊
     """
 
     vote_data = config.db.vote.find_one({"_id": pull_id})
+    result_data = {"vote_name": "", "dates": []}
     if vote_data:
-        del vote_data["_id"]
-        del vote_data["restaurants"]
-        del vote_data["creator"]
-        del vote_data["create_time"]
-        if user_id in vote_data["participants"]:
-            vote_data["last_select"] = vote_data["participants"][user_id][
-                "time"
-            ]  # 選擇時間紀錄
-        else:
-            vote_data["last_select"] = []
-        del vote_data["participants"]
+        result_data["vote_name"] = vote_data["vote_name"]
+        result_data["dates"] = vote_data["dates"]
 
-        message = {"status": "success", "data": vote_data}
+        message = {"status": "success", "data": result_data}
     else:
-        message = {"status": "failed", "error_message": "找不到投票內容！"}
+        message = {"status": "error", "error_message": "找不到投票內容！"}
     return JSONResponse(content=message, headers=headers)
 
 
@@ -223,16 +232,15 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
     """
     pull_id = param.pull_id
     user_id = param.user_id
-    dates = param.dates
+    available_date = param.available_date
 
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
-        pull_data["participants"][user_id]["time"] = dates
+        pull_data["participants"][user_id]["time"] = available_date
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
-        message = {"status": "success", "message": "已成功儲存！"}
+        message = {"status": "success", "message": "已成功儲存投票內容！"}
     else:
         message = {"status": "error", "error_message": "查無投票！"}
-    message = {"status": "success"}
     return JSONResponse(content=message, headers=headers)
 
 
