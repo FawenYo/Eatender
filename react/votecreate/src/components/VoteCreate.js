@@ -405,7 +405,7 @@ const {
         'date_range': PreservedFormValues.dateRange,
         'time_session': PreservedFormValues.timeSession,
     };
-    // console.log(postedData);
+    console.log(postedData);
 
     const requestOptions = {
         method: 'POST',
@@ -413,7 +413,8 @@ const {
         body: JSON.stringify(postedData),
         mode: 'cors'
     };
-    fetch('../api/vote/create/event', requestOptions)
+    try{
+      fetch('../api/vote/create/event', requestOptions)
         .then(response => response.json())
         .then((data) => {
             if (data && data.status === "success") {
@@ -434,6 +435,21 @@ const {
                 });
             }
         });
+      Swal.fire({
+        icon: "success",
+        title: "成功！",
+        text: "success",
+        confirmButtonText: "確認",
+      });
+    }
+    catch(e) {
+      Swal.fire({
+        icon: "error",
+        title: "很抱歉！",
+        text: "error",
+        confirmButtonText: "確認",
+      });
+    }
   }
   
   const handleNext = () => {
