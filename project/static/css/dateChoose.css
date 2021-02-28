@@ -1,0 +1,70 @@
+.vote-name {
+    text-align: center;
+    margin-top: 5%;
+}
+
+.date-table {
+    margin-top: 25px;
+}
+
+.date-info {
+    position: relative;
+    height: 70px;
+    background-color: white;
+    margin: 5px;
+    border-radius: 0.7rem;
+}
+
+.date-info>div {
+    display: table;
+    text-align: center;
+}
+
+.date-title {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    height: 50px;
+    width: calc(100% - 15px - 75px);
+    text-align: left !important;
+}
+
+.date-info>div>span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.date-choose {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    -ms-transform: translate(0%, -50%);
+    transform: translate(0%, -50%);
+}
+
+.ok-icon {
+    color: lightgray;
+    font-size: 28px;
+}
+
+.unsure-icon {
+    color: lightgray;
+    font-size: 28px;
+}
+
+.cancel-icon {
+    color: lightgray;
+    font-size: 28px;
+}
+
+.submit {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.submit-btn {
+    border-radius: 5rem;
+    background-color: deeppink !important;
+}

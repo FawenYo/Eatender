@@ -31,20 +31,21 @@ $(document).ready(function () {
 })
 
 function fetch_restaurant() {
-    $.ajax({
-        url: "/api/vote/get/restaurant",
-        contentType: "application/json",
-        method: "GET",
-        data: {
-            pull_id: pull_id
-        },
-        dataType: "json",
-        success: function (data) {
+    const requestOptions = {
+        method: 'GET',
+        header: { 'Content-Type': 'application/json' },
+        mode: 'same-origin'
+    };
+    const requestURL = `/api/vote/get/restaurant?pull_id=${pull_id}`
+
+    fetch(requestURL, requestOptions)
+        .then(response => response.json())
+        .then((data) => {
             if (data.status == "success") {
                 $("#cardWrapper").empty()
                 restaurants = data.restaurants
                 total_restaurant = restaurants.length
-                restaurants.forEach(i => render(i))
+                restaurants.forEach(i => renderCard(i))
                 load_done = true
                 main()
             } else {
@@ -55,33 +56,33 @@ function fetch_restaurant() {
                     confirmButtonText: "確認",
                 })
             }
-        },
-        error: function () {
+        })
+        .catch((error) => {
             Swal.fire({
                 icon: "error",
                 title: "很抱歉！",
                 text: "無法連接伺服器，請稍後再試！",
                 confirmButtonText: "確認",
             })
-        },
-    })
+            console.log(error)
+        });
 }
 
-function render(i) {
+function renderCard(restaurantInfo) {
     const data = `<div class='tinder--card'>
     <div class='main-window' id='main-window'>
   
-        <div class='restaurant-image' style="background-image: url('${i.photo_url}');">
-          <div class='restaurant-name'>${i.name}</div>
+        <div class='restaurant-image' style="background-image: url('${restaurantInfo.photo_url}');">
+          <div class='restaurant-name'>${restaurantInfo.name}</div>
         </div>
         <div class='restaurant-info'>
-          <div class='address'>地點：${i.address}</div>
+          <div class='address'>地點：${restaurantInfo.address}</div>
         </div>
   
         <div class='detail-info'>
-          <div class='detail-info-elm'>評價<br><span class='lg'>${i.rating}</span></div>
-          <div class='detail-info-elm'>價位<br><span class='lg'>\$${i.price}</span></div>
-          <div class='detail-info-elm'>關鍵字<br><span class='sm'>${i.keywords.join(", ")}</span></div>
+          <div class='detail-info-elm'>評價<br><span class='lg'>${restaurantInfo.rating}</span></div>
+          <div class='detail-info-elm'>價位<br><span class='lg'>\$${restaurantInfo.price}</span></div>
+          <div class='detail-info-elm'>關鍵字<br><span class='sm'>${restaurantInfo.keywords.join(", ")}</span></div>
         </div>
   
       </div>
@@ -216,32 +217,23 @@ function not_love_restaurant() {
 }
 
 function save_results() {
-    // 請求資料
     const sendData = {
-        pull_id: pull_id,
-        user_id: user_id,
-        choose_result: choose_result,
+        pull_id,
+        user_id,
+        choose_result,
     }
-
-    // 請求伺服器
-    $.ajax({
-        url: "/api/vote/save/restaurant",
-        contentType: "application/json",
-        method: "POST",
-        dataType: "json",
-        data: JSON.stringify(sendData),
-        success: function (data) {
+    const requestOptions = {
+        method: 'POST',
+        header: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sendData),
+        mode: 'same-origin'
+    };
+    const requestURL = "/api/vote/save/restaurant"
+    fetch(requestURL, requestOptions)
+        .then(response => response.json())
+        .then((data) => {
             if (data.status == "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "儲存成功！",
-                    text: "將在1秒後轉往日期投票...",
-                    timer: 1000,
-                })
-                setTimeout(() => {
-                    document.querySelector('#schedular').classList.remove('hidden')
-                    document.querySelector('.tinder').classList.add('hidden')
-                }, 1700)
+                fetchVoteDate();
             } else {
                 Swal.fire({
                     icon: "error",
@@ -250,14 +242,81 @@ function save_results() {
                     confirmButtonText: "確認",
                 })
             }
-        },
-        error: function () {
+        })
+        .catch((error) => {
             Swal.fire({
                 icon: "error",
                 title: "很抱歉！",
                 text: "無法連接伺服器，請稍後再試！",
                 confirmButtonText: "確認",
             })
-        },
-    })
+            console.log(error)
+        });
+}
+
+function fetchVoteDate() {
+    const requestOptions = {
+        method: 'GET',
+        header: { 'Content-Type': 'application/json' },
+        mode: 'same-origin'
+    };
+    const requestURL = `/api/vote/get/date?pull_id=${pull_id}`
+
+    fetch(requestURL, requestOptions)
+        .then(response => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "儲存成功！",
+                    text: "將在1秒後轉往日期投票...",
+                    timer: 1000,
+                });
+                setTimeout(() => {
+                    document.querySelector('#schedular').classList.remove('hidden')
+                    document.querySelector('.tinder').classList.add('hidden')
+                }, 1700)
+                document.getElementById("voteTitle").innerHTML = data.data.vote_name;
+                $("#dateTable").empty()
+                const voteTitle = `<h3>選擇時間</h3>`
+                $("#dateTable").append(data)
+                data.data.dates.forEach(i => renderDates(i))
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "很抱歉！",
+                    text: data.error_message,
+                    confirmButtonText: "確認",
+                })
+            }
+        })
+        .catch((error) => {
+            Swal.fire({
+                icon: "error",
+                title: "很抱歉！",
+                text: "無法連接伺服器，請稍後再試！",
+                confirmButtonText: "確認",
+            })
+            console.log(error)
+        });
+}
+
+function renderDates(dateTitle) {
+    const data = `<div class="date-info">
+    <div class="date-title">
+       <span>${dateTitle}</span>
+    </div>
+    <div class="date-choose">
+       <button class="btn ok-icon" onclick="okButton($(this))" id="ok_${dateTitle}">
+          <i class="fas fa-check-circle"></i>
+       </button>
+       <button class="btn unsure-icon" onclick="unsureButton($(this))" id="unsure_${dateTitle}">
+          <i class="fas fa-question-circle"></i>
+       </button>
+       <button class="btn cancel-icon" onclick="cancelButton($(this))" id="cancel_${dateTitle}">
+          <i class="fas fa-ban"></i>
+       </button>
+    </div>
+ </div>`
+    $("#dateTable").append(data)
 }
