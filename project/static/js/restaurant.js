@@ -273,6 +273,7 @@ function fetchVoteDate() {
                     timer: 1000,
                 });
                 setTimeout(() => {
+                    document.getElementsByTagName('body')[0].style = 'overflow: visible;';
                     document.querySelector('#schedular').classList.remove('hidden')
                     document.querySelector('.tinder').classList.add('hidden')
                 }, 1700)

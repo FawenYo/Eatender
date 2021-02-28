@@ -13,6 +13,7 @@
 body {
   background: #FFE57F;
   font-family: sans-serif;
+  overflow: hidden;
 }
 
 .hidden {
