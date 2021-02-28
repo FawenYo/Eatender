@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from "styled-components";
 import { Grid, TextField, makeStyles } from '@material-ui/core';
 import { useForm, Form } from "./useForm";
 
@@ -7,7 +8,7 @@ import Controls from "./controls/Controls";
 
 // To be improved
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker, { Calendar, utils } from 'react-modern-calendar-datepicker';
+import { Calendar, utils } from 'react-modern-calendar-datepicker';
 import { SentimentSatisfiedAlt } from '@material-ui/icons';
 import Swal from 'sweetalert2';
 
@@ -39,9 +40,10 @@ var PreservedFormValues = {
     }
 }
 
+
 /* END OF TODO PART */
 
-function VoteCreateForm() {
+function VoteName_DueDate() {
 
     /* Error report */
     const validate = (fieldValues = values) => {
@@ -131,35 +133,22 @@ function VoteCreateForm() {
             });
     }
 
-
+    const HeaderText = styled.h2`
+        font-size: 24px;
+        font-weight: 600 !important;
+        line-height: 1;
+        color: #000;
+        z-index: 10;
+        margin: 10;
+    `;
 
     /* Parts to improve */
 
-    const [dueDate, setDueDate] = useState(null);
-    // 投票截止日期的css和init
-    const renderCustomInput = ({ ref }) => (
-        <input
-            readOnly
-            ref={ref} // necessary
-            placeholder="設定投票截止日期"
-            value={dueDate ? `${dueDate.year}年` + `${dueDate.month}月` + `${dueDate.day}日` : ""}
-            style={{
-                textAlign: "center",
-                padding: "0.75rem 0.5rem",
-                fontSize: "1.25rem",
-                border: "1px solid #808080",
-                borderRadius: "50px",
-                // boxShadow: "0 0.25rem 0.25rem rgba(156, 136, 255, 0.2)",
-                color: "#f1c40f",
-                outline: "none",
-            }}
-        />
-    )
-
+    const [dueDate, setDueDate] = useState(utils().getToday());
 
     const syncDueDateToPreserved = () => {
         if (dueDate) {
-            PreservedFormValues.dueDate = `${dueDate.month}/${dueDate.day}/${dueDate.year}`;
+            PreservedFormValues.dueDate = `${dueDate.year}/${dueDate.month}/${dueDate.day}`;
         }
     }
     syncDueDateToPreserved();
@@ -194,6 +183,9 @@ function VoteCreateForm() {
     return (
         <Form onSubmit={handleSubmit}>
             <center>
+                <HeaderText>
+                    輸入聚餐名稱＆截止日期
+                </HeaderText>
                 <Controls.Input
                     name="voteName"
                     label="聚餐名稱"
@@ -201,61 +193,18 @@ function VoteCreateForm() {
                     onChange={handleInputChange}
                     error={errors.voteName}
                 />
-                <h2>選擇投票聚餐日期</h2>
                 <Calendar
-                    value={dateRange}
-                    onChange={setDateRange}
-                    colorPrimary="#f1c40f"
-                    colorPrimaryLight="rgba(241, 196, 15, 0.2)"
-                    minimumDate={utils().getToday()}
-                    shouldHighlightWeekends
-                />
-                <DatePicker
                     name="dueDate"
                     value={dueDate}
                     onChange={setDueDate}
-                    renderInput={renderCustomInput}
-                    minimumDate={utils().getToday()}
                     shouldHighlightWeekends
+                    minimumDate={utils().getToday()}
                 />
-                <div>
-                    <Controls.TimeRange
-                        name="earliestTime"
-                        label="聚餐最早開始時間"
-                        value={values.earliestTime}
-                        onChange={handleInputChange}
-                        error={errors.earliestTime}
-                    />
-                    <Controls.TimeRange
-                        name="latestTime"
-                        label="聚餐最晚結束時間"
-                        value={values.latestTime}
-                        onChange={handleInputChange}
-                        error={errors.latestTime}
-                    />
-                </div>
-                <div>
-                    <Controls.Button
-                        type="submit"
-                        text="建立投票"
-                        disabled={checkValidation()}
-                    />
-                    {/* <Controls.Button 
-                        text="重置投票"
-                        color="default"
-                        onClick={resetForm}
-                    /> */}
-                </div>
+                <input style={{display: "none"}} id="voteName" value={values.voteName} />
+                <input style={{display: "none"}} id="dueDate" value={PreservedFormValues.dueDate} />
             </center>
-
-            {/* <li>Returned Id: {postId}</li>
-            <li>聚餐名稱: {values.voteName}</li>
-            <li>最早時間: {values.earliestTime}</li>
-            <li>最晚時間: {values.latestTime}</li>
-            <li>截止日期: {PreservedFormValues.dueDate}</li>
-            <li>投票日期: {PreservedFormValues.dateRange.startDate}~{PreservedFormValues.dateRange.endDate}</li> */}
         </Form>
     )
 }
 
-export default VoteCreateForm
+export default VoteName_DueDate
