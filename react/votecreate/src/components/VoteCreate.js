@@ -337,18 +337,15 @@ const steps = [`聚餐名稱＆截止日期`, `聚餐日期選擇`, '聚餐時�
 function getStepContent(step) {
   switch (step) {
     case 0:
-      console.log(PreservedFormValues);
       return <VoteName_DueDate />;
     case 1:
       try {
         PreservedFormValues.voteName = document.getElementById("voteName").value;
         PreservedFormValues.dueDate = document.getElementById("dueDate").value;
-        console.log(PreservedFormValues);
       }
       catch (e) {}
       return <MultiDateSelect />;
     case 2:
-      console.log(PreservedFormValues);
       return <TimeSessionSelect />;
     default:
       throw new Error('Unknown step');
@@ -402,6 +399,7 @@ const {
         'date_range': PreservedFormValues.dateRange,
         'time_session': PreservedFormValues.timeSession,
     };
+    // console.log(postedData);
 
     const requestOptions = {
         method: 'POST',
@@ -469,7 +467,7 @@ const {
             {activeStep === steps.length ? (
               <center>
                 <HeaderText_timeSelect>
-                  恭喜您完成聚餐投票的建立
+                  已建立聚餐投票
                 </HeaderText_timeSelect>
                 <HeaderText_timeSelect>
                   預祝 聚餐愉快(*´∀`)~♥
