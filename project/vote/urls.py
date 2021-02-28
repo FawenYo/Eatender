@@ -237,7 +237,7 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         pull_data["participants"][user_id]["time"] = available_date
-        # config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
+        config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存投票內容！"}
     else:
         message = {"status": "error", "error_message": "查無投票！"}
