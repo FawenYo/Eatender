@@ -199,11 +199,6 @@ def search_info(query: str, page_token: str = ""):
         message = templates.search_result(
             restaurants=restaurants.restaurants[:5],
         )
-    # 記錄使用者位置
-    """thread = threading.Thread(
-        target=database.record_user_search, args=(user_id, latitude, longitude, keyword)
-    )
-    thread.start()"""
     return message
 
 

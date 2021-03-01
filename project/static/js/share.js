@@ -1,9 +1,20 @@
 let pull_id
 
 $(document).ready(function () {
-    $("#btnShare").click(function (event) {
-        sendShare()
-    })
+    const query_url = new URL(window.location.href)
+    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+
+    if (query_params.get("pull_id") != null) {
+        pull_id = query_params.get("pull_id")
+        localStorage["pull_id"] = pull_id
+    } else {
+        if (query_url.searchParams.get("pull_id") != null) {
+            pull_id = query_url.searchParams.get("pull_id")
+            localStorage["pull_id"] = pull_id
+        } else {
+            pull_id = localStorage["pull_id"]
+        }
+    }
     initializeLiff("1655422218-O3KRZNpK");
 })
 
@@ -27,13 +38,7 @@ function initializeApp() {
     } else {
         liff.getProfile()
             .then(profile => {
-                const query_url = new URL(window.location.href)
-                if (query_url.searchParams.has("liff.state")) {
-                    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
-                    pull_id = query_params.get("pull_id")
-                } else {
-                    pull_id = query_url.searchParams.get("pull_id")
-                }
+                console.log("LINE logged in!")
             })
             .catch(err => {
                 console.log(err);
@@ -43,12 +48,16 @@ function initializeApp() {
 
 
 function sendShare() {
-    $.ajax({
-        url: `./api/liffshare?pull_id=${pull_id}`,
-        contentType: "application/json",
-        method: "get",
-        dataType: "json",
-        success: function (data) {
+    const requestOptions = {
+        method: 'GET',
+        header: { 'Content-Type': 'application/json' },
+        mode: 'same-origin'
+    };
+    const requestURL = `./api/liffshare?pull_id=${pull_id}`
+
+    fetch(requestURL, requestOptions)
+        .then(response => response.json())
+        .then((data) => {
             if (data.status == "success") {
                 const result = liff.shareTargetPicker([
                     {
@@ -79,15 +88,14 @@ function sendShare() {
                     confirmButtonText: "確認",
                 })
             }
-        },
-        error: function (e) {
+        })
+        .catch((error) => {
             Swal.fire({
                 icon: "error",
                 title: "很抱歉！",
                 text: "發生錯誤，請重新再試！",
                 confirmButtonText: "確認",
             })
-            console.log(e)
-        },
-    })
+            console.log(error)
+        });
 }

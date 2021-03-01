@@ -38,8 +38,7 @@ weekday_text = {
 @vote.get("/share", response_class=HTMLResponse)
 async def share(
     request: Request,
-    liff_state: Optional[str] = Query(None, alias="liff.state"),
-    pull_id: Optional[str] = "",
+    pull_id: str,
 ) -> HTMLResponse:
     """分享投票資訊頁面
 

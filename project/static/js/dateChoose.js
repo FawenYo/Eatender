@@ -75,5 +75,4 @@ function submitButton() {
             })
             console.log(error)
         });
-    var value = document.getElementById("name").attr("value")
 }
