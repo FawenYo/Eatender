@@ -9,8 +9,13 @@ import Controls from "./controls/Controls";
 // To be improved
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar, utils } from 'react-modern-calendar-datepicker';
-import { SentimentSatisfiedAlt } from '@material-ui/icons';
 import Swal from 'sweetalert2';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+} from '@material-ui/pickers';
 
 let user_id;
 
@@ -34,6 +39,7 @@ const initialFormValues = {
 /* Parts to improve */
 var PreservedFormValues = {
     dueDate: '',
+    dueTime: '',
     dateRange: {
         startDate: '',
         endDate: '',
@@ -153,30 +159,16 @@ function VoteName_DueDate() {
     }
     syncDueDateToPreserved();
 
-    const defaultDateRange = {
-        from: utils().getToday(),
-        to: null,
-    };
-    const [dateRange, setDateRange] = useState(defaultDateRange)
-    const syncDateRangeToPreserved = () => {
-        if (dateRange.from !== null && dateRange.to !== null) {
-            PreservedFormValues.dateRange.startDate = `${dateRange.from.month}/${dateRange.from.day}/${dateRange.from.year}`;
-            PreservedFormValues.dateRange.endDate = `${dateRange.to.month}/${dateRange.to.day}/${dateRange.to.year}`;
+    const [selectedTime, setSelectedTime] = useState(null);
+
+    const parseTimeTo24h = () => {
+        if (selectedTime) {
+            const temp = String(selectedTime)
+            const re = /\d\d:\d\d/g;
+            PreservedFormValues.dueTime = temp.match(re);
         }
     }
-    syncDateRangeToPreserved();
-
-    const checkValidation = () => {
-        if (
-            values.voteName.length != 0 &&
-            Number.isInteger(values.earliestTime) &&
-            Number.isInteger(values.latestTime) &&
-            PreservedFormValues.dueDate.length != 0 &&
-            PreservedFormValues.dateRange.startDate.length != 0 &&
-            PreservedFormValues.dateRange.endDate.length != 0
-        ) { return false; }
-        return true;
-    }
+    parseTimeTo24h();
 
     /* END OF TODO PART */
 
@@ -184,7 +176,7 @@ function VoteName_DueDate() {
         <Form onSubmit={handleSubmit}>
             <center>
                 <HeaderText>
-                    輸入聚餐名稱＆截止日期
+                    輸入聚餐名稱
                 </HeaderText>
                 <Controls.Input
                     name="voteName"
@@ -193,6 +185,9 @@ function VoteName_DueDate() {
                     onChange={handleInputChange}
                     error={errors.voteName}
                 />
+                <HeaderText>
+                    投票截止日期＆時間
+                </HeaderText>
                 <Calendar
                     name="dueDate"
                     value={dueDate}
@@ -200,8 +195,21 @@ function VoteName_DueDate() {
                     shouldHighlightWeekends
                     minimumDate={utils().getToday()}
                 />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardTimePicker
+                        margin="normal"
+                        id="time-picker"
+                        label="投票截止時間"
+                        value={selectedTime}
+                        onChange={setSelectedTime}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                        }}
+                    />
+                </MuiPickersUtilsProvider>
                 <input style={{display: "none"}} id="voteName" value={values.voteName} />
                 <input style={{display: "none"}} id="dueDate" value={PreservedFormValues.dueDate} />
+                <input style={{display: "none"}} id="dueTime" value={PreservedFormValues.dueTime} />
             </center>
         </Form>
     )

@@ -347,7 +347,8 @@ function getStepContent(step) {
     case 1:
       try {
         PreservedFormValues.voteName = document.getElementById("voteName").value;
-        PreservedFormValues.dueDate = document.getElementById("dueDate").value;
+        PreservedFormValues.dueDate = `${document.getElementById("dueDate").value} ${document.getElementById("dueTime").value}:00`;
+        // console.log(PreservedFormValues)
       }
       catch (e) { }
       return <MultiDateSelect />;
