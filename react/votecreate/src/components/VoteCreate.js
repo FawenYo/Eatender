@@ -152,19 +152,19 @@ let user_id;
 
 $(document).ready(function () {
 
-    const query_url = new URL(window.location.href)
-    if (query_url.searchParams.has("liff.state")) {
-        const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
-        user_id = query_params.get("user_id")
-    } else {
-        user_id = query_url.searchParams.get("user_id")
-    }
+  const query_url = new URL(window.location.href)
+  if (query_url.searchParams.has("liff.state")) {
+    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+    user_id = query_params.get("user_id")
+  } else {
+    user_id = query_url.searchParams.get("user_id")
+  }
 })
 
 const initialFormValues = {
-    voteName: '',
-    earliestTime: '',
-    latestTime: '',
+  voteName: '',
+  earliestTime: '',
+  latestTime: '',
 }
 
 /* Parts to improve */
@@ -178,9 +178,9 @@ var PreservedFormValues = {
 var today = new Date();
 
 /* DateSelect */
-function MultiDateSelect(){
+function MultiDateSelect() {
   const [dateRange, setDateRange] = useState([]);
-  
+
   const HeaderText = styled.h2`
     font-size: 24px;
     font-weight: 600 !important;
@@ -197,20 +197,20 @@ function MultiDateSelect(){
 
   return (
     <>
-    <Form>
+      <Form>
         <center>
-            <HeaderText>
-                選擇聚餐日期
+          <HeaderText>
+            選擇聚餐日期
             </HeaderText>
-            <Calendar
-                name="dateRange"
-                value={dateRange}
-                onChange={setDateRange}
-                shouldHighlightWeekends
-                minimumDate={utils().getToday()}
-            />
+          <Calendar
+            name="dateRange"
+            value={dateRange}
+            onChange={setDateRange}
+            shouldHighlightWeekends
+            minimumDate={utils().getToday()}
+          />
         </center>
-    </Form>
+      </Form>
     </>
   )
 }
@@ -298,42 +298,42 @@ function TimeSessionSelect() {
   }
   updateToPreserved();
 
-return (
+  return (
     <>
-    <center>
+      <center>
         <HeaderText_timeSelect>選擇聚餐時段</HeaderText_timeSelect>
-    </center>
-    <FormControl className={classes.formControl}>
-    <InputLabel id="demo-mutiple-chip-label">選擇聚餐時段</InputLabel>
-    <Select
-        labelId="demo-mutiple-chip-label"
-        id="demo-mutiple-chip"
-        multiple
-        variant="filled"
-        value={timeSession}
-        onChange={handleChange}
-        input={<Input id="select-multiple-chip" />}
-        renderValue={(selected) => (
-        <div className={classes.chips}>
-            {selected.map((value) => (
-            <Chip 
-              key={value} 
-              label={value} 
-              className={classes.chip}
-              color="secondary"
-            />
-            ))}
-        </div>
-        )}
-        MenuProps={MenuProps}
-    >
-        {names.map((name) => (
-        <MenuItem key={name} value={name} style={getStyles(name, timeSession, theme)}>
-            {name}
-        </MenuItem>
-        ))}
-    </Select>
-    </FormControl>
+      </center>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-mutiple-chip-label">選擇聚餐時段</InputLabel>
+        <Select
+          labelId="demo-mutiple-chip-label"
+          id="demo-mutiple-chip"
+          multiple
+          variant="filled"
+          value={timeSession}
+          onChange={handleChange}
+          input={<Input id="select-multiple-chip" />}
+          renderValue={(selected) => (
+            <div className={classes.chips}>
+              {selected.map((value) => (
+                <Chip
+                  key={value}
+                  label={value}
+                  className={classes.chip}
+                  color="secondary"
+                />
+              ))}
+            </div>
+          )}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem key={name} value={name} style={getStyles(name, timeSession, theme)}>
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </>
   );
 }
@@ -349,7 +349,7 @@ function getStepContent(step) {
         PreservedFormValues.voteName = document.getElementById("voteName").value;
         PreservedFormValues.dueDate = document.getElementById("dueDate").value;
       }
-      catch (e) {}
+      catch (e) { }
       return <MultiDateSelect />;
     case 2:
       return <TimeSessionSelect />;
@@ -364,34 +364,34 @@ export default function VoteCreate() {
   const validate = (fieldValues = values) => {
     let temp = { ...errors }
     if ('voteName' in fieldValues) {
-        temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
+      temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
     }
     if ('earliestTime' in fieldValues) {
-        temp.earliestTime = fieldValues.earliestTime.length != 0 ? "" : "請選擇聚餐最早開始時間";
+      temp.earliestTime = fieldValues.earliestTime.length != 0 ? "" : "請選擇聚餐最早開始時間";
     }
     if ('latestTime' in fieldValues) {
-        temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
+      temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
     }
     if (Number.isInteger(fieldValues.earliestTime) &&
-        Number.isInteger(fieldValues.latestTime)) {
-        temp.latestTime = fieldValues.earliestTime >= fieldValues.latestTime ? "最晚時間需要比最早時間晚" : "";
+      Number.isInteger(fieldValues.latestTime)) {
+      temp.latestTime = fieldValues.earliestTime >= fieldValues.latestTime ? "最晚時間需要比最早時間晚" : "";
     }
     setErrors({
-        ...temp
+      ...temp
     })
     if (fieldValues == values)
       return Object.values(temp).every(x => x == "")
   }
 
-const {
-  values,
-  setValues,
-  errors,
-  setErrors,
-  handleInputChange,
-  resetForm,
-} = useForm(initialFormValues, true)
-/* Submit Part */
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange,
+    resetForm,
+  } = useForm(initialFormValues, true)
+  /* Submit Part */
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -399,54 +399,70 @@ const {
   /* SUBMIT */
   const handleSubmit = e => {
     const postedData = {
-        "user_id": user_id,
-        'vote_name': PreservedFormValues.voteName,
-        'due_date': PreservedFormValues.dueDate,
-        'date_range': PreservedFormValues.dateRange,
-        'time_session': PreservedFormValues.timeSession,
+      "user_id": user_id,
+      'vote_name': PreservedFormValues.voteName,
+      'due_date': PreservedFormValues.dueDate,
+      'date_range': PreservedFormValues.dateRange,
+      'time_session': PreservedFormValues.timeSession,
     };
-    // console.log(postedData);
+    console.log(postedData);
 
     const requestOptions = {
-        method: 'POST',
-        header: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postedData),
-        mode: 'cors'
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(postedData),
+      mode: 'cors'
     };
-    fetch('../api/vote/create/event', requestOptions)
+    try {
+      fetch('../api/vote/create/event', requestOptions)
         .then(response => response.json())
         .then((data) => {
-            if (data && data.status === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: data.message.title,
-                    text: data.message.content,
-                    confirmButtonText: "確認",
-                }).then((result) => {
-                    window.location.replace(data.message.share_link);
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "很抱歉！",
-                    text: data.error_message,
-                    confirmButtonText: "確認",
-                });
-            }
+          if (data && data.status === "success") {
+            Swal.fire({
+              icon: "success",
+              title: data.message.title,
+              text: data.message.content,
+              confirmButtonText: "確認",
+            }).then((result) => {
+              window.location.replace(data.message.share_link);
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "很抱歉！",
+              text: data.error_message,
+              confirmButtonText: "確認",
+            });
+          }
         });
+      Swal.fire({
+        icon: "success",
+        title: "成功！",
+        text: "success",
+        confirmButtonText: "確認",
+      });
+    }
+    catch (e) {
+      Swal.fire({
+        icon: "error",
+        title: "很抱歉！",
+        text: "error",
+        confirmButtonText: "確認",
+      });
+    }
   }
-  
+
   const handleNext = () => {
     setActiveStep(activeStep + 1);
     if (activeStep === steps.length - 1) {
       handleSubmit();
     }
   };
-  
+
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  
+
   return (
     <AppContainer>
       <BoxContainer>
@@ -470,16 +486,16 @@ const {
           </Stepper>
         </AppBarContainer>
         <React.Fragment>
-            {activeStep === steps.length ? (
-              <center>
-                <HeaderText_timeSelect>
-                  已建立聚餐投票
+          {activeStep === steps.length ? (
+            <center>
+              <HeaderText_timeSelect>
+                已建立聚餐投票
                 </HeaderText_timeSelect>
-                <HeaderText_timeSelect>
-                  預祝 聚餐愉快(*´∀`)~♥
+              <HeaderText_timeSelect>
+                預祝 聚餐愉快(*´∀`)~♥
                 </HeaderText_timeSelect>
-              </center>
-            ) : (
+            </center>
+          ) : (
               <React.Fragment>
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
@@ -499,7 +515,7 @@ const {
                 </div>
               </React.Fragment>
             )}
-          </React.Fragment>
+        </React.Fragment>
       </BoxContainer>
     </AppContainer>
   )

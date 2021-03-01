@@ -3,7 +3,12 @@ $(document).ready(function () {
   const query_url = new URL(window.location.href)
   const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
 
-  pull_id = query_params.get("pull_id")
+  if (query_params.get("pull_id") != null) {
+    pull_id = query_params.get("pull_id")
+    localStorage["pull_id"] = pull_id
+  } else {
+    pull_id = localStorage["pull_id"]
+  }
   initializeLiff("1655422218-8n1PlOw1");
 });
 
@@ -21,7 +26,6 @@ function initializeLiff(myLiffId) {
 }
 
 function initializeApp() {
-  // check if the user is logged in/out, and disable inappropriate button
   if (!liff.isLoggedIn()) {
     liff.login();
   } else {
@@ -37,6 +41,6 @@ function initializeApp() {
   }
 }
 
-function userStatus(userId) {
-  location.replace(`../vote?id=${pull_id}&name=${userId}`);
+function userStatus(userID) {
+  location.replace(`../vote?id=${pull_id}&name=${userID}`);
 }
