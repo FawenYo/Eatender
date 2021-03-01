@@ -14,24 +14,24 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 # Load cron jobs from database
 @cron.get("/init")
 async def init_cron():
-    all_votes = config.db.vote_pull.find({})
+    all_votes = config.db.vote.find({})
     for each_vote in all_votes:
         vote_cronjob(
             event_id=each_vote["_id"],
             creator=each_vote["creator"],
-            vote_end=each_vote["vote_end"],
+            due_date=each_vote["due_date"],
         )
     return "Init done"
 
 
 # Set up vote cron jobs
-def vote_cronjob(event_id: str, creator: str, vote_end: datetime):
+def vote_cronjob(event_id: str, creator: str, due_date: str):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         show_result,
         "date",
         args=[event_id, creator],
-        run_date=vote_end,
+        run_date=f"{due_date} 18:00:00",
         timezone=pytz.timezone("Asia/Taipei"),
     )
     scheduler.start()

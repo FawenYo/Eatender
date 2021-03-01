@@ -124,8 +124,13 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "due_date": param.due_date,
                 "dates": dates,
                 "create_time": now,
-                "participants": {},
+                "result": {"user": {}, "restaurants": {}, "dates": {}},
             }
+            for each_restaurant in restaurants:
+                data["result"]["restaurants"][each_restaurant] = 0
+            for each_date in dates:
+                data["result"]["dates"][each_date] = 0
+
             if param.user_id != "example":
                 config.db.vote.insert_one(data)
 
@@ -194,13 +199,18 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         # 曾經投票過
-        if user_id in pull_data["participants"]:
-            pull_data["participants"][user_id]["restaurants"] = choose_result["love"]
+        if user_id in pull_data["result"]["user"]:
+            pull_data["result"]["user"][user_id]["restaurants"] = choose_result["love"]
         else:
-            pull_data["participants"][user_id] = {
+            pull_data["result"]["user"][user_id] = {
                 "restaurants": choose_result["love"],
-                "time": [],
+                "dates": [],
             }
+
+        for restaurant_id in choose_result["love"]:
+            restaurant_place_id = pull_data["restaurants"][restaurant_id]
+            pull_data["result"]["restaurants"][restaurant_place_id] += 1
+
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存！"}
     else:
@@ -245,7 +255,10 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
 
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
-        pull_data["participants"][user_id]["time"] = available_date
+        pull_data["result"]["user"][user_id]["dates"] = available_date
+
+        for each in available_date:
+            pull_data["result"]["dates"][each] += 1
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存投票內容！"}
     else:
@@ -260,9 +273,9 @@ def get_vote_result(pull_id: str):
     vote_restaurants = []
     vote_time = []
 
-    for user, user_vote in vote_data["participants"].items():
+    for user, user_vote in vote_data["result"]["user"].items():
         vote_restaurants += user_vote["restaurants"]
-        vote_time += user_vote["time"]
+        vote_time += user_vote["dates"]
 
     result_restaurants = []
     for restaurant_index, count in Counter(vote_restaurants).most_common(3):
