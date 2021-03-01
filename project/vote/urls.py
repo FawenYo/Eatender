@@ -4,11 +4,11 @@ import string
 import sys
 from collections import Counter
 from datetime import datetime
-from dateutil import parser
 from typing import Optional
 
 import pytz
 from bson import json_util
+from dateutil import parser
 from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -127,10 +127,13 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "create_time": now,
                 "participants": {},
             }
-            config.db.vote.insert_one(data)
+            if param.user_id != "example":
+                config.db.vote.insert_one(data)
 
-            user_data["vote"] = []
-            config.db.user.update_one()({"user_id": param.user_id}, {"$set": user_data})
+                user_data["vote"] = []
+                config.db.user.update_one()(
+                    {"user_id": param.user_id}, {"$set": user_data}
+                )
             message = {
                 "status": "success",
                 "message": {
@@ -159,9 +162,16 @@ async def get_pull_data(pull_id: str) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         restaurants = []
-        for each in pull_data["restaurants"]:
-            data = json.loads(config.cache.get(each))
-            restaurants.append(data)
+        if pull_id != "example":
+            for each in pull_data["restaurants"]:
+                data = json.loads(config.cache.get(each))
+                restaurants.append(data)
+        else:
+            random_restaurants = config.db.restaurant.aggregate(
+                [{"$sample": {"size": 5}}]
+            )
+            for each in random_restaurants:
+                restaurants.append(each)
         message = {"status": "success", "restaurants": restaurants}
     else:
         message = {"status": "error", "error_message": "Vote pull not found."}

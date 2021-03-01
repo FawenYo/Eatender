@@ -1,7 +1,5 @@
-import re
 import sys
 import threading
-from datetime import datetime
 
 import sentry_sdk
 from linebot import LineBotApi
@@ -55,7 +53,6 @@ def handle_message(event):
 
             # 文字訊息
             else:
-                print("hi")
                 # 教學
                 if user_message == "教學":
                     message = templates.tutorial()
@@ -88,6 +85,24 @@ def handle_message(event):
                             message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
                     else:
                         message = templates.not_bound(user_id=user_id)
+
+                # 測試創建投票
+                elif user_message == "測試創建投票":
+                    random_restaurants = config.db.restaurant.aggregate(
+                        [{"$sample": {"size": 5}}]
+                    )
+                    restaurants = []
+                    for each in random_restaurants:
+                        restaurants.append(each["place_id"])
+                    message = [
+                        templates.show_vote_pull(restaurants=restaurants),
+                        templates.create_vote(user_id="example"),
+                    ]
+
+                ## 測試投票
+                elif user_message == "測試投票":
+                    contents = templates.share_vote(pull_id="example")
+                    message = FlexSendMessage(alt_text="使用教學", contents=contents)
 
                 # 客服
                 elif user_message == "客服":

@@ -8,8 +8,9 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 
-from . import message_event, postback_event, user_event
+from . import message_event, postback_event
 from . import templates as flex_templates
+from . import user_event
 
 sys.path.append(".")
 
