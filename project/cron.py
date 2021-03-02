@@ -31,7 +31,7 @@ def vote_cronjob(event_id: str, creator: str, due_date: str):
         show_result,
         "date",
         args=[event_id, creator],
-        run_date=f"{due_date} 18:00:00",
+        run_date=f"{due_date}",
         timezone=pytz.timezone("Asia/Taipei"),
     )
     scheduler.start()
@@ -40,11 +40,7 @@ def vote_cronjob(event_id: str, creator: str, due_date: str):
 
 # Push vote result via LINE Noitfy
 def show_result(event_id: str, creator: str):
-    user_data = config.db.user.find_one({"user_id": creator})
-    access_token = user_data["notify"]["token"]
     # TODO: 投票結果
     message = "TODO"
-    response = config.lotify_client.send_message(
-        access_token=access_token, message=message
-    )
-    return response
+    line_bot_api.push_message(creator, message)
+    return "ok"
