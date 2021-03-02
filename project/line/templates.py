@@ -291,6 +291,23 @@ def create_vote(user_id: str) -> FlexSendMessage:
     return message
 
 
+def vote_result(pull_id: str) -> FlexSendMessage:
+    vote_data = config.db.vote.find_one({"_id": pull_id})
+    with open("line/model/vote_result.json") as json_file:
+        contents = json.load(json_file)
+    contents["body"]["contents"][1]["text"] = vote_data["vote_name"]
+    vote_users_length = len(list(vote_data["result"]["user"].keys()))
+    contents["body"]["contents"][2]["text"] = f"共{vote_users_length}人參與投票"
+    contents["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = f"{0}票"
+    contents["body"]["contents"][6]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-KOeZvV1e?pull_id={pull_id}"
+    # TODO: contents["body"]["contents"][4]["contents"][1] 是 餐廳列表
+    # TODO: contents["body"]["contents"][4]["contents"][4] 是 時間列表
+    message = FlexSendMessage(alt_text="投票創建確認", contents=contents)
+    return message
+
+
 # 店家營業狀態
 def find_operating_status(data):
     now = datetime.now()

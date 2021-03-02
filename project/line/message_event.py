@@ -71,20 +71,17 @@ def handle_message(event):
                 # 投票池
                 elif user_message == "投票":
                     user_data = config.db.user.find_one({"user_id": user_id})
-                    # 已綁定 LINE Notify
-                    if user_data["notify"]["status"]:
-                        # 投票池內存在餐廳
-                        if len(user_data["vote"]) > 0:
-                            message = [
-                                templates.show_vote_pull(
-                                    restaurants=user_data["vote"][:10]
-                                ),
-                                templates.create_vote(user_id=user_id),
-                            ]
-                        else:
-                            message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
+                    # 此處移除 LINE Notify 綁定限制
+                    # 投票池內存在餐廳
+                    if len(user_data["vote"]) > 0:
+                        message = [
+                            templates.show_vote_pull(
+                                restaurants=user_data["vote"][:10]
+                            ),
+                            templates.create_vote(user_id=user_id),
+                        ]
                     else:
-                        message = templates.not_bound(user_id=user_id)
+                        message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
 
                 # 測試創建投票
                 elif user_message == "測試創建投票":
@@ -104,6 +101,9 @@ def handle_message(event):
                     contents = templates.share_vote(pull_id="example")
                     message = FlexSendMessage(alt_text="使用教學", contents=contents)
 
+                elif user_message == "測試結果":
+                    contents = templates.share_vote(pull_id="example")
+                    message = FlexSendMessage(alt_text="使用教學", contents=contents)
                 # 客服
                 elif user_message == "客服":
                     message = TextSendMessage(text="客服連結\nhttps://lin.ee/DsogwtP")
