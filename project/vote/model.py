@@ -2,6 +2,16 @@ from typing import Dict, List
 
 from pydantic import BaseModel
 
+weekday_text = {
+    0: "（一）",
+    1: "（二）",
+    2: "（三）",
+    3: "（四）",
+    4: "（五）",
+    5: "（六）",
+    6: "（日）",
+}
+
 
 class CreateVote(BaseModel):
     user_id: str  # 使用者 ID

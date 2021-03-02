@@ -291,6 +291,36 @@ def create_vote(user_id: str) -> FlexSendMessage:
     return message
 
 
+def vote_result(
+    pull_id: str, vote_name: str, best: list, users: list
+) -> FlexSendMessage:
+    with open("line/model/vote_result.json") as json_file:
+        contents = json.load(json_file)
+    contents["body"]["contents"][0]["contents"][0]["text"] = vote_name
+    for each in best:
+        date_template = {
+            "type": "text",
+            "text": each,
+            "size": "md",
+            "color": "#666666",
+            "flex": 2,
+            "wrap": true,
+            "position": "relative",
+            "weight": "bold",
+            "decoration": "none",
+            "margin": "xs",
+            "align": "start",
+        }
+        contents["body"]["contents"][1]["contents"][1]["contents"].append(date_template)
+    users_string = "、".join(users)
+    contents["body"]["contents"][1]["contents"][2]["contents"][1]["text"] = users_string
+    contents["footer"]["contents"][0]["contents"][0]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-KOeZvV1e?pull_id={pull_id}"
+    message = FlexSendMessage(alt_text="投票結果", contents=contents)
+    return message
+
+
 # 店家營業狀態
 def find_operating_status(data):
     now = datetime.now()

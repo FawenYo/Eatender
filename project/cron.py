@@ -1,11 +1,11 @@
-from datetime import datetime
-
 import config
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import APIRouter
+from line import templates
 from linebot import LineBotApi
 from linebot.models import *
+from vote.urls import find_vote_result, show_result
 
 cron = APIRouter()
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -17,7 +17,7 @@ async def init_cron():
     all_votes = config.db.vote.find({})
     for each_vote in all_votes:
         vote_cronjob(
-            event_id=each_vote["_id"],
+            pull_id=each_vote["_id"],
             creator=each_vote["creator"],
             due_date=each_vote["due_date"],
         )
@@ -25,13 +25,13 @@ async def init_cron():
 
 
 # Set up vote cron jobs
-def vote_cronjob(event_id: str, creator: str, due_date: str):
+def vote_cronjob(pull_id: str, creator: str, due_date: str):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
-        show_result,
+        send_result,
         "date",
-        args=[event_id, creator],
-        run_date=f"{due_date} 18:00:00",
+        args=[pull_id, creator],
+        run_date=f"{due_date}",
         timezone=pytz.timezone("Asia/Taipei"),
     )
     scheduler.start()
@@ -39,12 +39,14 @@ def vote_cronjob(event_id: str, creator: str, due_date: str):
 
 
 # Push vote result via LINE Noitfy
-def show_result(event_id: str, creator: str):
-    user_data = config.db.user.find_one({"user_id": creator})
-    access_token = user_data["notify"]["token"]
-    # TODO: 投票結果
-    message = "TODO"
-    response = config.lotify_client.send_message(
-        access_token=access_token, message=message
+def send_result(pull_id: str, creator: str):
+    vote_info = show_result(pull_id=pull_id)
+
+    vote_name = vote_info["vote_name"]
+    best = vote_info["best"]
+    users = vote_info["users"]
+
+    message = templates.vote_result(
+        pull_id=pull_id, vote_name=vote_name, best=best, users=users
     )
-    return response
+    line_bot_api.push_message(creator, message)

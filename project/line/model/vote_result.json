@@ -1,0 +1,121 @@
+{
+    "type": "bubble",
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "example",
+                        "size": "lg",
+                        "weight": "bold",
+                        "style": "normal",
+                        "wrap": true,
+                        "align": "center",
+                        "decoration": "underline"
+                    }
+                ],
+                "margin": "md",
+                "borderWidth": "bold",
+                "offsetBottom": "xs"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "投票結果",
+                                "size": "sm",
+                                "flex": 2,
+                                "decoration": "none",
+                                "color": "#837E7E"
+                            }
+                        ],
+                        "offsetTop": "sm",
+                        "borderWidth": "bold",
+                        "spacing": "sm",
+                        "offsetBottom": "lg",
+                        "flex": 2
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [],
+                        "flex": 2,
+                        "spacing": "sm",
+                        "borderWidth": "bold"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "與會人",
+                                "flex": 2,
+                                "size": "sm",
+                                "color": "#837E7E",
+                                "contents": [],
+                                "margin": "xs"
+                            },
+                            {
+                                "type": "text",
+                                "size": "sm",
+                                "flex": 6,
+                                "text": "example",
+                                "wrap": true,
+                                "align": "start"
+                            }
+                        ],
+                        "borderWidth": "bold",
+                        "spacing": "sm",
+                        "offsetBottom": "lg",
+                        "offsetTop": "sm",
+                        "position": "relative",
+                        "flex": 2
+                    }
+                ]
+            }
+        ]
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "none",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "查看投票結果",
+                            "uri": "http://example.com/"
+                        },
+                        "color": "#000000"
+                    }
+                ],
+                "backgroundColor": "#fdbe29",
+                "cornerRadius": "100px",
+                "margin": "none",
+                "alignItems": "center",
+                "justifyContent": "space-evenly",
+                "position": "relative",
+                "width": "200px",
+                "height": "50px",
+                "offsetStart": "40px"
+            }
+        ]
+    }
+}
