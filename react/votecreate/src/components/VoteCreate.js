@@ -349,33 +349,33 @@ function VoteName_DueDate() {
 
   /* Error report */
   const validate = (fieldValues = values) => {
-      let temp = { ...errors }
-      if ('voteName' in fieldValues) {
-          const invalidCharacters = ["$", "@", "+", "＋"];
-          if (!fieldValues.voteName) {
-              temp.voteName = "請輸入投票名稱";
-          }
-          else if (invalidCharacters.some(invalidChar => fieldValues.voteName.includes(invalidChar))) {
-              temp.voteName = "投票名稱不得含有'$', '@', '+'等非法字元";
-          }
-          else {
-              temp.voteName = "";
-          }
+    let temp = { ...errors }
+    if ('voteName' in fieldValues) {
+      const invalidCharacters = ["$", "@", "+", "＋"];
+      if (!fieldValues.voteName) {
+        temp.voteName = "請輸入投票名稱";
       }
-      setErrors({
-          ...temp
-      })
-      if (fieldValues == values)
-          return Object.values(temp).every(x => x == "")
+      else if (invalidCharacters.some(invalidChar => fieldValues.voteName.includes(invalidChar))) {
+        temp.voteName = "投票名稱不得含有'$', '@', '+'等非法字元";
+      }
+      else {
+        temp.voteName = "";
+      }
+    }
+    setErrors({
+      ...temp
+    })
+    if (fieldValues == values)
+      return Object.values(temp).every(x => x == "")
   }
 
   const {
-      values,
-      setValues,
-      errors,
-      setErrors,
-      handleInputChange,
-      resetForm,
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange,
+    resetForm,
   } = useForm(initialFormValues, true, validate);
 
   const HeaderText = styled.h2`
@@ -391,9 +391,9 @@ function VoteName_DueDate() {
 
   const [dueDate, setDueDate] = useState(utils().getToday());
 
-  
+
   const [selectedTime, setSelectedTime] = useState(null);
-  
+
   const parseTimeTo24h = () => {
     if (selectedTime) {
       const temp = String(selectedTime)
@@ -404,67 +404,71 @@ function VoteName_DueDate() {
   const syncDueDateToPreserved = () => {
     parseTimeTo24h();
     if (dueDate && selectedTime && values.voteName) {
-        PreservedFormValues.dueDate = `${dueDate.year}/${dueDate.month}/${dueDate.day} ${PreservedFormValues.dueTime}:00`;
-        PreservedFormValues.voteName = values.voteName;
+      PreservedFormValues.dueDate = `${dueDate.year}/${dueDate.month}/${dueDate.day} ${PreservedFormValues.dueTime}:00`;
+      PreservedFormValues.voteName = values.voteName;
     }
   }
   syncDueDateToPreserved();
   PreservedFormValues.voteName = values.voteName ? values.voteName : "";
 
-  // function checkStepsValidation () {
-  //   try{
-  //     const target = document.querySelector("#nextStepButton");
-  //     console.log(target);
-  //     const invalidCharacters = ["$", "@", "+", "＋"];
-  //     if (PreservedFormValues.voteName || invalidCharacters.some(invalidChar => PreservedFormValues.voteName.includes(invalidChar))) {
-  //       target.setAttribute("disabled", true);
-  //     }
-  //     target.setAttribute("disabled", false);
-      
-  //   }
-  //   catch (e) {}
-  // }
-  // checkStepsValidation();
-  
+  function checkStepsValidation() {
+    try {
+      const target = document.getElementById("nextStepButton");
+      const invalidCharacters = ["$", "@", "+", "＋"];
+      if (PreservedFormValues.voteName) {
+        if (invalidCharacters.some(invalidChar => PreservedFormValues.voteName.includes(invalidChar))) {
+          target.setAttribute("style", "display: none;")
+        } else {
+          target.setAttribute("style", "display: block;")
+        }
+      } else {
+        target.setAttribute("style", "display: none;")
+      }
+
+    }
+    catch (e) { }
+  }
+  checkStepsValidation();
+
   /* END OF TODO PART */
 
   return (
-      <Form>
-          <center>
-              <HeaderText>
-                  輸入聚餐名稱
+    <Form>
+      <center>
+        <HeaderText>
+          輸入聚餐名稱
               </HeaderText>
-              <Controls.Input
-                  name="voteName"
-                  label="聚餐名稱"
-                  value={values.voteName}
-                  onChange={handleInputChange}
-                  error={errors.voteName}
-              />
-              <HeaderText>
-                  投票截止日期＆時間
+        <Controls.Input
+          name="voteName"
+          label="聚餐名稱"
+          value={values.voteName}
+          onChange={handleInputChange}
+          error={errors.voteName}
+        />
+        <HeaderText>
+          投票截止日期＆時間
               </HeaderText>
-              <Calendar
-                  name="dueDate"
-                  value={dueDate}
-                  onChange={setDueDate}
-                  shouldHighlightWeekends
-                  minimumDate={utils().getToday()}
-              />
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardTimePicker
-                      margin="normal"
-                      id="time-picker"
-                      label="投票截止時間"
-                      value={selectedTime}
-                      onChange={setSelectedTime}
-                      KeyboardButtonProps={{
-                          'aria-label': 'change time',
-                      }}
-                  />
-              </MuiPickersUtilsProvider>
-          </center>
-      </Form>
+        <Calendar
+          name="dueDate"
+          value={dueDate}
+          onChange={setDueDate}
+          shouldHighlightWeekends
+          minimumDate={utils().getToday()}
+        />
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardTimePicker
+            margin="normal"
+            id="time-picker"
+            label="投票截止時間"
+            value={selectedTime}
+            onChange={setSelectedTime}
+            KeyboardButtonProps={{
+              'aria-label': 'change time',
+            }}
+          />
+        </MuiPickersUtilsProvider>
+      </center>
+    </Form>
   )
 }
 
@@ -479,17 +483,17 @@ function getStepContent(step) {
       }
       catch (e) { }
       return <MultiDateSelect />;
-      case 2:
+    case 2:
       return <TimeSessionSelect />;
-      default:
-        throw new Error('Unknown step');
-      }
-    }
-      
-  const steps = [`聚餐名稱＆截止日期`, `聚餐日期選擇`, '聚餐時段選擇'];
-  
-  export default function VoteCreate() {
-    
+    default:
+      throw new Error('Unknown step');
+  }
+}
+
+const steps = [`聚餐名稱＆截止日期`, `聚餐日期選擇`, '聚餐時段選擇'];
+
+export default function VoteCreate() {
+
   const {
     values,
     setValues,
@@ -499,7 +503,7 @@ function getStepContent(step) {
     resetForm,
   } = useForm(initialFormValues, true)
   /* Submit Part */
-  
+
   const [activeStep, setActiveStep] = React.useState(0);
 
   const classes = useStyles();

@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker,
 } from '@material-ui/pickers';
 
 const initialFormValues = {
@@ -137,9 +137,9 @@ function VoteName_DueDate() {
                         }}
                     />
                 </MuiPickersUtilsProvider>
-                <input style={{display: "none"}} id="voteName" value={values.voteName} />
-                <input style={{display: "none"}} id="dueDate" value={PreservedFormValues.dueDate} />
-                <input style={{display: "none"}} id="dueTime" value={PreservedFormValues.dueTime} />
+                <input style={{ display: "none" }} id="voteName" value={values.voteName} />
+                <input style={{ display: "none" }} id="dueDate" value={PreservedFormValues.dueDate} />
+                <input style={{ display: "none" }} id="dueTime" value={PreservedFormValues.dueTime} />
             </center>
         </Form>
     )
