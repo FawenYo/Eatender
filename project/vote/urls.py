@@ -29,6 +29,7 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 async def share(
     request: Request,
     pull_id: str,
+    liff_state: Optional[str] = Query(None, alias="liff.state"),
 ) -> HTMLResponse:
     """分享投票資訊頁面
 
