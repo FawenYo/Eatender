@@ -17,19 +17,6 @@ import {
   KeyboardTimePicker,
 } from '@material-ui/pickers';
 
-let user_id;
-
-$(document).ready(function () {
-
-    const query_url = new URL(window.location.href)
-    if (query_url.searchParams.has("liff.state")) {
-        const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
-        user_id = query_params.get("user_id")
-    } else {
-        user_id = query_url.searchParams.get("user_id")
-    }
-})
-
 const initialFormValues = {
     voteName: '',
     earliestTime: '',
@@ -55,17 +42,16 @@ function VoteName_DueDate() {
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
         if ('voteName' in fieldValues) {
-            temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
-        }
-        if ('earliestTime' in fieldValues) {
-            temp.earliestTime = fieldValues.earliestTime.length != 0 ? "" : "請選擇聚餐最早開始時間";
-        }
-        if ('latestTime' in fieldValues) {
-            temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
-        }
-        if (Number.isInteger(fieldValues.earliestTime) &&
-            Number.isInteger(fieldValues.latestTime)) {
-            temp.latestTime = fieldValues.earliestTime >= fieldValues.latestTime ? "最晚時間需要比最早時間晚" : "";
+            const invalidCharacters = ["$", "@", "+", "＋"];
+            if (!fieldValues.voteName) {
+                temp.voteName = "請輸入投票名稱";
+            }
+            else if (invalidCharacters.some(invalidChar => fieldValues.voteName.includes(invalidChar))) {
+                temp.voteName = "投票名稱不得含有'$', '@', '+'等非法字元";
+            }
+            else {
+                temp.voteName = "";
+            }
         }
         setErrors({
             ...temp
@@ -82,62 +68,6 @@ function VoteName_DueDate() {
         handleInputChange,
         resetForm,
     } = useForm(initialFormValues, true, validate);
-
-
-    /* Submit Part */
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        if (!validate()) { return; }
-
-        // Parsing local data
-        const date1 = new Date(PreservedFormValues.dateRange.startDate);
-        const startDate = `${date1.getFullYear()}/${date1.getMonth() + 1}/${date1.getDate()}`
-        const date2 = new Date(PreservedFormValues.dateRange.endDate);
-        const diffInTime = date2.getTime() - date1.getTime();
-        const diffInDays = (diffInTime / (1000 * 3600 * 24)) + 1;
-
-
-
-        const postedData = {
-            "user_id": user_id,
-            'vote_name': values.voteName,
-            'vote_end': PreservedFormValues.dueDate,
-            'start_date': startDate,
-            'num_days': diffInDays,
-            'min_time': values.earliestTime,
-            'max_time': values.latestTime,
-        };
-
-        const requestOptions = {
-            method: 'POST',
-            header: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(postedData),
-            mode: 'cors'
-        };
-        fetch('../api/vote/create/event', requestOptions)
-            .then(response => response.json())
-            .then((data) => {
-                if (data && data.status === "success") {
-                    Swal.fire({
-                        icon: "success",
-                        title: data.message.title,
-                        text: data.message.content,
-                        confirmButtonText: "確認",
-                    }).then((result) => {
-                        window.location.replace(data.message.share_link);
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "很抱歉！",
-                        text: data.error_message,
-                        confirmButtonText: "確認",
-                    });
-                }
-            });
-    }
 
     const HeaderText = styled.h2`
         font-size: 24px;
@@ -173,7 +103,7 @@ function VoteName_DueDate() {
     /* END OF TODO PART */
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form>
             <center>
                 <HeaderText>
                     輸入聚餐名稱

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { AppBar, CssBaseline, Step, Stepper, StepLabel, Button, Typography } from "@material-ui/core"
 import { Chip, FormControl, MenuItem, Select, InputLabel, Input } from '@material-ui/core';
-import VoteName_DueDate from "./Name_Date";
 import { useForm, Form } from "./useForm";
 
 // ./ imports
@@ -15,6 +14,12 @@ import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker, { Calendar, utils } from 'react-modern-calendar-datepicker';
 import { NoEncryption, SentimentSatisfiedAlt } from '@material-ui/icons';
 import Swal from 'sweetalert2';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+} from '@material-ui/pickers';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -171,6 +176,7 @@ const initialFormValues = {
 var PreservedFormValues = {
   voteName: '',
   dueDate: '',
+  dueTime: '',
   dateRange: [],
   timeSession: [],
 }
@@ -215,7 +221,7 @@ function MultiDateSelect() {
   )
 }
 
-/* END OF TODO PART */
+/* END OF DateSelect PART */
 
 /* TimeSessioin Part */
 const useStyles_timeSession = makeStyles((theme) => ({
@@ -235,7 +241,6 @@ const useStyles_timeSession = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 }));
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -338,52 +343,153 @@ function TimeSessionSelect() {
   );
 }
 
-const steps = [`聚餐名稱＆截止日期`, `聚餐日期選擇`, '聚餐時段選擇'];
+/* END OF TimeSessioin Part */
 
+function VoteName_DueDate() {
+
+  /* Error report */
+  const validate = (fieldValues = values) => {
+      let temp = { ...errors }
+      if ('voteName' in fieldValues) {
+          const invalidCharacters = ["$", "@", "+", "＋"];
+          if (!fieldValues.voteName) {
+              temp.voteName = "請輸入投票名稱";
+          }
+          else if (invalidCharacters.some(invalidChar => fieldValues.voteName.includes(invalidChar))) {
+              temp.voteName = "投票名稱不得含有'$', '@', '+'等非法字元";
+          }
+          else {
+              temp.voteName = "";
+          }
+      }
+      setErrors({
+          ...temp
+      })
+      if (fieldValues == values)
+          return Object.values(temp).every(x => x == "")
+  }
+
+  const {
+      values,
+      setValues,
+      errors,
+      setErrors,
+      handleInputChange,
+      resetForm,
+  } = useForm(initialFormValues, true, validate);
+
+  const HeaderText = styled.h2`
+      font-size: 24px;
+      font-weight: 600 !important;
+      line-height: 1;
+      color: #000;
+      z-index: 10;
+      margin: 10;
+  `;
+
+  /* Parts to improve */
+
+  const [dueDate, setDueDate] = useState(utils().getToday());
+
+  
+  const [selectedTime, setSelectedTime] = useState(null);
+  
+  const parseTimeTo24h = () => {
+    if (selectedTime) {
+      const temp = String(selectedTime)
+      const re = /\d\d:\d\d/g;
+      PreservedFormValues.dueTime = temp.match(re);
+    }
+  }
+  const syncDueDateToPreserved = () => {
+    parseTimeTo24h();
+    if (dueDate && selectedTime && values.voteName) {
+        PreservedFormValues.dueDate = `${dueDate.year}/${dueDate.month}/${dueDate.day} ${PreservedFormValues.dueTime}:00`;
+        PreservedFormValues.voteName = values.voteName;
+    }
+  }
+  syncDueDateToPreserved();
+  PreservedFormValues.voteName = values.voteName ? values.voteName : "";
+
+  // function checkStepsValidation () {
+  //   try{
+  //     const target = document.querySelector("#nextStepButton");
+  //     console.log(target);
+  //     const invalidCharacters = ["$", "@", "+", "＋"];
+  //     if (PreservedFormValues.voteName || invalidCharacters.some(invalidChar => PreservedFormValues.voteName.includes(invalidChar))) {
+  //       target.setAttribute("disabled", true);
+  //     }
+  //     target.setAttribute("disabled", false);
+      
+  //   }
+  //   catch (e) {}
+  // }
+  // checkStepsValidation();
+  
+  /* END OF TODO PART */
+
+  return (
+      <Form>
+          <center>
+              <HeaderText>
+                  輸入聚餐名稱
+              </HeaderText>
+              <Controls.Input
+                  name="voteName"
+                  label="聚餐名稱"
+                  value={values.voteName}
+                  onChange={handleInputChange}
+                  error={errors.voteName}
+              />
+              <HeaderText>
+                  投票截止日期＆時間
+              </HeaderText>
+              <Calendar
+                  name="dueDate"
+                  value={dueDate}
+                  onChange={setDueDate}
+                  shouldHighlightWeekends
+                  minimumDate={utils().getToday()}
+              />
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardTimePicker
+                      margin="normal"
+                      id="time-picker"
+                      label="投票截止時間"
+                      value={selectedTime}
+                      onChange={setSelectedTime}
+                      KeyboardButtonProps={{
+                          'aria-label': 'change time',
+                      }}
+                  />
+              </MuiPickersUtilsProvider>
+          </center>
+      </Form>
+  )
+}
+
+/* Control each steps content */
 function getStepContent(step) {
   switch (step) {
     case 0:
       return <VoteName_DueDate />;
     case 1:
       try {
-        PreservedFormValues.voteName = document.getElementById("voteName").value;
-        PreservedFormValues.dueDate = `${document.getElementById("dueDate").value} ${document.getElementById("dueTime").value}:00`;
         // console.log(PreservedFormValues)
       }
       catch (e) { }
       return <MultiDateSelect />;
-    case 2:
+      case 2:
       return <TimeSessionSelect />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
-export default function VoteCreate() {
-
-  /* Error report */
-  const validate = (fieldValues = values) => {
-    let temp = { ...errors }
-    if ('voteName' in fieldValues) {
-      temp.voteName = fieldValues.voteName ? "" : "請輸入投票名稱";
+      default:
+        throw new Error('Unknown step');
+      }
     }
-    if ('earliestTime' in fieldValues) {
-      temp.earliestTime = fieldValues.earliestTime.length != 0 ? "" : "請選擇聚餐最早開始時間";
-    }
-    if ('latestTime' in fieldValues) {
-      temp.latestTime = fieldValues.latestTime.length != 0 ? "" : "請選擇聚餐最晚結束時間";
-    }
-    if (Number.isInteger(fieldValues.earliestTime) &&
-      Number.isInteger(fieldValues.latestTime)) {
-      temp.latestTime = fieldValues.earliestTime >= fieldValues.latestTime ? "最晚時間需要比最早時間晚" : "";
-    }
-    setErrors({
-      ...temp
-    })
-    if (fieldValues == values)
-      return Object.values(temp).every(x => x == "")
-  }
-
+      
+  const steps = [`聚餐名稱＆截止日期`, `聚餐日期選擇`, '聚餐時段選擇'];
+  
+  export default function VoteCreate() {
+    
   const {
     values,
     setValues,
@@ -393,9 +499,10 @@ export default function VoteCreate() {
     resetForm,
   } = useForm(initialFormValues, true)
   /* Submit Part */
+  
+  const [activeStep, setActiveStep] = React.useState(0);
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
 
   /* SUBMIT */
   const handleSubmit = e => {
@@ -438,8 +545,8 @@ export default function VoteCreate() {
         });
       Swal.fire({
         icon: "success",
-        title: "成功！",
-        text: "success",
+        title: "成功建立投票！",
+        text: "預祝 聚餐愉快(*´∀`)~♥",
         confirmButtonText: "確認",
       });
     }
@@ -447,7 +554,7 @@ export default function VoteCreate() {
       Swal.fire({
         icon: "error",
         title: "很抱歉！",
-        text: "error",
+        text: "出現預期外的錯誤",
         confirmButtonText: "確認",
       });
     }
@@ -508,6 +615,7 @@ export default function VoteCreate() {
                   <Button
                     variant="contained"
                     color="primary"
+                    id="nextStepButton"
                     onClick={handleNext}
                     className={classes.button}
                   >
