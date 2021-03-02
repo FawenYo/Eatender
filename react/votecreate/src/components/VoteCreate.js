@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { AppBar, CssBaseline, Step, Stepper, StepLabel, Button, Typography } from "@material-ui/core"
+import { Step, Stepper, StepLabel, Button } from "@material-ui/core"
 import { Chip, FormControl, MenuItem, Select, InputLabel, Input } from '@material-ui/core';
 import { useForm, Form } from "./useForm";
 
@@ -11,8 +11,7 @@ import Controls from "./controls/Controls";
 
 // To be improved
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker, { Calendar, utils } from 'react-modern-calendar-datepicker';
-import { NoEncryption, SentimentSatisfiedAlt } from '@material-ui/icons';
+import { Calendar, utils } from 'react-modern-calendar-datepicker';
 import Swal from 'sweetalert2';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -153,23 +152,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-let user_id;
+const todayDate = new Date();
 
-$(document).ready(function () {
-
-  const query_url = new URL(window.location.href)
-  if (query_url.searchParams.has("liff.state")) {
-    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
-    user_id = query_params.get("user_id")
-  } else {
-    user_id = query_url.searchParams.get("user_id")
-  }
-})
-
-const initialFormValues = {
-  voteName: '',
-  earliestTime: '',
-  latestTime: '',
+var defaultDueDate = {
+  year: todayDate.getFullYear(),
+  month: todayDate.getMonth() + 1,
+  day: todayDate.getDay()
 }
 
 /* Parts to improve */
@@ -177,6 +165,7 @@ var PreservedFormValues = {
   voteName: '',
   dueDate: '',
   dueTime: '',
+  selectedTime: null,
   dateRange: [],
   timeSession: [],
 }
@@ -185,7 +174,7 @@ var today = new Date();
 
 /* DateSelect */
 function MultiDateSelect() {
-  const [dateRange, setDateRange] = useState([]);
+  const [dateRange, setDateRange] = useState(PreservedFormValues.dateRange);
 
   const HeaderText = styled.h2`
     font-size: 24px;
@@ -288,7 +277,7 @@ function TimeSessionSelect() {
   };
 
   const handleChangeMultiple = (event) => {
-    const { options } = event.target;
+    const options = event.target;
     const value = [];
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
@@ -376,7 +365,7 @@ function VoteName_DueDate() {
     setErrors,
     handleInputChange,
     resetForm,
-  } = useForm(initialFormValues, true, validate);
+  } = useForm(PreservedFormValues, true, validate);
 
   const HeaderText = styled.h2`
       font-size: 24px;
@@ -389,14 +378,15 @@ function VoteName_DueDate() {
 
   /* Parts to improve */
 
-  const [dueDate, setDueDate] = useState(utils().getToday());
+  const [dueDate, setDueDate] = useState(defaultDueDate);
 
 
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(PreservedFormValues.selectedTime);
 
   const parseTimeTo24h = () => {
     if (selectedTime) {
-      const temp = String(selectedTime)
+      PreservedFormValues.selectedTime = selectedTime;
+      const temp = String(selectedTime);
       const re = /\d\d:\d\d/g;
       PreservedFormValues.dueTime = temp.match(re);
     }
@@ -406,29 +396,14 @@ function VoteName_DueDate() {
     if (dueDate && selectedTime && values.voteName) {
       PreservedFormValues.dueDate = `${dueDate.year}/${dueDate.month}/${dueDate.day} ${PreservedFormValues.dueTime}:00`;
       PreservedFormValues.voteName = values.voteName;
+
+      defaultDueDate.year = dueDate.year
+      defaultDueDate.month = dueDate.month
+      defaultDueDate.day = dueDate.day
     }
   }
   syncDueDateToPreserved();
   PreservedFormValues.voteName = values.voteName ? values.voteName : "";
-
-  function checkStepsValidation() {
-    try {
-      const target = document.getElementById("nextStepButton");
-      const invalidCharacters = ["$", "@", "+", "＋"];
-      if (PreservedFormValues.voteName) {
-        if (invalidCharacters.some(invalidChar => PreservedFormValues.voteName.includes(invalidChar))) {
-          target.setAttribute("style", "display: none;")
-        } else {
-          target.setAttribute("style", "display: block;")
-        }
-      } else {
-        target.setAttribute("style", "display: none;")
-      }
-
-    }
-    catch (e) { }
-  }
-  checkStepsValidation();
 
   /* END OF TODO PART */
 
@@ -478,10 +453,6 @@ function getStepContent(step) {
     case 0:
       return <VoteName_DueDate />;
     case 1:
-      try {
-        // console.log(PreservedFormValues)
-      }
-      catch (e) { }
       return <MultiDateSelect />;
     case 2:
       return <TimeSessionSelect />;
@@ -501,7 +472,7 @@ export default function VoteCreate() {
     setErrors,
     handleInputChange,
     resetForm,
-  } = useForm(initialFormValues, true)
+  } = useForm(PreservedFormValues, true)
   /* Submit Part */
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -510,6 +481,14 @@ export default function VoteCreate() {
 
   /* SUBMIT */
   const handleSubmit = e => {
+    let user_id;
+    const query_url = new URL(window.location.href)
+    if (query_url.searchParams.has("liff.state")) {
+      const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+      user_id = query_params.get("user_id")
+    } else {
+      user_id = query_url.searchParams.get("user_id")
+    }
     const postedData = {
       "user_id": user_id,
       'vote_name': PreservedFormValues.voteName,
@@ -517,7 +496,6 @@ export default function VoteCreate() {
       'date_range': PreservedFormValues.dateRange,
       'time_session': PreservedFormValues.timeSession,
     };
-    console.log(postedData);
 
     const requestOptions = {
       method: 'POST',
@@ -525,49 +503,109 @@ export default function VoteCreate() {
       body: JSON.stringify(postedData),
       mode: 'cors'
     };
-    try {
-      fetch('../api/vote/create/event', requestOptions)
-        .then(response => response.json())
-        .then((data) => {
-          if (data && data.status === "success") {
-            Swal.fire({
-              icon: "success",
-              title: data.message.title,
-              text: data.message.content,
-              confirmButtonText: "確認",
-            }).then((result) => {
-              window.location.replace(data.message.share_link);
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "很抱歉！",
-              text: data.error_message,
-              confirmButtonText: "確認",
-            });
-          }
+    fetch('../api/vote/create/event', requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+        if (data && data.status === "success") {
+          Swal.fire({
+            icon: "success",
+            title: data.message.title,
+            text: data.message.content,
+            confirmButtonText: "確認",
+          }).then((result) => {
+            window.location.replace(data.message.share_link);
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "很抱歉！",
+            text: data.error_message,
+            confirmButtonText: "確認",
+          });
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "很抱歉！",
+          text: "無法連接伺服器，請稍後再試",
+          confirmButtonText: "確認",
         });
-      Swal.fire({
-        icon: "success",
-        title: "成功建立投票！",
-        text: "預祝 聚餐愉快(*´∀`)~♥",
-        confirmButtonText: "確認",
       });
-    }
-    catch (e) {
-      Swal.fire({
-        icon: "error",
-        title: "很抱歉！",
-        text: "出現預期外的錯誤",
-        confirmButtonText: "確認",
-      });
-    }
   }
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if (activeStep == 0) {
+      let validation = true;
+      function checkVoteName() {
+        const invalidCharacters = ["$", "@", "+", "＋"];
+        if (PreservedFormValues.voteName) {
+          if (invalidCharacters.some(invalidChar => PreservedFormValues.voteName.includes(invalidChar))) {
+            validation = false;
+            Swal.fire({
+              icon: "error",
+              title: "很抱歉！",
+              text: "投票名稱不得含有'$', '@', '+'等非法字元",
+              confirmButtonText: "確認",
+            });
+          }
+        } else {
+          validation = false;
+          Swal.fire({
+            icon: "error",
+            title: "很抱歉！",
+            text: "投票名稱不得為空",
+            confirmButtonText: "確認",
+          });
+        }
+      }
+      function checkDueDate() {
+        if (!PreservedFormValues.dueDate) {
+          validation = false;
+          Swal.fire({
+            icon: "error",
+            title: "很抱歉！",
+            text: "投票截止日期與時間不得為空",
+            confirmButtonText: "確認",
+          });
+        }
+      }
+      checkVoteName()
+      if (validation) {
+        checkDueDate()
+        if (validation) {
+          setActiveStep(activeStep + 1);
+        }
+      }
+    } else if (activeStep == 1) {
+      let validation = true;
+      if (PreservedFormValues.dateRange.length == 0) {
+        validation = false;
+        Swal.fire({
+          icon: "error",
+          title: "很抱歉！",
+          text: "聚餐日期不得為空",
+          confirmButtonText: "確認",
+        });
+      }
+      if (validation) {
+        setActiveStep(activeStep + 1);
+      }
+    }
     if (activeStep === steps.length - 1) {
-      handleSubmit();
+      let validation = true;
+      if (PreservedFormValues.timeSession.length == 0) {
+        validation = false;
+        Swal.fire({
+          icon: "error",
+          title: "很抱歉！",
+          text: "選擇聚餐時段不得為空",
+          confirmButtonText: "確認",
+        });
+      }
+      if (validation) {
+        handleSubmit();
+      }
     }
   };
 
