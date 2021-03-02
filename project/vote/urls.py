@@ -11,6 +11,7 @@ from dateutil import parser
 from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from linebot import LineBotApi
 
 from .model import *
 
@@ -21,17 +22,7 @@ vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 headers = {"content-type": "application/json; charset=utf-8"}
-
-
-weekday_text = {
-    0: "（一）",
-    1: "（二）",
-    2: "（三）",
-    3: "（四）",
-    4: "（五）",
-    5: "（六）",
-    6: "（日）",
-}
+line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 
 
 @vote.get("/share", response_class=HTMLResponse)
@@ -109,6 +100,15 @@ async def login(
 
 @vote.get("/vote/result")
 async def vote_result_page(request: Request, pull_id: str) -> HTMLResponse:
+    """投票結果頁面
+
+    Args:
+        request (Request): Request Object
+        pull_id (str): 投票池ID
+
+    Returns:
+        HTMLResponse: 投票結果頁面
+    """
     return templates.TemplateResponse(
         "vote_result.html",
         context={"request": request},
@@ -117,6 +117,14 @@ async def vote_result_page(request: Request, pull_id: str) -> HTMLResponse:
 
 @vote.post("/api/vote/create/event", response_class=JSONResponse)
 async def vote_create(param: CreateVote) -> JSONResponse:
+    """創建投票
+
+    Args:
+        param (CreateVote): 投票資訊
+
+    Returns:
+        JSONResponse: 創建結果
+    """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
 
     user_data = config.db.user.find_one({"user_id": param.user_id})
@@ -260,8 +268,10 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
 @vote.get("/api/vote/get/date", response_class=JSONResponse)
 async def vote_date_get(pull_id: str) -> JSONResponse:
     """投票 - 取得投票日期資訊
+
     Args:
         pull_id (str): 投票池ID
+
     Returns:
         JSONResponse: 投票日期資訊
     """
@@ -316,6 +326,14 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
 
 @vote.get("/api/vote/get/result", response_class=JSONResponse)
 async def api_vote_get_result(pull_id: str) -> JSONResponse:
+    """投票 - 取得投票結果
+
+    Args:
+        pull_id (str): 投票池ID
+
+    Returns:
+        JSONResponse: 投票結果
+    """
     vote_data = find_vote_result(pull_id=pull_id)
     result_data = {
         "vote_name": "",
@@ -377,6 +395,14 @@ async def api_vote_get_result(pull_id: str) -> JSONResponse:
 
 
 def find_vote_result(pull_id: str) -> dict:
+    """排序投票結果
+
+    Args:
+        pull_id (str): 投票池ID
+
+    Returns:
+        dict: 排序結果
+    """
     vote_data = config.db.vote.find_one({"_id": pull_id})
     if vote_data:
         restaurants = vote_data["result"]["restaurants"]
@@ -423,3 +449,34 @@ def find_vote_result(pull_id: str) -> dict:
     else:
         data = {"status": "error", "error_message": "找不到投票內容！"}
     return data
+
+
+def show_result(pull_id: str) -> dict:
+    """LINE投票結果
+
+    Args:
+        pull_id (str): 投票池ID
+
+    Returns:
+        dict: 投票結果
+    """
+    result = find_vote_result(pull_id=pull_id)
+    vote_name = result["data"]["info"]["vote_name"]
+    count, best_info = result["data"]["sorted_best"][0]
+    best = []
+    users = []
+    for date_info, user_info in best_info:
+        info_date, info_rid = date_info.split(" @ ")
+        info_date = info_date.replace("+ ", "")
+        restaurant = json.loads(config.cache.get(info_rid))
+
+        best.append(f"{info_date} @ {restaurant['name']}")
+        for each_user_id in user_info:
+            try:
+                user_name = line_bot_api.get_profile(each_user_id).display_name
+            except:
+                user_name = each_user_id
+
+            if user_name not in users:
+                users.append(user_name)
+    return {"vote_name": vote_name, "best": best, "users": users}

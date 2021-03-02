@@ -12,6 +12,7 @@ sys.path.append(".")
 import config
 import MongoDB.operation as database
 from food.main import RestaurantInfo
+from vote.urls import show_result
 from weather.main import Weather
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -101,9 +102,17 @@ def handle_message(event):
                     contents = templates.share_vote(pull_id="example")
                     message = FlexSendMessage(alt_text="使用教學", contents=contents)
 
-                elif user_message == "測試結果":
-                    contents = templates.share_vote(pull_id="example")
-                    message = FlexSendMessage(alt_text="使用教學", contents=contents)
+                elif user_message == "測試投票結果":
+                    pull_id = "example"
+                    vote_info = show_result(pull_id=pull_id)
+
+                    vote_name = vote_info["vote_name"]
+                    best = vote_info["best"]
+                    users = vote_info["users"]
+
+                    message = templates.vote_result(
+                        pull_id=pull_id, vote_name=vote_name, best=best, users=users
+                    )
                 # 客服
                 elif user_message == "客服":
                     message = TextSendMessage(text="客服連結\nhttps://lin.ee/DsogwtP")
