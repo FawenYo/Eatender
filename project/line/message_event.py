@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from linebot import LineBotApi
 from linebot.models import *
 
-from . import templates
+from . import flex_template
 
 sys.path.append(".")
 
@@ -58,14 +58,14 @@ def handle_message(event):
             else:
                 # 教學
                 if user_message == "教學":
-                    message = templates.tutorial()
+                    message = flex_template.tutorial()
                     line_bot_api.reply_message(reply_token, message)
 
                 # 我的最愛
                 if user_message == "我的最愛":
                     user_data = config.db.user.find_one({"user_id": user_id})
                     if len(user_data["favorite"]) > 0:
-                        message = templates.show_favorite(
+                        message = flex_template.show_favorite(
                             restaurants=user_data["favorite"][:10]
                         )
                     else:
@@ -78,10 +78,10 @@ def handle_message(event):
                     # 投票池內存在餐廳
                     if len(user_data["vote"]) > 0:
                         message = [
-                            templates.show_vote_pull(
+                            flex_template.show_vote_pull(
                                 restaurants=user_data["vote"][:10]
                             ),
-                            templates.create_vote(user_id=user_id),
+                            flex_template.create_vote(user_id=user_id),
                         ]
                     else:
                         message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
@@ -95,13 +95,13 @@ def handle_message(event):
                     for each in random_restaurants:
                         restaurants.append(each["place_id"])
                     message = [
-                        templates.show_vote_pull(restaurants=restaurants),
-                        templates.create_vote(user_id="example"),
+                        flex_template.show_vote_pull(restaurants=restaurants),
+                        flex_template.create_vote(user_id="example"),
                     ]
 
                 ## 測試投票
                 elif user_message == "測試投票":
-                    contents = templates.share_vote(pull_id="example")
+                    contents = flex_template.share_vote(pull_id="example")
                     message = FlexSendMessage(alt_text="使用教學", contents=contents)
 
                 elif user_message == "測試投票結果":
@@ -113,7 +113,7 @@ def handle_message(event):
                     users = vote_info["users"]
                     total_user_count = vote_info["total_user_count"]
 
-                    message = templates.vote_result(
+                    message = flex_template.vote_result(
                         pull_id=pull_id,
                         vote_name=vote_name,
                         best=best,
@@ -151,7 +151,7 @@ def handle_message(event):
         except Exception as e:
             sentry_sdk.capture_exception(e)
             config.console.print_exception()
-            message = templates.error()
+            message = flex_template.error()
         if can_reply:
             line_bot_api.reply_message(reply_token, message)
 
@@ -206,7 +206,7 @@ def handle_message(event):
         except Exception as e:
             sentry_sdk.capture_exception(e)
             config.console.print_exception()
-            message = templates.error()
+            message = flex_template.error()
         line_bot_api.reply_message(reply_token, message)
 
 
@@ -222,7 +222,7 @@ def search_info(query: str, page_token: str = ""):
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = templates.search_result(
+        message = flex_template.search_result(
             restaurants=restaurants.restaurants[:5],
         )
     return message
@@ -249,7 +249,7 @@ def find_nearby(
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = templates.show_restaurant(
+        message = flex_template.show_restaurant(
             user_latitude=latitude,
             user_longitude=longitude,
             restaurants=restaurants.restaurants[:5],

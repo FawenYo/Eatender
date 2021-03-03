@@ -9,7 +9,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 
 from . import message_event, postback_event
-from . import templates as flex_templates
+from . import flex_template
 from . import user_event
 
 sys.path.append(".")
@@ -133,5 +133,5 @@ async def liff_share(pull_id: str) -> JSONResponse:
     Returns:
         JSONResponse: Flex Message資料
     """
-    message = flex_templates.share_vote(pull_id=pull_id)
+    message = flex_template.share_vote(pull_id=pull_id)
     return JSONResponse(content={"status": "success", "data": message})

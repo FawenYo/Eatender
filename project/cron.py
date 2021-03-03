@@ -3,7 +3,7 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from dateutil import parser
 from fastapi import APIRouter
-from line import templates
+from line import flex_template
 from linebot import LineBotApi
 from linebot.models import *
 from vote.urls import find_vote_result, show_result
@@ -48,7 +48,7 @@ def send_result(pull_id: str, creator: str):
     users = vote_info["users"]
     total_user_count = vote_info["total_user_count"]
 
-    message = templates.vote_result(
+    message = flex_template.vote_result(
         pull_id=pull_id,
         vote_name=vote_name,
         best=best,

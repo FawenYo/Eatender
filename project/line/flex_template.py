@@ -311,7 +311,7 @@ def vote_result(
     contents["body"]["contents"][1]["text"] = vote_name
     contents["body"]["contents"][2]["text"] = f"共{total_user_count}人參與投票"
     for each in best:
-        restaurant_name = each["restaurant"]
+        restaurant_name = each["restaurant"]["name"]
         date_text = each["date"]
         session_text = each["session"]
 
