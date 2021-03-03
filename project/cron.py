@@ -1,6 +1,7 @@
 import config
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
+from dateutil import parser
 from fastapi import APIRouter
 from line import templates
 from linebot import LineBotApi
@@ -31,7 +32,7 @@ def vote_cronjob(pull_id: str, creator: str, due_date: str):
         send_result,
         "date",
         args=[pull_id, creator],
-        run_date=f"{due_date}",
+        run_date=parser.parse(due_date),
         timezone=pytz.timezone("Asia/Taipei"),
     )
     scheduler.start()
