@@ -51,7 +51,12 @@ GOOGLE_MAPS_REQUEST_FIELD = [
 ]
 
 # MongoDB
-client = pymongo.MongoClient()
+MONGO_USER = os.environ.get("MONGO_USER")
+MONGO_PWD = os.environ.get("MONGO_PWD")
+
+client = pymongo.MongoClient(
+    f"mongodb+srv://{MONGO_USER}:{MONGO_PWD}@cluster0.db2o0.mongodb.net/db?retryWrites=true&w=majority"
+)
 
 db = client.db
 

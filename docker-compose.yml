@@ -1,18 +1,6 @@
 version: "3.7"
 
 services:
-  mongodb_container:
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: /run/secrets/mongodb_root_username
-      MONGO_INITDB_ROOT_PASSWORD: /run/secrets/mongodb_root_password
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb_data_container:/data/db
-    secrets:
-      - mongodb_root_password
-      - mongodb_root_username
   redis:
     image: "redis:alpine"
     environment:
@@ -38,11 +26,3 @@ services:
       - project
     environment:
       - TZ=Asia/Taipei
-volumes:
-  mongodb_data_container:
-
-secrets:
-  mongodb_root_username:
-    file: ./mongodb/.mongodb_root_username
-  mongodb_root_password:
-    file: ./mongodb/.mongodb_root_password
