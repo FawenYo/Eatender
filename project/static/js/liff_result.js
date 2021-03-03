@@ -23,7 +23,7 @@ function initializeLiff(myLiffId) {
             liffId: myLiffId,
         })
         .then(() => {
-            location.replace(`../vote/result?id=${pull_id}`);
+            location.replace(`../vote/result?pull_id=${pull_id}`);
         })
         .catch((err) => {
             console.log(err);

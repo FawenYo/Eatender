@@ -86,7 +86,9 @@ async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
 
 @vote.get("/view/result", response_class=HTMLResponse)
 async def login(
-    request: Request, liff_state: Optional[str] = Query(None, alias="liff.state")
+    request: Request,
+    liff_state: Optional[str] = Query(None, alias="liff.state"),
+    pull_id: Optional[str] = "",
 ) -> HTMLResponse:
     """轉址至投票結果頁面
 
