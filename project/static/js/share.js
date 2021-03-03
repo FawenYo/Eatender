@@ -48,6 +48,17 @@ function initializeApp() {
 
 
 function sendShare() {
+    if (!pull_id) {
+        pull_id = localStorage["pull_id"]
+        if (!pull_id) {
+            Swal.fire({
+                icon: "error",
+                title: "很抱歉！",
+                text: "查無投票池，請重新再試！",
+                confirmButtonText: "確認",
+            })
+        }
+    }
     const requestOptions = {
         method: 'GET',
         header: { 'Content-Type': 'application/json' },
