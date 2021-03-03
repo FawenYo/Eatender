@@ -1,7 +1,9 @@
 import sys
 import threading
 
+import requests
 import sentry_sdk
+from bs4 import BeautifulSoup
 from linebot import LineBotApi
 from linebot.models import *
 
@@ -122,6 +124,16 @@ def handle_message(event):
                     target = user_message.split("@找")[1]
                     message = search_info(query=target)
 
+                elif "\n" in user_message:
+                    contents_list = user_message.split("\n")
+                    if (
+                        len(contents_list) >= 3
+                        and "maps.app.goo.gl" in contents_list[2]
+                    ):
+                        google_maps_url = contents_list[2].split(" ")[0]
+                        query = parse_google_maps_url(url=google_maps_url)
+                        if query:
+                            message = search_info(query=query)
                 else:
                     # 面對單一使用者
                     if event.source.type == "user":
@@ -245,3 +257,23 @@ def find_nearby(
     )
     thread.start()
     return message
+
+
+def parse_google_maps_url(url: str):
+    """擷取Google Maps網頁資訊
+
+    Args:
+        url (str): Google Maps URL
+    """
+    origin_url = requests.get(url=url).url
+    response = requests.get(url=f"{origin_url}&hl=zh-TW")
+
+    soup = BeautifulSoup(response.content, "html.parser")
+    meta_list = soup.find_all("meta")
+    for meta in meta_list:
+        if "property" in meta.attrs:
+            name = meta.attrs["property"]
+            if name == "og:title":
+                info = meta.attrs["content"]
+                return info
+    return None
