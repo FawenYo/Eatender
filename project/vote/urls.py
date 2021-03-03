@@ -176,10 +176,10 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                         f"{date_string} {day_text} + {session} @ {each_restaurant}"
                     ] = []
 
+            config.db.vote.insert_one(data)
+
             # 非測試範例
             if param.user_id != "example":
-                config.db.vote.insert_one(data)
-
                 user_data["vote"] = []
                 config.db.user.update_one()(
                     {"user_id": param.user_id}, {"$set": user_data}
@@ -463,15 +463,21 @@ def show_result(pull_id: str) -> dict:
     """
     result = find_vote_result(pull_id=pull_id)
     vote_name = result["data"]["info"]["vote_name"]
+    total_user_count = len(result["data"]["info"]["result"]["user"])
     count, best_info = result["data"]["sorted_best"][0]
     best = []
     users = []
     for date_info, user_info in best_info:
         info_date, info_rid = date_info.split(" @ ")
-        info_date = info_date.replace("+ ", "")
+        each_date, each_session = info_date.split(" + ")
         restaurant = json.loads(config.cache.get(info_rid))
 
-        best.append(f"{info_date} @ {restaurant['name']}")
+        best_template = {
+            "date": each_date,
+            "session": each_session,
+            "restaurant": restaurant,
+        }
+        best.append(best_template)
         for each_user_id in user_info:
             try:
                 user_name = line_bot_api.get_profile(each_user_id).display_name
@@ -480,4 +486,9 @@ def show_result(pull_id: str) -> dict:
 
             if user_name not in users:
                 users.append(user_name)
-    return {"vote_name": vote_name, "best": best, "users": users}
+    return {
+        "vote_name": vote_name,
+        "best": best,
+        "users": users,
+        "total_user_count": total_user_count,
+    }

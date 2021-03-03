@@ -5,23 +5,74 @@
         "layout": "vertical",
         "contents": [
             {
+                "type": "text",
+                "text": "投票名稱",
+                "weight": "bold",
+                "color": "#E36F19",
+                "size": "sm"
+            },
+            {
+                "type": "text",
+                "text": "example",
+                "weight": "bold",
+                "size": "xxl",
+                "margin": "md",
+                "color": "#000000",
+                "align": "center"
+            },
+            {
+                "type": "text",
+                "text": "共0人參與投票",
+                "size": "xs",
+                "color": "#82827B",
+                "wrap": true,
+                "align": "end",
+                "weight": "bold"
+            },
+            {
+                "type": "separator",
+                "margin": "xxl",
+                "color": "#000000"
+            },
+            {
                 "type": "box",
-                "layout": "baseline",
+                "layout": "horizontal",
                 "contents": [
                     {
                         "type": "text",
-                        "text": "example",
-                        "size": "lg",
-                        "weight": "bold",
-                        "style": "normal",
-                        "wrap": true,
-                        "align": "center",
-                        "decoration": "underline"
+                        "text": "投票結果",
+                        "color": "#82827B",
+                        "size": "md",
+                        "weight": "bold"
                     }
                 ],
-                "margin": "md",
-                "borderWidth": "bold",
-                "offsetBottom": "xs"
+                "spacing": "none",
+                "margin": "xl"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": []
+            },
+            {
+                "type": "separator",
+                "margin": "xxl",
+                "color": "#000000"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "與會人",
+                        "color": "#82827B",
+                        "size": "md",
+                        "weight": "bold"
+                    }
+                ],
+                "spacing": "none",
+                "margin": "xl"
             },
             {
                 "type": "box",
@@ -29,68 +80,50 @@
                 "contents": [
                     {
                         "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": "投票結果",
-                                "size": "sm",
-                                "flex": 2,
-                                "decoration": "none",
-                                "color": "#837E7E"
-                            }
-                        ],
-                        "offsetTop": "sm",
-                        "borderWidth": "bold",
-                        "spacing": "sm",
-                        "offsetBottom": "lg",
-                        "flex": 2
-                    },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [],
-                        "flex": 2,
-                        "spacing": "sm",
-                        "borderWidth": "bold"
-                    },
-                    {
-                        "type": "box",
                         "layout": "vertical",
                         "contents": [
                             {
-                                "type": "text",
-                                "text": "與會人",
-                                "flex": 2,
-                                "size": "sm",
-                                "color": "#837E7E",
-                                "contents": [],
-                                "margin": "xs"
-                            },
-                            {
-                                "type": "text",
-                                "size": "sm",
-                                "flex": 6,
-                                "text": "example",
-                                "wrap": true,
-                                "align": "start"
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "【",
+                                        "margin": "none",
+                                        "size": "md",
+                                        "align": "start",
+                                        "offsetStart": "none",
+                                        "flex": 0
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "example",
+                                        "align": "center"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "】",
+                                        "align": "end",
+                                        "flex": 0
+                                    }
+                                ]
                             }
                         ],
-                        "borderWidth": "bold",
-                        "spacing": "sm",
-                        "offsetBottom": "lg",
-                        "offsetTop": "sm",
-                        "position": "relative",
-                        "flex": 2
+                        "margin": "md"
                     }
                 ]
+            },
+            {
+                "type": "separator",
+                "margin": "xxl",
+                "color": "#000000"
             }
-        ]
+        ],
+        "backgroundColor": "#ffffff"
     },
     "footer": {
         "type": "box",
         "layout": "vertical",
-        "spacing": "none",
         "contents": [
             {
                 "type": "box",
@@ -103,19 +136,23 @@
                             "label": "查看投票結果",
                             "uri": "http://example.com/"
                         },
-                        "color": "#000000"
+                        "color": "#000000",
+                        "style": "link"
                     }
                 ],
-                "backgroundColor": "#fdbe29",
-                "cornerRadius": "100px",
-                "margin": "none",
-                "alignItems": "center",
-                "justifyContent": "space-evenly",
-                "position": "relative",
                 "width": "200px",
+                "alignItems": "center",
                 "height": "50px",
-                "offsetStart": "40px"
+                "cornerRadius": "100px",
+                "backgroundColor": "#fdbe29"
             }
-        ]
+        ],
+        "alignItems": "center",
+        "margin": "xl"
+    },
+    "styles": {
+        "footer": {
+            "separator": true
+        }
     }
 }

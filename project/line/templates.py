@@ -292,28 +292,111 @@ def create_vote(user_id: str) -> FlexSendMessage:
 
 
 def vote_result(
-    pull_id: str, vote_name: str, best: list, users: list
+    pull_id: str, vote_name: str, best: list, users: list, total_user_count: int
 ) -> FlexSendMessage:
+    """投票結果
+
+    Args:
+        pull_id (str): 投票池ID
+        vote_name (str): 投票名稱
+        best (list): 投票結果
+        users (list): 與會人列表
+        total_user_count (int): 投票總人數
+
+    Returns:
+        FlexSendMessage: 投票結果
+    """
     with open("line/model/vote_result.json") as json_file:
         contents = json.load(json_file)
-    contents["body"]["contents"][0]["contents"][0]["text"] = vote_name
+    contents["body"]["contents"][1]["text"] = vote_name
+    contents["body"]["contents"][2]["text"] = f"共{total_user_count}人參與投票"
     for each in best:
-        date_template = {
-            "type": "text",
-            "text": each,
-            "size": "md",
-            "color": "#666666",
-            "flex": 2,
-            "wrap": true,
-            "position": "relative",
-            "weight": "bold",
-            "decoration": "none",
-            "margin": "xs",
-            "align": "start",
+        restaurant_name = each["restaurant"]
+        date_text = each["date"]
+        session_text = each["session"]
+
+        template = {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": restaurant_name,
+                            "align": "center",
+                            "size": "lg",
+                            "weight": "bold",
+                            "margin": "md",
+                        },
+                        {
+                            "type": "box",
+                            "layout": "horizontal",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": date_text,
+                                    "size": "sm",
+                                    "weight": "bold",
+                                    "align": "start",
+                                    "offsetStart": "10px",
+                                },
+                                {
+                                    "type": "text",
+                                    "text": session_text,
+                                    "align": "end",
+                                    "size": "sm",
+                                    "color": "#F26013",
+                                    "margin": "none",
+                                    "weight": "bold",
+                                    "offsetEnd": "10px",
+                                },
+                            ],
+                            "margin": "lg",
+                        },
+                    ],
+                    "paddingAll": "none",
+                    "borderWidth": "none",
+                    "cornerRadius": "10px",
+                    "borderColor": "#F7F1C7",
+                    "margin": "none",
+                }
+            ],
+            "margin": "md",
+            "borderColor": "#F7F1C7",
+            "borderWidth": "medium",
+            "cornerRadius": "10px",
+            "paddingBottom": "10px",
         }
-        contents["body"]["contents"][1]["contents"][1]["contents"].append(date_template)
-    users_string = "、".join(users)
-    contents["body"]["contents"][1]["contents"][2]["contents"][1]["text"] = users_string
+        contents["body"]["contents"][5]["contents"].append(template)
+    for each_user in users:
+        template = {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "horizontal",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "【",
+                            "margin": "none",
+                            "size": "md",
+                            "align": "start",
+                            "offsetStart": "none",
+                            "flex": 0,
+                        },
+                        {"type": "text", "text": each_user, "align": "center"},
+                        {"type": "text", "text": "】", "align": "end", "flex": 0},
+                    ],
+                }
+            ],
+            "margin": "md",
+        }
+        contents["body"]["contents"][8]["contents"].append(template)
     contents["footer"]["contents"][0]["contents"][0]["action"][
         "uri"
     ] = f"https://liff.line.me/1655422218-KOeZvV1e?pull_id={pull_id}"

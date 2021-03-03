@@ -87,7 +87,7 @@ def handle_message(event):
                         message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
 
                 # 測試創建投票
-                elif user_message == "測試創建投票":
+                elif user_message == "測試投票創建":
                     random_restaurants = config.db.restaurant.aggregate(
                         [{"$sample": {"size": 5}}]
                     )
@@ -111,9 +111,14 @@ def handle_message(event):
                     vote_name = vote_info["vote_name"]
                     best = vote_info["best"]
                     users = vote_info["users"]
+                    total_user_count = vote_info["total_user_count"]
 
                     message = templates.vote_result(
-                        pull_id=pull_id, vote_name=vote_name, best=best, users=users
+                        pull_id=pull_id,
+                        vote_name=vote_name,
+                        best=best,
+                        users=users,
+                        total_user_count=total_user_count,
                     )
                 # 客服
                 elif user_message == "客服":
