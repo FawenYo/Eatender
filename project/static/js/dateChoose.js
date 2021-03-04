@@ -31,10 +31,8 @@ function cancelButton(targetBtn) {
 }
 
 function submitButton() {
-    let query_url = window.location.href
-    let url = new URL(query_url);
-    pull_id = url.searchParams.get("id")
-    user_id = url.searchParams.get("name")
+    pull_id = localStorage["pull_id"];
+    user_id = localStorage["user_id"];
 
     let sendData = {
         pull_id,

@@ -49,6 +49,7 @@ function initializeApp() {
             .getProfile()
             .then((profile) => {
                 user_id = profile.userId;
+                localStorage["user_id"] = user_id
             })
             .catch((err) => {
                 console.log(err);
