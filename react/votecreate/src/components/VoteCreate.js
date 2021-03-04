@@ -143,12 +143,13 @@ const useStyles = makeStyles(theme => ({
     color: "rgba(241, 196, 15, 0.8)"
   },
   buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   button: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
+    width:200,
   },
 }));
 
@@ -650,7 +651,11 @@ export default function VoteCreate() {
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
+                    <Button
+                      variant="contained"
+                      onClick={handleBack} 
+                      className={classes.button}
+                    >
                       回上一步
                     </Button>
                   )}
