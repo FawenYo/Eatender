@@ -1,4 +1,4 @@
-let pull_id
+let pull_id;
 
 $(document).ready(function () {
     const query_url = new URL(window.location.href)
@@ -78,7 +78,14 @@ function sendShare() {
                     },
                 ])
                 if (result) {
-                    console.log(`[${result.status}] Message sent!`)
+                    Swal.fire({
+                        icon: "success",
+                        title: "成功！",
+                        text: "訊息已送出至聊天室囉～",
+                        confirmButtonText: "確認",
+                    }).then((result) => {
+                        liff.closeWindow();
+                    })
                 } else {
                     const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split(".")
 

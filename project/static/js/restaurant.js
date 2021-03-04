@@ -1,16 +1,14 @@
-var pull_id = ""
-var user_id = ""
-var total_restaurant = 0
-var current_index = 0
-var choose_result = { love: [], hate: [] }
-var load_done = false
+let pull_id;
+let user_id;
+let total_restaurant = 0;
+let current_index = 0;
+let choose_result = { love: [], hate: [] };
+let load_done = false;
 
 $(document).ready(function () {
-    var query_url = window.location.href
-    var url = new URL(query_url);
+    initializeLiff("1655422218-8n1PlOw1");
+    parseParam();
 
-    pull_id = url.searchParams.get("id")
-    user_id = url.searchParams.get("name")
     var tinderContainer = document.querySelector(".tinder")
     var allCards = document.querySelectorAll(".tinder--card")
 
@@ -29,6 +27,51 @@ $(document).ready(function () {
     initCards()
     fetch_restaurant()
 })
+
+function initializeLiff(myLiffId) {
+    liff
+        .init({
+            liffId: myLiffId,
+        })
+        .then(() => {
+            initializeApp();
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function initializeApp() {
+    if (!liff.isLoggedIn()) {
+        liff.login();
+    } else {
+        liff
+            .getProfile()
+            .then((profile) => {
+                user_id = profile.userId;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+}
+
+function parseParam() {
+    const query_url = new URL(window.location.href)
+    const query_params = new URLSearchParams(query_url.searchParams.get("liff.state"))
+
+    if (query_params.get("pull_id") != null) {
+        pull_id = query_params.get("pull_id")
+        localStorage["pull_id"] = pull_id
+    } else {
+        if (query_url.searchParams.get("pull_id") != null) {
+            pull_id = query_url.searchParams.get("pull_id")
+            localStorage["pull_id"] = pull_id
+        } else {
+            pull_id = localStorage["pull_id"]
+        }
+    }
+}
 
 function fetch_restaurant() {
     const requestOptions = {

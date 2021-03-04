@@ -56,7 +56,13 @@ function submitButton() {
                     icon: "success",
                     title: "投票成功！",
                     text: data.message,
-                    confirmButtonText: "確認",
+                    confirmButtonText: "離開投票",
+                    showCancelButton: true,
+                    cancelButtonText: "繼續編輯",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        liff.closeWindow();
+                    }
                 })
             } else {
                 Swal.fire({

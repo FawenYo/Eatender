@@ -42,21 +42,6 @@ async def share(
     return templates.TemplateResponse("share.html", context={"request": request})
 
 
-@vote.get("/login", response_class=HTMLResponse)
-async def login(
-    request: Request, liff_state: Optional[str] = Query(None, alias="liff.state")
-) -> HTMLResponse:
-    """轉址至投票頁面
-
-    Args:
-        request (Request): Request Object
-
-    Returns:
-        HTMLResponse: 轉址頁面
-    """
-    return templates.TemplateResponse("login.html", context={"request": request})
-
-
 @vote.get("/vote/create")
 async def vote_create_page(
     request: Request,
@@ -67,7 +52,11 @@ async def vote_create_page(
 
 
 @vote.get("/vote")
-async def vote_page(request: Request, id: str, name: str) -> HTMLResponse:
+async def vote_page(
+    request: Request,
+    liff_state: Optional[str] = Query(None, alias="liff.state"),
+    pull_id: Optional[str] = "",
+) -> HTMLResponse:
     """餐廳投票頁面
 
     Args:
