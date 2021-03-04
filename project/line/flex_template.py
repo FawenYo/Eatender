@@ -166,23 +166,23 @@ def show_favorite(restaurants) -> FlexSendMessage:
 
 
 def show_restaurant(
-    user_latitude: float,
-    user_longitude: float,
     restaurants,
+    user_latitude: float = 0.0,
+    user_longitude: float = 0.0,
     keyword: str = "",
     next_page: str = "",
 ) -> FlexSendMessage:
     """附近餐廳列表
 
     Args:
-        user_latitude (float): 使用者緯度
-        user_longitude (float): 使用者經度
         restaurants: 餐廳列表
+        user_latitude (float, optional): 使用者緯度. Defaults to 0.0.
+        user_longitude (float, optional): 使用者經度. Defaults to 0.0.
         keyword (str, optional): 餐廳關鍵字. Defaults to "".
         next_page (str, optional): 更多餐廳 token. Defaults to "".
 
     Returns:
-        FlexSendMessage: 餐廳推薦列表
+        FlexSendMessage: 餐廳資訊列表
     """
     show_list = []
     for each in restaurants:
@@ -227,49 +227,7 @@ def show_restaurant(
             next_page=next_page,
         )
         contents["contents"].append(more)
-    message = FlexSendMessage(alt_text="餐廳推薦列表", contents=contents)
-    return message
-
-
-def search_result(restaurants) -> FlexSendMessage:
-    """特定餐廳資料
-
-    Args:
-        restaurants: 餐廳列表
-
-    Returns:
-        FlexSendMessage: 餐廳資訊
-    """
-    show_list = []
-    for each in restaurants:
-        restaurant_name = each.name
-        keywords = each.keywords
-        photo_url = each.photo_url
-        website = each.website
-        ifoodie_url = each.ifoodie_url
-        rating = each.rating
-        price = each.price
-        address = each.address
-        open_now = each.open_now
-        phone_number = each.phone_number
-        card = search_card_info(
-            restaurant_name=restaurant_name,
-            keywords=keywords,
-            photo_url=photo_url,
-            website=website,
-            ifoodie_url=ifoodie_url,
-            rating=rating,
-            price=price,
-            address=address,
-            open_now=open_now,
-            phone_number=phone_number,
-        )
-        show_list.append(card)
-    contents = {
-        "type": "carousel",
-        "contents": show_list,
-    }
-    message = FlexSendMessage(alt_text="餐廳資訊", contents=contents)
+    message = FlexSendMessage(alt_text="餐廳資訊列表", contents=contents)
     return message
 
 
@@ -426,76 +384,6 @@ def find_operating_status(data):
         if start <= current <= end:
             return True
     return False
-
-
-def search_card_info(
-    restaurant_name: str,
-    keywords: list,
-    photo_url: str,
-    website: str,
-    ifoodie_url: str,
-    rating: float,
-    price: int,
-    address: str,
-    open_now: bool,
-    phone_number: str,
-) -> dict:
-    """卡片模板 - 特定餐廳資訊
-
-    Args:
-        restaurant_name (str): 餐廳名稱
-        keywords (list): 餐廳評論列表
-        photo_url (str): 餐廳照片
-        website (str): 餐廳網站連結
-        ifoodie_url (str): 餐廳愛食記連結
-        rating (float): Google Maps' 評分
-        price (int): 餐廳平均消費價格
-        address (str): 餐廳地址
-        open_now (bool): 是否營業中
-        phone_number (str): 餐廳電話
-
-    Returns:
-        dict: Flex Message 卡片模板
-    """
-    star_list = stars_template(rating=rating)
-    if price == 0:
-        price = "N/A"
-    comments = keywords_template(keywords=keywords)
-    operate_status, operate_color = operate_status_template(open_now=open_now)
-
-    with open("line/model/search_card_info.json") as json_file:
-        card = json.load(json_file)
-    card["header"]["contents"][0]["contents"][0]["url"] = photo_url
-    card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
-    card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
-    card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
-    card["body"]["contents"][1]["contents"] = star_list + [
-        {
-            "type": "text",
-            "text": str(rating),
-            "size": "sm",
-            "color": "#999999",
-            "margin": "sm",
-            "flex": 0,
-        },
-    ]
-    card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
-    card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
-    card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
-    detail = [
-        {
-            "type": "text",
-            "text": "評論",
-            "size": "sm",
-            "color": "#999999",
-            "flex": 0,
-        }
-    ]
-    detail.extend(comments)
-    card["body"]["contents"][3]["contents"] = detail
-    card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
-    card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
-    return card
 
 
 def restaurant_card_info(

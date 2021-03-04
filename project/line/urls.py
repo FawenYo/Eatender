@@ -103,6 +103,26 @@ def handle_unfollow(event):
     user_event.handle_unfollow(event=event)
 
 
+@handler.add(JoinEvent)
+def handle_join(event):
+    """事件 - 加入群組/房間
+
+    Args:
+        event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#join-event
+    """
+    user_event.handle_join(event=event)
+
+
+@handler.add(LeaveEvent)
+def handle_leave(event):
+    """事件 - 離開群組/房間
+
+    Args:
+        event (LINE Event Object): Refer to https://developers.line.biz/en/reference/messaging-api/#leave-event
+    """
+    user_event.handle_leave(event=event)
+
+
 @handler.add(MessageEvent, message=(TextMessage, LocationMessage))
 def handle_message(event):
     """事件 - 訊息

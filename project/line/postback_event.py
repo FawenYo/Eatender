@@ -31,6 +31,7 @@ def handle_postback(event):
         if "_||_" in postback_data:
             postback_args = postback_data.split("_||_")
             action = postback_args[0]
+
             # 加入收藏名單
             if action == "favorite":
                 place_id = postback_args[1]
@@ -46,8 +47,9 @@ def handle_postback(event):
 
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}加入最愛！")
                 else:
-                    message = TextSendMessage(text=f"已經有like過相同的餐廳囉！")
+                    message = TextSendMessage(text=f"已經有收藏過相同的餐廳囉！")
                 line_bot_api.reply_message(reply_token, message)
+
             # 搜尋餐廳
             elif action == "search":
                 latitude, longitude = [float(i) for i in postback_args[1].split(",")]
@@ -75,6 +77,7 @@ def handle_postback(event):
                     sentry_sdk.capture_exception(e)
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
+
             # 搜尋更多
             elif action == "more":
                 latitude, longitude = [float(i) for i in postback_args[1].split(",")]
@@ -97,10 +100,18 @@ def handle_postback(event):
                     config.console.print_exception()
                     # 使用push回應內容
                     line_bot_api.push_message(user_id, message)
+
             # 加入投票池
             elif action == "vote":
                 place_id = postback_args[1]
-                user = config.db.user.find_one({"user_id": user_id})
+
+                if event.source.type == "user":
+                    user = config.db.user.find_one({"user_id": user_id})
+                elif event.source.type == "group":
+                    user = config.db.user.find_one({"user_id": event.source.group_id})
+                else:
+                    user = config.db.user.find_one({"user_id": event.source.room_id})
+
                 restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
                 if not restaurant_data:
                     restaurant_data = json.loads(config.cache.get(place_id))
@@ -111,10 +122,18 @@ def handle_postback(event):
                 else:
                     message = TextSendMessage(text=f"餐廳已經在投票池內囉！")
                 line_bot_api.reply_message(reply_token, message)
+
             # 移除投票
             elif action == "remove":
                 place_id = postback_args[1]
-                user = config.db.user.find_one({"user_id": user_id})
+
+                if event.source.type == "user":
+                    user = config.db.user.find_one({"user_id": user_id})
+                elif event.source.type == "group":
+                    user = config.db.user.find_one({"user_id": event.source.group_id})
+                else:
+                    user = config.db.user.find_one({"user_id": event.source.room_id})
+
                 restaurant_data = config.db.restaurant.find_one({"place_id": place_id})
                 if place_id in user["vote"]:
                     user["vote"].remove(place_id)

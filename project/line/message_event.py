@@ -222,9 +222,7 @@ def search_info(query: str, page_token: str = ""):
         message = TextSendMessage(text=f"很抱歉，我們找不到相關的餐廳😭")
     else:
         # Show first five restaurant
-        message = flex_template.search_result(
-            restaurants=restaurants.restaurants[:5],
-        )
+        message = flex_template.show_restaurant(restaurants=restaurants.restaurants[:5])
     return message
 
 

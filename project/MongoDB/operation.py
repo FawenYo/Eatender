@@ -7,34 +7,6 @@ sys.path.append(".")
 from config import db
 
 
-def new_user(user_id: str, display_name: str):
-    """LINE Bot - New User
-
-    Args:
-        user_id (str): LINE User ID
-        display_name (str): LINE User Name
-    """
-    now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
-    data = {
-        "user_id": user_id,
-        "display_name": display_name,
-        "add_time": now,
-        "favorite": [],
-        "vote": [],
-        "notify": {"status": False, "token": ""},
-    }
-    db.user.insert_one(data)
-
-
-def delete_user(user_id: str):
-    """LINE Bot - Delete User
-
-    Args:
-        user_id (str): LINE User ID
-    """
-    db.user.delete_one({"user_id": user_id})
-
-
 def record_user_search(user_id: str, lat: float, lng: float, search: str):
     """LINE Bot - Record user
 
