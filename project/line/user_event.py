@@ -61,7 +61,7 @@ def handle_join(event):
         display_name = user_id
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
     data = {
-        "user_id": event.source.user_id,
+        "user_id": user_id,
         "display_name": display_name,
         "add_time": now,
         "favorite": [],
