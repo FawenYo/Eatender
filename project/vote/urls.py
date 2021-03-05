@@ -172,7 +172,7 @@ async def vote_create(param: CreateVote) -> JSONResponse:
             # 非測試範例
             if param.user_id != "example":
                 user_data["vote"] = []
-                config.db.user.update_one()(
+                config.db.user.update_one(
                     {"user_id": param.user_id}, {"$set": user_data}
                 )
             message = {

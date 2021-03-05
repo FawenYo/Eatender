@@ -1,7 +1,7 @@
 import sys
-import pytz
-
 from datetime import datetime
+
+import pytz
 from linebot import LineBotApi
 from linebot.models import *
 
