@@ -6,7 +6,7 @@ from fastapi import APIRouter
 from line import flex_template
 from linebot import LineBotApi
 from linebot.models import *
-from vote.urls import find_vote_result, show_result
+from vote.urls import show_result
 
 cron = APIRouter()
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)

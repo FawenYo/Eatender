@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Optional
 
 import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
 from bson import json_util
 from dateutil import parser
 from fastapi import APIRouter, Query, Request
@@ -17,6 +18,7 @@ from .model import *
 
 sys.path.append(".")
 import config
+import cron
 
 vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -175,6 +177,16 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 config.db.user.update_one(
                     {"user_id": param.user_id}, {"$set": user_data}
                 )
+
+                scheduler = BackgroundScheduler()
+                scheduler.add_job(
+                    cron.send_result,
+                    "date",
+                    args=[data_id, param.user_id],
+                    run_date=parser.parse(param.due_date),
+                    timezone=pytz.timezone("Asia/Taipei"),
+                )
+                scheduler.start()
             message = {
                 "status": "success",
                 "message": {
