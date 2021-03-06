@@ -6,7 +6,12 @@ let choose_result = { love: [], hate: [] };
 let load_done = false;
 
 $(document).ready(function () {
-    initializeLiff("1655422218-8n1PlOw1");
+    if (!localStorage["dont_hint"] || localStorage["dont_hint"] == "false") {
+        document.getElementById("hint_box").setAttribute("style", "display: block;");
+        rightSlideIn(leftSlideIn);
+    }
+
+    //initializeLiff("1655422218-8n1PlOw1");
     parseParam();
 
     var tinderContainer = document.querySelector(".tinder")
@@ -27,6 +32,30 @@ $(document).ready(function () {
     initCards()
     fetch_restaurant()
 })
+
+function rightSlideIn(callback) {
+    document.getElementById("left_content").setAttribute("style", "display: block; animation: right_slidein 1s;");
+    setTimeout(callback, 1000);
+}
+
+function leftSlideIn() {
+    document.getElementById("right_content").setAttribute("style", "display: block; animation: left_slidein 1s;");
+}
+
+function hideHint() {
+    Swal.fire({
+        icon: "question",
+        title: "是否要永久關閉提示？",
+        confirmButtonText: "確認",
+        showCancelButton: true,
+        cancelButtonText: "取消",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage["dont_hint"] = true
+        }
+    })
+    document.getElementById("hint_box").setAttribute("style", "display: none;");
+}
 
 function initializeLiff(myLiffId) {
     liff

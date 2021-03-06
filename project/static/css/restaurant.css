@@ -30,6 +30,45 @@ body {
   transition: all .3s ease-in;
 }
 
+.hint_box {
+  background-color: rgba(0,0,0,0.6);
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  position: absolute;
+}
+
+.left_hint {
+  height: 80vh;
+  width: 50%;
+  float: left;
+}
+
+.right_hint {
+  height: 80vh;
+  width: 50%;
+  float: right;
+}
+
+.hint_content {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height: 100%;
+  text-align: center;
+  color:white;
+}
+
+.button_hint {
+  text-align: center;
+}
+
+.hint_confirm {
+  margin-top: 10px;
+  width: 30%;
+  border-radius: 5rem;
+}
+
 .tinder {
   width: 100vw;
   height: 100vh;
@@ -171,5 +210,25 @@ body {
 
   100% {
     left: 100%;
+  }
+}
+
+@keyframes right_slidein {
+  from {
+    margin-right: -50%;
+  }
+
+  to {
+    margin-right: 0%;
+  }
+}
+
+@keyframes left_slidein {
+  from {
+    margin-left: -50%;
+  }
+
+  to {
+    margin-left: 0%;
   }
 }

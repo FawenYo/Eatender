@@ -30,6 +30,25 @@
 
 <body>
 	<div class="tinder">
+		<div class="hint_box" id="hint_box" style="display: none;">
+			<div class="left_hint">
+				<div class="hint_content">
+					<i class="fas fa-arrow-left fa-10x" id="left_content" style="display: none; ">
+						<h2>向左滑動不喜歡</h2>
+					</i>
+				</div>
+			</div>
+			<div class="right_hint">
+				<div class="hint_content">
+					<i class="fas fa-arrow-right fa-10x" id="right_content" style="display: none; ">
+						<h2>向右滑動喜歡</h2>
+					</i>
+				</div>
+			</div>
+			<div class="button_hint">
+				<button type="button" class="hint_confirm btn btn-primary" onclick="hideHint()">確認</button>
+			</div>
+		</div>
 		<div class="tinder--status"><i class="fas fa-times"></i> <i class="fas fa-heart"></i></div>
 
 		<div id="cardWrapper" class="tinder--cards">
