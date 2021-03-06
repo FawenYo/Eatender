@@ -11,7 +11,7 @@ $(document).ready(function () {
         rightSlideIn(leftSlideIn);
     }
 
-    //initializeLiff("1655422218-8n1PlOw1");
+    initializeLiff("1655422218-8n1PlOw1");
     parseParam();
 
     var tinderContainer = document.querySelector(".tinder")
