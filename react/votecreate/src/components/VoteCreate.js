@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Step, Stepper, StepLabel, Button } from "@material-ui/core"
-import { Chip, FormControl, MenuItem, Select, InputLabel, Input } from '@material-ui/core';
 import { useForm, Form } from "./useForm";
 
 // ./ imports
