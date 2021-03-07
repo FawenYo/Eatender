@@ -214,51 +214,6 @@ function MultiDateSelect() {
 /* END OF DateSelect PART */
 
 /* TimeSessioin Part */
-const useStyles_timeSession = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    maxWidth: 300,
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
-  },
-  noLabel: {
-    marginTop: theme.spacing(3),
-  },
-}));
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-const names = [
-  "早餐",
-  "午餐",
-  "下午茶",
-  "晚餐",
-  "宵夜",
-];
-
-function getStyles(name, timeSession, theme) {
-  return {
-    fontWeight:
-      timeSession.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 const HeaderText_timeSelect = styled.h2`
     font-size: 24px;
     font-weight: 600 !important;
@@ -269,66 +224,32 @@ const HeaderText_timeSelect = styled.h2`
 `;
 
 function TimeSessionSelect() {
-  const classes = useStyles_timeSession();
-  const theme = useTheme();
-  const [timeSession, setTimeSession] = React.useState([]);
 
-  const handleChange = (event) => {
-    setTimeSession(event.target.value);
-  };
-
-  const handleChangeMultiple = (event) => {
-    const options = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
+  const handleOnClick = (e) => {
+    const value = e.target.value;
+    if (PreservedFormValues.timeSession.includes(value)) {
+      PreservedFormValues.timeSession.pop(value);
     }
-    setTimeSession(value);
-  };
-
-  const updateToPreserved = () => {
-    PreservedFormValues.timeSession = timeSession;
+    else {
+      PreservedFormValues.timeSession.push(value);
+    }
   }
-  updateToPreserved();
 
   return (
     <>
       <center>
         <HeaderText_timeSelect>選擇聚餐時段</HeaderText_timeSelect>
+        <input type="checkbox" id="breakfast" value="早餐" onClick={handleOnClick}/>
+        <label for="breakfast">早餐</label>
+        <input type="checkbox" id="lunch" value="午餐" onClick={handleOnClick}/>
+        <label for="lunch">午餐</label>
+        <input type="checkbox" id="teatime" value="下午茶" onClick={handleOnClick}/>
+        <label for="teatime">下午茶</label>
+        <input type="checkbox" id="dinner" value="晚餐" onClick={handleOnClick}/>
+        <label for="dinner">晚餐</label>
+        <input type="checkbox" id="supper" value="宵夜" onClick={handleOnClick}/>
+        <label for="supper">宵夜</label>
       </center>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">選擇聚餐時段</InputLabel>
-        <Select
-          labelId="demo-mutiple-chip-label"
-          id="demo-mutiple-chip"
-          multiple
-          variant="filled"
-          value={timeSession}
-          onChange={handleChange}
-          input={<Input id="select-multiple-chip" />}
-          renderValue={(selected) => (
-            <div className={classes.chips}>
-              {selected.map((value) => (
-                <Chip
-                  key={value}
-                  label={value}
-                  className={classes.chip}
-                  color="secondary"
-                />
-              ))}
-            </div>
-          )}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name} style={getStyles(name, timeSession, theme)}>
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
     </>
   );
 }
@@ -336,7 +257,6 @@ function TimeSessionSelect() {
 /* END OF TimeSessioin Part */
 
 function VoteName_DueDate() {
-  const classes = useStyles_timeSession();
 
   /* Error report */
   const validate = (fieldValues = values) => {
