@@ -39,7 +39,7 @@ def share_vote(pull_id: str) -> dict:
     ] = f"https://liff.line.me/1655422218-8n1PlOw1?pull_id={pull_id}"
     contents["footer"]["contents"][1]["contents"][0]["action"][
         "uri"
-    ] = f"{config.SITE_NAME}share?pull_id={pull_id}"
+    ] = f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={pull_id}"
     return contents
 
 
