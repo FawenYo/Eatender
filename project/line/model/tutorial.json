@@ -1,20 +1,148 @@
 {
-    "type": "bubble",
-    "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-            {
-                "type": "image",
-                "aspectMode": "cover",
-                "size": "full",
-                "gravity": "top",
-                "margin": "none",
-                "position": "relative",
-                "aspectRatio": "2:3",
-                "url": "https://i.imgur.com/RFqeCz2.jpg"
-            },
-            {
+    "type": "carousel",
+    "contents": [
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://i.ibb.co/y09hjt2/LOGO5.png",
+                                "size": "full",
+                                "aspectRatio": "20:12",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "cornerRadius": "100px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "icon",
+                                        "url": "https://imgur.com/UQL7M2P.png",
+                                        "margin": "none"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "尋找餐廳",
+                                        "margin": "md",
+                                        "size": "lg",
+                                        "weight": "bold"
+                                    }
+                                ],
+                                "margin": "md"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "icon",
+                                        "url": "https://imgur.com/b3PbbNS.png",
+                                        "margin": "none"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "聚會排程",
+                                        "margin": "md",
+                                        "size": "lg",
+                                        "weight": "bold"
+                                    }
+                                ],
+                                "margin": "md"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "separator",
+                                "color": "#868178",
+                                "margin": "none"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "約食神器",
+                                        "weight": "bold",
+                                        "size": "lg",
+                                        "adjustMode": "shrink-to-fit",
+                                        "margin": "none",
+                                        "gravity": "center",
+                                        "offsetEnd": "1px",
+                                        "offsetStart": "1px",
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "EATender",
+                                        "weight": "regular",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "none",
+                                "alignItems": "center"
+                            },
+                            {
+                                "type": "separator",
+                                "color": "#868178",
+                                "margin": "none"
+                            }
+                        ],
+                        "margin": "xxl",
+                        "alignItems": "center"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/wpYtT6H.png",
+                                "align": "center",
+                                "size": "sm"
+                            }
+                        ],
+                        "margin": "xxl"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "滑動查看教學",
+                                "weight": "regular",
+                                "color": "#000000",
+                                "style": "italic",
+                                "align": "center"
+                            }
+                        ],
+                        "margin": "xxl"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "body": {
                 "type": "box",
                 "layout": "vertical",
                 "contents": [
@@ -23,110 +151,575 @@
                         "layout": "vertical",
                         "contents": [
                             {
-                                "type": "text",
-                                "text": "今晚，你或許會想先來點...",
-                                "size": "lg",
-                                "weight": "bold",
-                                "margin": "5px",
-                                "color": "#ffffff",
-                                "wrap": true
-                            },
-                            {
-                                "type": "text",
-                                "text": "「使．用．教．學！」",
-                                "color": "#0E9721",
-                                "weight": "bold",
-                                "size": "lg"
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "傳送位置",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "color": "#ffffff"
+                                    }
+                                ],
+                                "backgroundColor": "#E36F19",
+                                "cornerRadius": "10px",
+                                "paddingStart": "5px",
+                                "paddingEnd": "5px",
+                                "width": "100px",
+                                "borderWidth": "medium"
                             }
                         ]
                     },
                     {
                         "type": "box",
-                        "layout": "baseline",
+                        "layout": "vertical",
                         "contents": [
                             {
-                                "type": "icon",
-                                "url": "https://i.imgur.com/UQL7M2P.png",
-                                "size": "md"
+                                "type": "image",
+                                "url": "https://imgur.com/rkzjW4m.png",
+                                "size": "xs"
                             },
                             {
                                 "type": "text",
-                                "text": "首先，設定您要用餐的地點",
-                                "margin": "5px",
-                                "size": "md",
-                                "weight": "bold"
-                            }
-                        ],
-                        "margin": "sm"
-                    },
-                    {
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                            {
-                                "type": "icon",
-                                "size": "md",
-                                "url": "https://i.imgur.com/49UpMsr.png"
-                            },
-                            {
-                                "type": "text",
-                                "text": "將喜歡的餐廳加入投票箱",
+                                "text": "點選下方的「找餐廳」圖示",
+                                "align": "center",
                                 "weight": "bold",
-                                "margin": "5px",
-                                "size": "md"
+                                "margin": "md"
                             }
                         ],
-                        "margin": "sm"
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
                     },
                     {
                         "type": "box",
-                        "layout": "baseline",
+                        "layout": "vertical",
                         "contents": [
                             {
-                                "type": "icon",
-                                "url": "https://i.imgur.com/lNtabPe.png",
-                                "size": "md"
+                                "type": "image",
+                                "url": "https://imgur.com/ExR0OGF.png",
+                                "size": "3xl",
+                                "aspectRatio": "24:12"
                             },
                             {
                                 "type": "text",
-                                "text": "點選投票 跟朋友決定最愛的餐廳",
-                                "size": "md",
-                                "margin": "5px",
-                                "weight": "bold"
-                            }
-                        ],
-                        "margin": "sm"
-                    },
-                    {
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                            {
-                                "type": "icon",
-                                "url": "https://i.imgur.com/247HjzP.png",
-                                "size": "md"
-                            },
-                            {
-                                "type": "text",
-                                "text": "導航至目的地，Let's dig in！",
-                                "size": "md",
-                                "margin": "5px",
+                                "text": "點選自己的位置",
+                                "align": "center",
                                 "weight": "bold",
-                                "color": "#EF4B26"
+                                "margin": "md"
                             }
                         ],
-                        "margin": "sm"
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/qA5Uw6N.png",
+                                "size": "xl",
+                                "aspectRatio": "21:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "確定傳送位置",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "lg"
                     }
-                ],
-                "backgroundColor": "#EBA909cc",
-                "position": "absolute",
-                "offsetStart": "0px",
-                "offsetEnd": "0px",
-                "offsetBottom": "250px",
-                "paddingAll": "20px",
-                "paddingTop": "100px"
+                ]
             }
-        ],
-        "paddingAll": "0px"
-    }
+        },
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "選擇餐廳",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "color": "#ffffff"
+                                    }
+                                ],
+                                "backgroundColor": "#E36F19",
+                                "cornerRadius": "10px",
+                                "paddingStart": "5px",
+                                "paddingEnd": "5px",
+                                "width": "100px",
+                                "borderWidth": "medium"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/CPE2qxN.png",
+                                "size": "full",
+                                "aspectRatio": "32:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "選擇餐廳類別",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/yQfiSvA.png",
+                                "size": "xxl",
+                                "aspectRatio": "16:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "點選加入投票",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/LmsQqE2.png",
+                                "size": "4xl",
+                                "aspectRatio": "50:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "成功加入投票池",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "創建投票",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "color": "#ffffff"
+                                    }
+                                ],
+                                "backgroundColor": "#E36F19",
+                                "cornerRadius": "10px",
+                                "paddingStart": "5px",
+                                "paddingEnd": "5px",
+                                "width": "100px",
+                                "borderWidth": "medium"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/OtszQWJ.png",
+                                "size": "xs",
+                                "aspectRatio": "10:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "點選投票按鈕",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/dERDmAR.png",
+                                "size": "xxl",
+                                "aspectRatio": "30:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "點選創建投票",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/4iL5SzL.png",
+                                "size": "4xl",
+                                "aspectRatio": "15:10"
+                            },
+                            {
+                                "type": "text",
+                                "text": "開始創建",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "分享投票",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "color": "#ffffff"
+                                    }
+                                ],
+                                "backgroundColor": "#E36F19",
+                                "cornerRadius": "10px",
+                                "paddingStart": "5px",
+                                "paddingEnd": "5px",
+                                "width": "100px",
+                                "borderWidth": "medium"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/1hRYAra.png",
+                                "size": "xl"
+                            },
+                            {
+                                "type": "text",
+                                "text": "別忘了分享給你的朋友~",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            },
+                            {
+                                "type": "text",
+                                "text": "(群組或是單一好友都可以喔)",
+                                "weight": "bold",
+                                "align": "center",
+                                "size": "sm",
+                                "color": "#E36F19"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/6ocxDjk.png",
+                                "size": "md"
+                            },
+                            {
+                                "type": "text",
+                                "text": "群組馬上會有投票通知！",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "投票教學",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "color": "#ffffff"
+                                    }
+                                ],
+                                "backgroundColor": "#E36F19",
+                                "cornerRadius": "10px",
+                                "paddingStart": "5px",
+                                "paddingEnd": "5px",
+                                "width": "100px",
+                                "borderWidth": "medium"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/qC6HrOQ.png",
+                                "size": "lg"
+                            },
+                            {
+                                "type": "text",
+                                "text": "進入投票頁面",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "image",
+                                        "url": "https://imgur.com/QlLUQ6I.png",
+                                        "size": "lg"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "右滑喜歡",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "margin": "md",
+                                        "color": "#F8B3E1",
+                                        "style": "italic"
+                                    }
+                                ],
+                                "margin": "md"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "image",
+                                        "url": "https://imgur.com/qC6HrOQ.png",
+                                        "size": "lg"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "左滑不喜歡",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "margin": "md",
+                                        "color": "#B2B3B1",
+                                        "style": "italic"
+                                    }
+                                ],
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "lg"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "投票結果",
+                                        "align": "center",
+                                        "weight": "bold",
+                                        "color": "#ffffff"
+                                    }
+                                ],
+                                "backgroundColor": "#E36F19",
+                                "cornerRadius": "10px",
+                                "paddingStart": "5px",
+                                "paddingEnd": "5px",
+                                "width": "100px",
+                                "borderWidth": "medium"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/VR06KV4.png",
+                                "size": "5xl"
+                            },
+                            {
+                                "type": "text",
+                                "text": "表格介紹",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#000000",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://imgur.com/1r9Dfyy.png",
+                                "size": "full",
+                                "aspectRatio": "22:5"
+                            },
+                            {
+                                "type": "text",
+                                "text": "點選此按鈕可看到進一步分析",
+                                "align": "center",
+                                "weight": "bold",
+                                "margin": "md"
+                            }
+                        ],
+                        "margin": "md"
+                    }
+                ]
+            }
+        }
+    ]
 }
