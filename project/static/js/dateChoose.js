@@ -56,10 +56,12 @@ function submitButton() {
                     text: data.message,
                     confirmButtonText: "離開投票",
                     showCancelButton: true,
-                    cancelButtonText: "繼續編輯",
+                    cancelButtonText: "查看結果",
                 }).then((result) => {
                     if (result.isConfirmed) {
                         liff.closeWindow();
+                    } else {
+                        window.location.replace(`https://liff.line.me/1655422218-KOeZvV1e?pull_id=${pull_id}`);
                     }
                 })
             } else {
