@@ -149,7 +149,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     marginTop: theme.spacing(3),
-    width:200,
+    width: 200,
   },
 }));
 
@@ -336,6 +336,7 @@ function TimeSessionSelect() {
 /* END OF TimeSessioin Part */
 
 function VoteName_DueDate() {
+  const classes = useStyles_timeSession();
 
   /* Error report */
   const validate = (fieldValues = values) => {
@@ -413,17 +414,19 @@ function VoteName_DueDate() {
       <center>
         <HeaderText>
           輸入聚餐名稱
-              </HeaderText>
-        <Controls.Input
-          name="voteName"
-          label="聚餐名稱"
-          value={values.voteName}
-          onChange={handleInputChange}
-          error={errors.voteName}
-        />
+        </HeaderText>
+      </center>
+      <Controls.Input
+        name="voteName"
+        label="聚餐名稱"
+        value={values.voteName}
+        onChange={handleInputChange}
+        error={errors.voteName}
+      />
+      <center>
         <HeaderText>
           投票截止日期＆時間
-              </HeaderText>
+        </HeaderText>
         <Calendar
           name="dueDate"
           value={dueDate}
@@ -647,30 +650,30 @@ export default function VoteCreate() {
                 </HeaderText_timeSelect>
             </center>
           ) : (
-              <React.Fragment>
-                {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button
-                      variant="contained"
-                      onClick={handleBack} 
-                      className={classes.button}
-                    >
-                      回上一步
-                    </Button>
-                  )}
+            <React.Fragment>
+              {getStepContent(activeStep)}
+              <div className={classes.buttons}>
+                {activeStep !== 0 && (
                   <Button
                     variant="contained"
-                    color="primary"
-                    id="nextStepButton"
-                    onClick={handleNext}
+                    onClick={handleBack}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? '建立投票' : `前往${steps[activeStep + 1]}`}
+                    回上一步
                   </Button>
-                </div>
-              </React.Fragment>
-            )}
+                )}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  id="nextStepButton"
+                  onClick={handleNext}
+                  className={classes.button}
+                >
+                  {activeStep === steps.length - 1 ? '建立投票' : `前往${steps[activeStep + 1]}`}
+                </Button>
+              </div>
+            </React.Fragment>
+          )}
         </React.Fragment>
       </BoxContainer>
     </AppContainer>
