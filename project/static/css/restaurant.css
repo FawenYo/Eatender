@@ -11,7 +11,7 @@
 }
 
 body {
-  background: #FFE57F;
+  background: linear-gradient(135deg, #efb95d 0%, #ffa 100%);
   font-family: sans-serif;
   overflow: hidden;
 }

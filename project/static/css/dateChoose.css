@@ -1,6 +1,8 @@
 .vote-name {
     text-align: center;
     margin-top: 5%;
+    font-weight: bold;
+    color: #3d1718;
 }
 
 .date-table {
@@ -66,5 +68,6 @@
 
 .submit-btn {
     border-radius: 5rem;
-    background-color: deeppink !important;
+    background-color: #4DABF5 !important;
+    border-color: #4DABF5 !important;
 }
