@@ -8,8 +8,8 @@
                 "type": "text",
                 "text": "投票名稱",
                 "weight": "bold",
-                "color": "#E36F19",
-                "size": "sm"
+                "color": "#F26013",
+                "size": "md"
             },
             {
                 "type": "text",
@@ -41,7 +41,7 @@
                     {
                         "type": "text",
                         "text": "投票結果",
-                        "color": "#82827B",
+                        "color": "#F26013",
                         "size": "md",
                         "weight": "bold"
                     }
@@ -66,7 +66,7 @@
                     {
                         "type": "text",
                         "text": "與會人",
-                        "color": "#82827B",
+                        "color": "#F26013",
                         "size": "md",
                         "weight": "bold"
                     }
@@ -77,45 +77,12 @@
             {
                 "type": "box",
                 "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "horizontal",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "【",
-                                        "margin": "none",
-                                        "size": "md",
-                                        "align": "start",
-                                        "offsetStart": "none",
-                                        "flex": 0
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "example",
-                                        "align": "center"
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": "】",
-                                        "align": "end",
-                                        "flex": 0
-                                    }
-                                ]
-                            }
-                        ],
-                        "margin": "md"
-                    }
-                ]
+                "contents": [],
+                "alignItems": "center"
             },
             {
                 "type": "separator",
-                "margin": "xxl",
+                "margin": "xl",
                 "color": "#000000"
             }
         ],

@@ -86,6 +86,24 @@ def handle_message(event):
                     else:
                         message = TextSendMessage(text="您的投票池內還沒有餐廳喔！")
 
+                elif user_message == "測試":
+                    message = TextSendMessage(
+                        text="請選擇功能",
+                        quick_reply=QuickReply(
+                            items=[
+                                QuickReplyButton(
+                                    action=MessageAction(label="創建投票", text="測試投票創建")
+                                ),
+                                QuickReplyButton(
+                                    action=MessageAction(label="投票", text="測試投票")
+                                ),
+                                QuickReplyButton(
+                                    action=MessageAction(label="投票結果", text="測試投票結果")
+                                ),
+                            ]
+                        ),
+                    )
+
                 # 測試創建投票
                 elif user_message == "測試投票創建":
                     random_restaurants = config.db.restaurant.aggregate(

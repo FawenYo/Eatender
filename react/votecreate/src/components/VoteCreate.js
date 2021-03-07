@@ -238,15 +238,15 @@ function TimeSessionSelect() {
     <>
       <center>
         <HeaderText_timeSelect>選擇聚餐時段</HeaderText_timeSelect>
-        <input type="checkbox" id="breakfast" value="早餐" onClick={handleOnClick}/>
+        <input type="checkbox" id="breakfast" value="早餐" onClick={handleOnClick} />
         <label for="breakfast">早餐</label>
-        <input type="checkbox" id="lunch" value="午餐" onClick={handleOnClick}/>
+        <input type="checkbox" id="lunch" value="午餐" onClick={handleOnClick} />
         <label for="lunch">午餐</label>
-        <input type="checkbox" id="teatime" value="下午茶" onClick={handleOnClick}/>
+        <input type="checkbox" id="teatime" value="下午茶" onClick={handleOnClick} />
         <label for="teatime">下午茶</label>
-        <input type="checkbox" id="dinner" value="晚餐" onClick={handleOnClick}/>
+        <input type="checkbox" id="dinner" value="晚餐" onClick={handleOnClick} />
         <label for="dinner">晚餐</label>
-        <input type="checkbox" id="supper" value="宵夜" onClick={handleOnClick}/>
+        <input type="checkbox" id="supper" value="宵夜" onClick={handleOnClick} />
         <label for="supper">宵夜</label>
       </center>
     </>
@@ -256,7 +256,6 @@ function TimeSessionSelect() {
 /* END OF TimeSessioin Part */
 
 function VoteName_DueDate() {
-
   /* Error report */
   const validate = (fieldValues = values) => {
     let temp = { ...errors }

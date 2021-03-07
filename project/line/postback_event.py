@@ -149,24 +149,7 @@ def handle_postback(event):
                     config.console.print_exception()
                     line_bot_api.push_message(user_id, message)
         else:
-            # 創建投票
-            if postback_data == "create":
-                message = TextSendMessage(
-                    text=f"請設定投票截止日期",
-                    quick_reply=QuickReply(
-                        items=[
-                            QuickReplyButton(
-                                action=DatetimePickerAction(
-                                    label="截止日期",
-                                    data="endDate",
-                                    mode="datetime",
-                                )
-                            ),
-                        ]
-                    ),
-                )
-            else:
-                message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
+            message = TextSendMessage(text=f"我不知道你在幹嘛QwQ")
             line_bot_api.reply_message(reply_token, message)
     except Exception as e:
         sentry_sdk.capture_exception(e)

@@ -32,7 +32,7 @@
                 "contents": [
                     {
                         "type": "text",
-                        "text": "餐廳選項建立完成",
+                        "text": "投票建立成功",
                         "size": "lg",
                         "weight": "bold",
                         "style": "normal",
@@ -111,7 +111,6 @@
     "footer": {
         "type": "box",
         "layout": "vertical",
-        "spacing": "none",
         "contents": [
             {
                 "type": "box",
@@ -122,20 +121,43 @@
                         "action": {
                             "type": "uri",
                             "label": "開始投票",
-                            "uri": "https://liff.line.me/1655422218-8n1PlOw1?pull_id=example"
+                            "uri": "http://example.com/"
                         },
                         "color": "#000000"
                     }
                 ],
                 "backgroundColor": "#fdbe29",
                 "cornerRadius": "100px",
-                "margin": "none",
                 "alignItems": "center",
                 "justifyContent": "space-evenly",
                 "position": "relative",
                 "width": "200px",
                 "height": "50px",
                 "offsetStart": "40px"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "分享投票",
+                            "uri": "http://example.com/"
+                        },
+                        "color": "#000000"
+                    }
+                ],
+                "backgroundColor": "#fdbe29",
+                "cornerRadius": "100px",
+                "alignItems": "center",
+                "justifyContent": "space-evenly",
+                "position": "relative",
+                "width": "200px",
+                "height": "50px",
+                "offsetStart": "40px",
+                "margin": "10px"
             }
         ]
     }

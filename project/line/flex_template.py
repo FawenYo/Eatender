@@ -11,18 +11,6 @@ import config
 true = True
 
 
-def welcome() -> FlexSendMessage:
-    """歡迎訊息
-
-    Returns:
-        FlexSendMessage: 歡迎使用 Eatender！
-    """
-    with open("line/model/welcome.json") as json_file:
-        contents = json.load(json_file)
-    message = FlexSendMessage(alt_text="歡迎使用 Eatender！", contents=contents)
-    return message
-
-
 def tutorial() -> FlexSendMessage:
     """使用教學
 
@@ -49,6 +37,9 @@ def share_vote(pull_id: str) -> dict:
     contents["footer"]["contents"][0]["contents"][0]["action"][
         "uri"
     ] = f"https://liff.line.me/1655422218-8n1PlOw1?pull_id={pull_id}"
+    contents["footer"]["contents"][1]["contents"][0]["action"][
+        "uri"
+    ] = f"{config.SITE_NAME}share?pull_id={pull_id}"
     return contents
 
 
@@ -323,7 +314,7 @@ def vote_result(
                 }
             ],
             "margin": "md",
-            "borderColor": "#F7F1C7",
+            "borderColor": "#EFB95D",
             "borderWidth": "medium",
             "cornerRadius": "10px",
             "paddingBottom": "10px",
@@ -335,24 +326,22 @@ def vote_result(
             "layout": "vertical",
             "contents": [
                 {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "【",
-                            "margin": "none",
-                            "size": "md",
-                            "align": "start",
-                            "offsetStart": "none",
-                            "flex": 0,
-                        },
-                        {"type": "text", "text": each_user, "align": "center"},
-                        {"type": "text", "text": "】", "align": "end", "flex": 0},
-                    ],
+                    "type": "text",
+                    "text": each_user,
+                    "color": "#ffffff",
+                    "align": "center",
+                    "adjustMode": "shrink-to-fit",
                 }
             ],
-            "margin": "md",
+            "alignItems": "center",
+            "backgroundColor": "#EFB95D",
+            "paddingStart": "10px",
+            "paddingEnd": "10px",
+            "cornerRadius": "5px",
+            "paddingTop": "2px",
+            "paddingBottom": "2px",
+            "spacing": "md",
+            "margin": "sm",
         }
         contents["body"]["contents"][8]["contents"].append(template)
     contents["footer"]["contents"][0]["contents"][0]["action"][
