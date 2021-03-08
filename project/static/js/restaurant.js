@@ -174,6 +174,7 @@ function renderCard(restaurantInfo) {
 }
 
 function main() {
+    document.querySelector('.loading_page').classList.add('hidden')
     var tinderContainer = document.querySelector(".tinder")
     var allCards = document.querySelectorAll(".tinder--card")
     var nope = document.getElementById("nope")
