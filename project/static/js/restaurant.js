@@ -6,7 +6,7 @@ let choose_result = { love: [], hate: [] };
 let load_done = false;
 
 $(document).ready(function () {
-    initializeLiff("1655422218-8n1PlOw1");
+    parseParam();
 })
 
 function rightSlideIn(callback) {
@@ -76,7 +76,6 @@ function loadPage() {
         document.getElementById("hint_box").setAttribute("style", "display: block;");
         rightSlideIn(leftSlideIn);
     }
-    parseParam();
     var tinderContainer = document.querySelector(".tinder");
     var allCards = document.querySelectorAll(".tinder--card");
 
@@ -111,6 +110,7 @@ function parseParam() {
             pull_id = localStorage["pull_id"]
         }
     }
+    initializeLiff("1655422218-8n1PlOw1");
 }
 
 function fetch_restaurant() {
@@ -355,16 +355,29 @@ function fetchVoteDate() {
                     text: "將在1秒後轉往日期投票...",
                     timer: 1000,
                 });
+                document.getElementById("voteTitle").innerHTML = data.data.vote_name;
+                $("#dateTable").empty()
+                const voteTitle = `<h3>選擇時間</h3>`
+                $("#dateTable").append(data)
+                Object.keys(data.data.dates).forEach((key) => {
+                    let ok, unsure, cancel = 0;
+                    Object.keys(data.data.dates[key]).forEach((each_key) => {
+                        localStorage[`${key}_${each_key}`] = data.data.dates[key][each_key]
+                        if (each_key == "ok") {
+                            ok = data.data.dates[key][each_key]
+                        } else if (each_key == "unsure") {
+                            unsure = data.data.dates[key][each_key]
+                        } else {
+                            cancel = data.data.dates[key][each_key]
+                        }
+                    })
+                    renderDates(key, ok, unsure, cancel)
+                });
                 setTimeout(() => {
                     document.getElementsByTagName('body')[0].style = 'overflow: visible;';
                     document.querySelector('#schedular').classList.remove('hidden')
                     document.querySelector('.tinder').classList.add('hidden')
                 }, 1700)
-                document.getElementById("voteTitle").innerHTML = data.data.vote_name;
-                $("#dateTable").empty()
-                const voteTitle = `<h3>選擇時間</h3>`
-                $("#dateTable").append(data)
-                data.data.dates.forEach(i => renderDates(i))
             } else {
                 Swal.fire({
                     icon: "error",
@@ -385,21 +398,31 @@ function fetchVoteDate() {
         });
 }
 
-function renderDates(dateTitle) {
-    const data = `<div class="date-info">
+function renderDates(dateTitle, okCount, unsureCount, cancelCount) {
+    const data = `
+<div class="date-info">
     <div class="date-title">
-       <span>${dateTitle}</span>
+        <span>${dateTitle}</span>
     </div>
     <div class="date-choose">
-       <button class="btn ok-icon" onclick="okButton($(this))" id="ok_${dateTitle}">
-          <i class="fas fa-check-circle"></i>
-       </button>
-       <button class="btn unsure-icon" onclick="unsureButton($(this))" id="unsure_${dateTitle}">
-          <i class="fas fa-question-circle"></i>
-       </button>
-       <button class="btn cancel-icon" onclick="cancelButton($(this))" id="cancel_${dateTitle}">
-          <i class="fas fa-ban"></i>
-       </button>
+        <button class="btn ok-icon" onclick="okButton($(this))" id="ok_${dateTitle}">
+            <p class="icon-text">
+                <i class="fas fa-check-circle"></i>
+                <span id="ok_users_count_${dateTitle}">${okCount}</span>
+            </p>
+        </button>
+        <button class="btn unsure-icon" onclick="unsureButton($(this))" id="unsure_${dateTitle}">
+            <p class="icon-text" id="unsure_users_count">
+                <i class="fas fa-question-circle"></i>
+                <span id="unsure_users_count_${dateTitle}">${unsureCount}</span>
+            </p>
+        </button>
+        <button class="btn cancel-icon" onclick="cancelButton($(this))" id="cancel_${dateTitle}">
+            <p class="icon-text" id="cancel_users_count">
+                <i class="fas fa-ban"></i>
+                <span id="cancel_users_count_${dateTitle}">${cancelCount}</span>
+            </p>
+        </button>
     </div>
  </div>`
     $("#dateTable").append(data)

@@ -11,7 +11,7 @@
 
 .date-info {
     position: relative;
-    height: 70px;
+    height: 100px;
     background-color: white;
     margin: 5px;
     border-radius: 0.7rem;
@@ -40,9 +40,6 @@
     margin: 0;
     position: absolute;
     top: 50%;
-    right: 0px;
-    -ms-transform: translate(0%, -50%);
-    transform: translate(0%, -50%);
 }
 
 .ok-icon {
@@ -70,4 +67,8 @@
     border-radius: 5rem;
     background-color: #4DABF5 !important;
     border-color: #4DABF5 !important;
+}
+
+.icon-text {
+    margin-bottom: 0px;
 }
