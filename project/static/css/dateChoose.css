@@ -18,7 +18,6 @@
 }
 
 .date-info>div {
-    display: table;
     font-weight: bold;
     text-align: center;
 }
@@ -39,8 +38,8 @@
 
 .date-choose {
     margin: 0;
-    position: absolute;
-    top: 50%;
+    position: relative;
+    top: 40px;
 }
 
 .ok-icon {

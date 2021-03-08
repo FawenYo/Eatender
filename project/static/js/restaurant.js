@@ -152,25 +152,23 @@ function fetch_restaurant() {
 }
 
 function renderCard(restaurantInfo) {
-    const data = `<div class='tinder--card'>
-    <div class='main-window' id='main-window'>
+    const data = `
+    <div class='tinder--card'>
+        <div class='main-window' id='main-window'>
+            <div class='restaurant-image' style="background-image: url('${restaurantInfo.photo_url}');">
+                <div class='restaurant-name'>${restaurantInfo.name}</div>
+            </div>
+            <div class='restaurant-info'>
+                <div class='address'>地點：${restaurantInfo.address}</div>
+            </div>
   
-        <div class='restaurant-image' style="background-image: url('${restaurantInfo.photo_url}');">
-          <div class='restaurant-name'>${restaurantInfo.name}</div>
+            <div class='detail-info'>
+                <div class='detail-info-elm'>評價<br><span class='lg'>${restaurantInfo.rating}</span></div>
+                <div class='detail-info-elm'>價位<br><span class='lg'>\$${restaurantInfo.price}</span></div>
+                <div class='detail-info-elm'>關鍵字<br><span class='sm'>${restaurantInfo.keywords.join(", ")}</span></div>
+            </div>
         </div>
-        <div class='restaurant-info'>
-          <div class='address'>地點：${restaurantInfo.address}</div>
-        </div>
-  
-        <div class='detail-info'>
-          <div class='detail-info-elm'>評價<br><span class='lg'>${restaurantInfo.rating}</span></div>
-          <div class='detail-info-elm'>價位<br><span class='lg'>\$${restaurantInfo.price}</span></div>
-          <div class='detail-info-elm'>關鍵字<br><span class='sm'>${restaurantInfo.keywords.join(", ")}</span></div>
-        </div>
-  
-      </div>
-  
-  </div>`
+    </div>`
     $("#cardWrapper").append(data)
 }
 
@@ -400,30 +398,38 @@ function fetchVoteDate() {
 
 function renderDates(dateTitle, okCount, unsureCount, cancelCount) {
     const data = `
-<div class="date-info">
-    <div class="date-title">
-        <span>${dateTitle}</span>
-    </div>
-    <div class="date-choose">
-        <button class="btn ok-icon" onclick="okButton($(this))" id="ok_${dateTitle}">
-            <p class="icon-text">
-                <i class="fas fa-check-circle"></i>
-                <span id="ok_users_count_${dateTitle}">${okCount}</span>
-            </p>
-        </button>
-        <button class="btn unsure-icon" onclick="unsureButton($(this))" id="unsure_${dateTitle}">
-            <p class="icon-text" id="unsure_users_count">
-                <i class="fas fa-question-circle"></i>
-                <span id="unsure_users_count_${dateTitle}">${unsureCount}</span>
-            </p>
-        </button>
-        <button class="btn cancel-icon" onclick="cancelButton($(this))" id="cancel_${dateTitle}">
-            <p class="icon-text" id="cancel_users_count">
-                <i class="fas fa-ban"></i>
-                <span id="cancel_users_count_${dateTitle}">${cancelCount}</span>
-            </p>
-        </button>
-    </div>
- </div>`
+    <div class="date-info">
+        <div class="date-title">
+            <span>${dateTitle}</span>
+        </div>
+        <div class="row date-choose">
+            <div class="col">
+                <button class="btn ok-icon" onclick="okButton($(this))" id="ok_${dateTitle}">
+                    <p class="icon-text">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="ok_users_count_${dateTitle}">${okCount}</span>
+                    </p>
+                </button>
+            </div>
+            <div class="col">
+                <button class="btn unsure-icon" onclick="unsureButton($(this))" id="unsure_${dateTitle}">
+                    <p class="icon-text" id="unsure_users_count">
+                        <i class="fas fa-question-circle"></i>
+                        <span id="unsure_users_count_${dateTitle}">${unsureCount}</span>
+                    </p>
+                </button>
+            </div>
+            
+            <div class="col">
+                <button class="btn cancel-icon" onclick="cancelButton($(this))" id="cancel_${dateTitle}">
+                    <p class="icon-text" id="cancel_users_count">
+                        <i class="fas fa-ban"></i>
+                        <span id="cancel_users_count_${dateTitle}">${cancelCount}</span>
+                    </p>
+                </button>
+            </div>
+            
+        </div>
+    </div>`
     $("#dateTable").append(data)
 }
