@@ -19,6 +19,7 @@
 
 .date-info>div {
     display: table;
+    font-weight: bold;
     text-align: center;
 }
 
