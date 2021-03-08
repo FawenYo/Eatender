@@ -49,21 +49,32 @@ $(document).ready(() => {
 })
 
 function changeChart(filter) {
+    $("#result-text").empty()
+    $("#result-text").append(`<h4>最多人選擇：</h4>`)
     if (filter == "best-filter") {
         document.getElementById("bestChart").setAttribute("style", "display: block;")
         document.getElementById("restaurantChart").setAttribute("style", "display: none;")
         document.getElementById("dateChart").setAttribute("style", "display: none;")
-        document.getElementById("result-info").innerHTML = "最多人選擇：" + most_best;
+        for (each in most_best) {
+            data = `<li style="text-align: left;">${most_best[each]}</li>`
+            $("#result-text").append(data)
+        }
     } else if (filter == "restaurant-filter") {
         document.getElementById("bestChart").setAttribute("style", "display: none;")
         document.getElementById("restaurantChart").setAttribute("style", "display: block;")
         document.getElementById("dateChart").setAttribute("style", "display: none;")
-        document.getElementById("result-info").innerHTML = "最多人選擇：" + most_restaurants;
+        for (each in most_restaurants) {
+            data = `<li style="text-align: left;">${most_restaurants[each]}</li>`
+            $("#result-text").append(data)
+        }
     } else {
         document.getElementById("bestChart").setAttribute("style", "display: none;")
         document.getElementById("restaurantChart").setAttribute("style", "display: none;")
         document.getElementById("dateChart").setAttribute("style", "display: block;")
-        document.getElementById("result-info").innerHTML = "最多人選擇：" + most_dates;
+        for (each in most_dates) {
+            data = `<li style="text-align: left;">${most_dates[each]}</li>`
+            $("#result-text").append(data)
+        }
     }
 }
 

@@ -6,31 +6,7 @@ let choose_result = { love: [], hate: [] };
 let load_done = false;
 
 $(document).ready(function () {
-    if (!localStorage["dont_hint"] || localStorage["dont_hint"] == "false") {
-        document.getElementById("hint_box").setAttribute("style", "display: block;");
-        rightSlideIn(leftSlideIn);
-    }
-
     initializeLiff("1655422218-8n1PlOw1");
-    parseParam();
-
-    var tinderContainer = document.querySelector(".tinder")
-    var allCards = document.querySelectorAll(".tinder--card")
-
-    function initCards(card, index) {
-        var newCards = document.querySelectorAll(".tinder--card:not(.removed)")
-
-        newCards.forEach(function (card, index) {
-            card.style.zIndex = allCards.length - index
-            card.style.transform = "scale(" + (20 - index) / 20 + ") translateY(-" + 30 * index + "px)"
-            card.style.opacity = (10 - index) / 10
-        })
-
-        tinderContainer.classList.add("loaded")
-    }
-
-    initCards()
-    fetch_restaurant()
 })
 
 function rightSlideIn(callback) {
@@ -71,19 +47,52 @@ function initializeLiff(myLiffId) {
 }
 
 function initializeApp() {
+    let currentTime = new Date()
+
     if (!liff.isLoggedIn()) {
-        liff.login();
+        if (localStorage["lastLogin"] && Math.ceil(new Date(localStorage["lastLogin"]).getTime() - currentTime.getTime() / (1000 * 3600 * 24)) > 1) {
+            loadPage();
+        } else {
+            liff.login();
+        }
     } else {
         liff
             .getProfile()
             .then((profile) => {
                 user_id = profile.userId;
                 localStorage["user_id"] = user_id
+
+                loadPage();
             })
             .catch((err) => {
                 console.log(err);
             });
     }
+}
+
+function loadPage() {
+    if (!localStorage["dont_hint"] || localStorage["dont_hint"] == "false") {
+        document.getElementById("hint_box").setAttribute("style", "display: block;");
+        rightSlideIn(leftSlideIn);
+    }
+    parseParam();
+    var tinderContainer = document.querySelector(".tinder");
+    var allCards = document.querySelectorAll(".tinder--card");
+
+    function initCards(card, index) {
+        var newCards = document.querySelectorAll(".tinder--card:not(.removed)")
+
+        newCards.forEach(function (card, index) {
+            card.style.zIndex = allCards.length - index
+            card.style.transform = "scale(" + (20 - index) / 20 + ") translateY(-" + 30 * index + "px)"
+            card.style.opacity = (10 - index) / 10
+        })
+
+        tinderContainer.classList.add("loaded")
+    }
+
+    initCards();
+    fetch_restaurant();
 }
 
 function parseParam() {

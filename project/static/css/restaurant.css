@@ -12,8 +12,13 @@
 
 body {
   background: linear-gradient(135deg, #efb95d 0%, #ffa 100%);
-  font-family: sans-serif;
   overflow: hidden;
+}
+
+.loading_page {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
 }
 
 .hidden {
@@ -77,6 +82,7 @@ body {
   flex-direction: column;
   position: relative;
   opacity: 0;
+  transition: all .3s ease-in;
   transition: opacity 0.1s ease-in-out;
 }
 
