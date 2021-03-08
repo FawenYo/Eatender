@@ -7,6 +7,10 @@ function okButton(targetBtn) {
     document.getElementById(`unsure_${buttonDate}`).setAttribute("style", "color: light-gray;")
     document.getElementById(`cancel_${buttonDate}`).setAttribute("style", "color: light-gray;")
 
+    document.getElementById(`ok_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_ok`]) + 1
+    document.getElementById(`unsure_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_unsure`])
+    document.getElementById(`cancel_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_cancel`])
+
     availableDate[buttonDate] = "ok"
 }
 
@@ -17,6 +21,10 @@ function unsureButton(targetBtn) {
     document.getElementById(`unsure_${buttonDate}`).setAttribute("style", "color: orange;")
     document.getElementById(`cancel_${buttonDate}`).setAttribute("style", "color: light-gray;")
 
+    document.getElementById(`ok_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_ok`])
+    document.getElementById(`unsure_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_unsure`]) + 1
+    document.getElementById(`cancel_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_cancel`])
+
     availableDate[buttonDate] = "unsure"
 }
 
@@ -26,6 +34,10 @@ function cancelButton(targetBtn) {
     document.getElementById(`ok_${buttonDate}`).setAttribute("style", "color: light-gray;")
     document.getElementById(`unsure_${buttonDate}`).setAttribute("style", "color: light-gray;")
     document.getElementById(`cancel_${buttonDate}`).setAttribute("style", "color: red;");
+
+    document.getElementById(`ok_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_ok`])
+    document.getElementById(`unsure_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_unsure`])
+    document.getElementById(`cancel_users_count_${buttonDate}`).innerText = parseInt(localStorage[`${buttonDate}_cancel`]) + 1
 
     availableDate[buttonDate] = "cancel"
 }

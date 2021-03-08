@@ -284,7 +284,14 @@ async def vote_date_get(pull_id: str) -> JSONResponse:
     result_data = {"vote_name": "", "dates": []}
     if vote_data:
         result_data["vote_name"] = vote_data["vote_name"]
-        result_data["dates"] = vote_data["dates"]
+        data = {}
+        for each in vote_data["dates"]:
+            data[each] = {"ok": 0, "unsure": 0, "cancel": 0}
+        for user, user_data in vote_data["result"]["user"].items():
+            for each_date, each_vote in user_data["dates"].items():
+                data[each_date][each_vote] += 1
+
+        result_data["dates"] = data
 
         message = {"status": "success", "data": result_data}
     else:
