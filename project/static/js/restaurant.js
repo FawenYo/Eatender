@@ -71,6 +71,7 @@ function initializeApp() {
 }
 
 function loadPage() {
+    document.querySelector('.loading_page').classList.add('hidden')
     if (!localStorage["dont_hint"] || localStorage["dont_hint"] == "false") {
         document.getElementById("hint_box").setAttribute("style", "display: block;");
         rightSlideIn(leftSlideIn);
@@ -174,7 +175,6 @@ function renderCard(restaurantInfo) {
 }
 
 function main() {
-    document.querySelector('.loading_page').classList.add('hidden')
     var tinderContainer = document.querySelector(".tinder")
     var allCards = document.querySelectorAll(".tinder--card")
     var nope = document.getElementById("nope")

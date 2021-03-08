@@ -22,7 +22,7 @@ body {
 }
 
 .hidden {
-  visibility: hidden;
+  display: none;
   opacity: 0;
   z-index: -1
 }
@@ -44,13 +44,13 @@ body {
 }
 
 .left_hint {
-  height: 80vh;
+  height: 75vh;
   width: 50%;
   float: left;
 }
 
 .right_hint {
-  height: 80vh;
+  height: 75vh;
   width: 50%;
   float: right;
 }
@@ -70,7 +70,7 @@ body {
 
 .hint_confirm {
   margin-top: 10px;
-  width: 30%;
+  width: 40%;
   border-radius: 5rem;
 }
 
