@@ -9,13 +9,18 @@ $(document).ready(function () {
     parseParam();
 })
 
-function rightSlideIn(callback) {
-    document.getElementById("left_content").setAttribute("style", "display: block; animation: right_slidein 1s;");
-    setTimeout(callback, 1000);
+function rightSlideIn() {
+    document.getElementById("left_content").setAttribute("style", "display: block !important;");
+    setTimeout(leftSlideIn, 1000);
 }
 
 function leftSlideIn() {
-    document.getElementById("right_content").setAttribute("style", "display: block; animation: left_slidein 1s;");
+    document.getElementById("right_content").setAttribute("style", "display: block !important;");
+    setTimeout(btnEaseIn, 1000)
+}
+
+function btnEaseIn() {
+    $("#button_hint").fadeIn();
 }
 
 function hideHint() {
@@ -71,10 +76,11 @@ function initializeApp() {
 }
 
 function loadPage() {
-    document.querySelector('.loading_page').classList.add('hidden')
+    $(".loading_page").fadeOut();
+    $(".tinder").fadeIn();
     if (!localStorage["dont_hint"] || localStorage["dont_hint"] == "false") {
         document.getElementById("hint_box").setAttribute("style", "display: block;");
-        rightSlideIn(leftSlideIn);
+        rightSlideIn();
     }
     var tinderContainer = document.querySelector(".tinder");
     var allCards = document.querySelectorAll(".tinder--card");
@@ -152,6 +158,12 @@ function fetch_restaurant() {
 }
 
 function renderCard(restaurantInfo) {
+    let price = "";
+    if (restaurantInfo.price > 0) {
+        price = "$" + restaurantInfo.price
+    } else {
+        price = "未知"
+    }
     const data = `
     <div class='tinder--card'>
         <div class='main-window' id='main-window'>
@@ -164,7 +176,7 @@ function renderCard(restaurantInfo) {
   
             <div class='detail-info'>
                 <div class='detail-info-elm'>評價<br><span class='lg'>${restaurantInfo.rating}</span></div>
-                <div class='detail-info-elm'>價位<br><span class='lg'>\$${restaurantInfo.price}</span></div>
+                <div class='detail-info-elm'>價位<br><span class='lg'>${price}</span></div>
                 <div class='detail-info-elm'>關鍵字<br><span class='sm'>${restaurantInfo.keywords.join(", ")}</span></div>
             </div>
         </div>
@@ -357,7 +369,9 @@ function fetchVoteDate() {
                 $("#dateTable").empty()
                 const voteTitle = `<h3>選擇時間</h3>`
                 $("#dateTable").append(data)
+                let totalDates = []
                 Object.keys(data.data.dates).forEach((key) => {
+                    totalDates.push(key)
                     let ok, unsure, cancel = 0;
                     Object.keys(data.data.dates[key]).forEach((each_key) => {
                         localStorage[`${key}_${each_key}`] = data.data.dates[key][each_key]
@@ -371,10 +385,11 @@ function fetchVoteDate() {
                     })
                     renderDates(key, ok, unsure, cancel)
                 });
+                localStorage["totalDates"] = totalDates
                 setTimeout(() => {
                     document.getElementsByTagName('body')[0].style = 'overflow: visible;';
-                    document.querySelector('#schedular').classList.remove('hidden')
-                    document.querySelector('.tinder').classList.add('hidden')
+                    $(".tinder").fadeOut();
+                    $("#schedular").fadeIn();
                 }, 1700)
             } else {
                 Swal.fire({

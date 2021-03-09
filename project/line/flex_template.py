@@ -412,7 +412,7 @@ def restaurant_card_info(
     """
     star_list = stars_template(rating=rating)
     if price == 0:
-        price = "N/A"
+        price = "未知"
     comments = keywords_template(keywords=keywords)
     operate_status, operate_color = operate_status_template(open_now=open_now)
 
@@ -518,7 +518,7 @@ def vote_card(
     """
     star_list = stars_template(rating=rating)
     if price == 0:
-        price = "N/A"
+        price = "未知"
     comments = keywords_template(keywords=keywords)
     operate_status, operate_color = operate_status_template(open_now=open_now)
 

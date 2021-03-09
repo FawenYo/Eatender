@@ -39,19 +39,19 @@
 		<div class="hint_box" id="hint_box" style="display: none;">
 			<div class="left_hint">
 				<div class="hint_content">
-					<i class="fas fa-arrow-left fa-10x" id="left_content" style="display: none; ">
+					<i class="left_content fas fa-arrow-left fa-10x" id="left_content">
 						<h2>向左滑動不喜歡</h2>
 					</i>
 				</div>
 			</div>
 			<div class="right_hint">
 				<div class="hint_content">
-					<i class="fas fa-arrow-right fa-10x" id="right_content" style="display: none; ">
+					<i class="right_content fas fa-arrow-right fa-10x" id="right_content">
 						<h2>向右滑動喜歡</h2>
 					</i>
 				</div>
 			</div>
-			<div class="button_hint">
+			<div class="button_hint" id="button_hint">
 				<button type="button" class="hint_confirm btn btn-primary" onclick="hideHint()">開始投票</button>
 			</div>
 		</div>
@@ -69,7 +69,7 @@
 					class="fa fa-heart"></i></button></div>
 	</div>
 
-	<div class="date-select-schedular hidden" id="schedular">
+	<div class="date-select-schedular" id="schedular">
 		<h1 class="vote-name" id="voteTitle">投票名稱</h1>
 		<div class="container date-table" id="dateTable">
 			<h3>選擇時間</h3>

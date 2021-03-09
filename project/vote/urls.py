@@ -157,10 +157,10 @@ async def vote_create(param: CreateVote) -> JSONResponse:
             }
             # 餐廳
             for each_restaurant in restaurants:
-                data["result"]["restaurants"][each_restaurant] = 0
+                data["result"]["restaurants"][each_restaurant] = []
             for each_date in dates:
                 # 日期
-                data["result"]["dates"][each_date] = 0
+                data["result"]["dates"][each_date] = []
 
                 # 綜合
                 date_string, day_text, session = each_date.split(" ")
@@ -171,22 +171,18 @@ async def vote_create(param: CreateVote) -> JSONResponse:
 
             config.db.vote.insert_one(data)
 
-            # 非測試範例
-            if param.user_id != "example":
-                user_data["vote"] = []
-                config.db.user.update_one(
-                    {"user_id": param.user_id}, {"$set": user_data}
-                )
+            user_data["vote"] = []
+            config.db.user.update_one({"user_id": param.user_id}, {"$set": user_data})
 
-                scheduler = BackgroundScheduler()
-                scheduler.add_job(
-                    cron.send_result,
-                    "date",
-                    args=[data_id, param.user_id],
-                    run_date=parser.parse(param.due_date),
-                    timezone=pytz.timezone("Asia/Taipei"),
-                )
-                scheduler.start()
+            scheduler = BackgroundScheduler()
+            scheduler.add_job(
+                cron.send_result,
+                "date",
+                args=[data_id, param.user_id],
+                run_date=parser.parse(param.due_date),
+                timezone=pytz.timezone("Asia/Taipei"),
+            )
+            scheduler.start()
             message = {
                 "status": "success",
                 "message": {
@@ -251,7 +247,8 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
         for restaurant_id in choose_result["love"]:
             restaurant_place_id = pull_data["restaurants"][restaurant_id]
             restaurants.append(restaurant_place_id)
-            pull_data["result"]["restaurants"][restaurant_place_id] += 1
+            if user_id not in pull_data["result"]["restaurants"][restaurant_place_id]:
+                pull_data["result"]["restaurants"][restaurant_place_id].append(user_id)
 
         # 曾經投票過
         if user_id in pull_data["result"]["user"]:
@@ -319,14 +316,21 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
 
         for each_date in available_date:
             # 日期
-            pull_data["result"]["dates"][each_date] += 1
+            if user_id not in pull_data["result"]["dates"][each_date]:
+                pull_data["result"]["dates"][each_date].append(user_id)
 
             # 綜合
             date_string, day_text, session = each_date.split(" ")
             for each_restaurant in pull_data["result"]["user"][user_id]["restaurants"]:
-                pull_data["result"]["best"][
-                    f"{date_string} {day_text} + {session} @ {each_restaurant}"
-                ].append(user_id)
+                if (
+                    user_id
+                    not in pull_data["result"]["best"][
+                        f"{date_string} {day_text} + {session} @ {each_restaurant}"
+                    ]
+                ):
+                    pull_data["result"]["best"][
+                        f"{date_string} {day_text} + {session} @ {each_restaurant}"
+                    ].append(user_id)
 
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存投票內容！"}
@@ -422,7 +426,8 @@ def find_vote_result(pull_id: str) -> dict:
 
         # 餐廳
         reverse_restaurants = {}
-        for restaurant_id, count in restaurants.items():
+        for restaurant_id, users in restaurants.items():
+            count = len(users)
             if count in reverse_restaurants:
                 reverse_restaurants[count].append(restaurant_id)
             else:
@@ -431,7 +436,8 @@ def find_vote_result(pull_id: str) -> dict:
 
         # 時間
         reverse_dates = {}
-        for each_date, count in dates.items():
+        for each_date, users in dates.items():
+            count = len(users)
             if count in reverse_dates:
                 reverse_dates[count].append(each_date)
             else:

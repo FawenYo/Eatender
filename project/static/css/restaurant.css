@@ -21,18 +21,12 @@ body {
   background-color: white;
 }
 
-.hidden {
-  display: none;
-  opacity: 0;
-  z-index: -1
-}
-
 #schedular {
-  position: absolute;
+  display: none;
   top: 10px;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   margin: 0 auto;
-  transition: all .3s ease-in;
 }
 
 .hint_box {
@@ -64,8 +58,19 @@ body {
   color:white;
 }
 
+.left_content {
+  display: none !important;
+  animation: right_slidein 1s;
+}
+
+.right_content {
+  display: none !important;
+  animation: left_slidein 1s;
+}
+
 .button_hint {
   text-align: center;
+  display: none;
 }
 
 .hint_confirm {
@@ -83,7 +88,6 @@ body {
   position: relative;
   opacity: 0;
   transition: all .3s ease-in;
-  transition: opacity 0.1s ease-in-out;
 }
 
 .loaded.tinder {
