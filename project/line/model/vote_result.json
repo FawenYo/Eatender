@@ -112,6 +112,28 @@
                 "height": "50px",
                 "cornerRadius": "100px",
                 "backgroundColor": "#fdbe29"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "分享投票結果",
+                            "uri": "http://example.com/"
+                        },
+                        "color": "#000000",
+                        "style": "link"
+                    }
+                ],
+                "width": "200px",
+                "alignItems": "center",
+                "height": "50px",
+                "cornerRadius": "100px",
+                "backgroundColor": "#fdbe29",
+                "margin": "15px"
             }
         ],
         "alignItems": "center",

@@ -32,6 +32,7 @@ async def share(
     request: Request,
     liff_state: Optional[str] = Query(None, alias="liff.state"),
     pull_id: Optional[str] = "",
+    target: Optional[str] = "",
 ) -> HTMLResponse:
     """分享投票資訊頁面
 
@@ -188,7 +189,7 @@ async def vote_create(param: CreateVote) -> JSONResponse:
                 "message": {
                     "title": "投票已成功建立！",
                     "content": "前往分享頁面",
-                    "share_link": f"{config.SITE_NAME}share?pull_id={data_id}",
+                    "share_link": f"{config.SITE_NAME}share?pull_id={data_id}&target=vote",
                 },
             }
         else:

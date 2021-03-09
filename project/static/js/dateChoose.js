@@ -81,7 +81,7 @@ function submitButton() {
                         if (result.isConfirmed) {
                             liff.closeWindow();
                         } else {
-                            window.location.replace(`https://liff.line.me/1655422218-KOeZvV1e?pull_id=${pull_id}`);
+                            window.location.replace(`https://liff.line.me/1655422218-KOeZvV1e?pull_id=${pull_id}&target=result`);
                         }
                     })
                 } else {

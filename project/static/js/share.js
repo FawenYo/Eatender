@@ -1,4 +1,5 @@
 let pull_id;
+let target;
 
 $(document).ready(function () {
     const query_url = new URL(window.location.href)
@@ -13,6 +14,18 @@ $(document).ready(function () {
             localStorage["pull_id"] = pull_id
         } else {
             pull_id = localStorage["pull_id"]
+        }
+    }
+
+    if (query_params.get("target") != null) {
+        target = query_params.get("target")
+        localStorage["target"] = target
+    } else {
+        if (query_url.searchParams.get("target") != null) {
+            target = query_url.searchParams.get("target")
+            localStorage["target"] = target
+        } else {
+            target = localStorage["target"]
         }
     }
     initializeLiff("1655422218-O3KRZNpK");
@@ -64,7 +77,7 @@ function sendShare() {
         header: { 'Content-Type': 'application/json' },
         mode: 'same-origin'
     };
-    const requestURL = `./api/liffshare?pull_id=${pull_id}`
+    const requestURL = `./api/liffshare?pull_id=${pull_id}&target=${target}`
 
     fetch(requestURL, requestOptions)
         .then(response => response.json())

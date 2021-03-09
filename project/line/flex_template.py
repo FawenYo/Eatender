@@ -39,7 +39,120 @@ def share_vote(pull_id: str) -> dict:
     ] = f"https://liff.line.me/1655422218-8n1PlOw1?pull_id={pull_id}"
     contents["footer"]["contents"][1]["contents"][0]["action"][
         "uri"
-    ] = f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={pull_id}"
+    ] = f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={pull_id}&target=vote"
+    return contents
+
+
+def share_result(
+    pull_id: str, vote_name: str, best: list, users: list, total_user_count: int
+) -> dict:
+    """WEB - 分享結果
+
+    Args:
+        pull_id (str): 投票池ID
+        vote_name (str): 投票名稱
+        best (list): 投票結果
+        users (list): 與會人列表
+        total_user_count (int): 投票總人數
+
+    Returns:
+        dict: 投票分享資訊
+    """
+    with open("line/model/vote_result.json") as json_file:
+        contents = json.load(json_file)
+    contents["body"]["contents"][1]["text"] = vote_name
+    contents["body"]["contents"][2]["text"] = f"共{total_user_count}人參與投票"
+    for each in best:
+        restaurant_name = each["restaurant"]["name"]
+        date_text = each["date"]
+        session_text = each["session"]
+
+        template = {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": restaurant_name,
+                            "align": "center",
+                            "size": "lg",
+                            "weight": "bold",
+                            "margin": "md",
+                        },
+                        {
+                            "type": "box",
+                            "layout": "horizontal",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": date_text,
+                                    "size": "sm",
+                                    "weight": "bold",
+                                    "align": "start",
+                                    "offsetStart": "10px",
+                                },
+                                {
+                                    "type": "text",
+                                    "text": session_text,
+                                    "align": "end",
+                                    "size": "sm",
+                                    "color": "#F26013",
+                                    "margin": "none",
+                                    "weight": "bold",
+                                    "offsetEnd": "10px",
+                                },
+                            ],
+                            "margin": "lg",
+                        },
+                    ],
+                    "paddingAll": "none",
+                    "borderWidth": "none",
+                    "cornerRadius": "10px",
+                    "borderColor": "#F7F1C7",
+                    "margin": "none",
+                }
+            ],
+            "margin": "md",
+            "borderColor": "#EFB95D",
+            "borderWidth": "medium",
+            "cornerRadius": "10px",
+            "paddingBottom": "10px",
+        }
+        contents["body"]["contents"][5]["contents"].append(template)
+    for each_user in users:
+        template = {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": each_user,
+                    "color": "#ffffff",
+                    "align": "center",
+                    "adjustMode": "shrink-to-fit",
+                }
+            ],
+            "alignItems": "center",
+            "backgroundColor": "#EFB95D",
+            "paddingStart": "10px",
+            "paddingEnd": "10px",
+            "cornerRadius": "5px",
+            "paddingTop": "2px",
+            "paddingBottom": "2px",
+            "spacing": "md",
+            "margin": "sm",
+        }
+        contents["body"]["contents"][8]["contents"].append(template)
+    contents["footer"]["contents"][0]["contents"][0]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-KOeZvV1e?pull_id={pull_id}"
+    contents["footer"]["contents"][1]["contents"][0]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={pull_id}&target=result"
     return contents
 
 

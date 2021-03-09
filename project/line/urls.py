@@ -13,6 +13,7 @@ from . import flex_template, message_event, postback_event, user_event
 sys.path.append(".")
 
 import config
+from vote.urls import show_result
 
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
@@ -142,7 +143,7 @@ def handle_postback(event):
 
 
 @line_app.get("/api/liffshare")
-async def liff_share(pull_id: str) -> JSONResponse:
+async def liff_share(pull_id: str, target: str) -> JSONResponse:
     """API - 分享投票
 
     Args:
@@ -151,5 +152,21 @@ async def liff_share(pull_id: str) -> JSONResponse:
     Returns:
         JSONResponse: Flex Message資料
     """
-    message = flex_template.share_vote(pull_id=pull_id)
+    if target == "vote":
+        message = flex_template.share_vote(pull_id=pull_id)
+    else:
+        vote_info = show_result(pull_id=pull_id)
+
+        vote_name = vote_info["vote_name"]
+        best = vote_info["best"]
+        users = vote_info["users"]
+        total_user_count = vote_info["total_user_count"]
+
+        message = flex_template.share_result(
+            pull_id=pull_id,
+            vote_name=vote_name,
+            best=best,
+            users=users,
+            total_user_count=total_user_count,
+        )
     return JSONResponse(content={"status": "success", "data": message})
