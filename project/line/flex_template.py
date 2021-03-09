@@ -460,6 +460,9 @@ def vote_result(
     contents["footer"]["contents"][0]["contents"][0]["action"][
         "uri"
     ] = f"https://liff.line.me/1655422218-KOeZvV1e?pull_id={pull_id}"
+    contents["footer"]["contents"][1]["contents"][0]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={pull_id}&target=result"
     message = FlexSendMessage(alt_text="投票結果", contents=contents)
     return message
 
