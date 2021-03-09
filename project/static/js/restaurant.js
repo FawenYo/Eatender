@@ -123,40 +123,46 @@ function parseParam() {
 }
 
 function fetch_restaurant() {
-    const requestOptions = {
-        method: 'GET',
-        header: { 'Content-Type': 'application/json' },
-        mode: 'same-origin'
-    };
-    const requestURL = `/api/vote/get/restaurant?pull_id=${pull_id}`
+    if (firstLoad) {
+        const requestOptions = {
+            method: 'GET',
+            header: { 'Content-Type': 'application/json' },
+            mode: 'same-origin'
+        };
+        const requestURL = `/api/vote/get/restaurant?pull_id=${pull_id}`
 
-    fetch(requestURL, requestOptions)
-        .then(response => response.json())
-        .then((data) => {
-            if (data.status == "success") {
-                $("#cardWrapper").empty()
-                restaurants = data.restaurants
-                total_restaurant = restaurants.length
-                restaurants.forEach(i => renderCard(i))
-                main()
-            } else {
+        fetch(requestURL, requestOptions)
+            .then(response => response.json())
+            .then((data) => {
+                if (data.status == "success") {
+                    $("#cardWrapper").empty()
+                    restaurants = data.restaurants
+                    total_restaurant = restaurants.length
+                    restaurants.forEach(i => renderCard(i))
+                    main()
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "很抱歉！",
+                        text: data.error_message,
+                        confirmButtonText: "確認",
+                    })
+                }
+            })
+            .catch((error) => {
                 Swal.fire({
                     icon: "error",
                     title: "很抱歉！",
-                    text: data.error_message,
+                    text: "無法連接伺服器，請稍後再試！",
                     confirmButtonText: "確認",
                 })
-            }
-        })
-        .catch((error) => {
-            Swal.fire({
-                icon: "error",
-                title: "很抱歉！",
-                text: "無法連接伺服器，請稍後再試！",
-                confirmButtonText: "確認",
-            })
-            console.log(error)
-        });
+                console.log(error)
+            });
+    } else {
+        $("#cardWrapper").empty()
+        restaurants.forEach(i => renderCard(i))
+        main()
+    }
 }
 
 function renderCard(restaurantInfo) {
