@@ -256,7 +256,7 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
         else:
             pull_data["result"]["user"][user_id] = {
                 "restaurants": restaurants,
-                "dates": [],
+                "dates": {},
             }
 
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
