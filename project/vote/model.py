@@ -26,7 +26,7 @@ class CreateVote(BaseModel):
 class SaveVoteRestaurant(BaseModel):
     pull_id: str  # 投票池 ID
     user_id: str  # 使用者 ID
-    choose_result: Dict[str, List[int]] = {"love": [], "hate": []}  # 餐廳選擇
+    choose_result: Dict[str, List[str]] = {"love": [], "nope": []}  # 餐廳選擇
 
 
 class OldSaveVoteDate(BaseModel):

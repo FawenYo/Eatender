@@ -211,16 +211,9 @@ async def get_pull_data(pull_id: str) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         restaurants = []
-        if pull_id != "example":
-            for each in pull_data["restaurants"]:
-                data = json.loads(config.cache.get(each))
-                restaurants.append(data)
-        else:
-            random_restaurants = config.db.restaurant.aggregate(
-                [{"$sample": {"size": 5}}]
-            )
-            for each in random_restaurants:
-                restaurants.append(each)
+        for each in pull_data["restaurants"]:
+            data = json.loads(config.cache.get(each))
+            restaurants.append(data)
         message = {"status": "success", "restaurants": restaurants}
     else:
         message = {"status": "error", "error_message": "Vote pull not found."}
@@ -244,8 +237,7 @@ async def vote_save(param: SaveVoteRestaurant) -> JSONResponse:
     pull_data = config.db.vote.find_one({"_id": pull_id})
     if pull_data:
         restaurants = []
-        for restaurant_id in choose_result["love"]:
-            restaurant_place_id = pull_data["restaurants"][restaurant_id]
+        for restaurant_place_id in choose_result["love"]:
             restaurants.append(restaurant_place_id)
             if user_id not in pull_data["result"]["restaurants"][restaurant_place_id]:
                 pull_data["result"]["restaurants"][restaurant_place_id].append(user_id)
