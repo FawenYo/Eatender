@@ -2,8 +2,9 @@ let pull_id;
 let user_id;
 let total_restaurant = 0;
 let current_index = 0;
-let choose_result = { love: [], hate: [] };
-let load_done = false;
+let choose_result = { love: [], nope: [] };
+let restaurants = [];
+let firstLoad = true
 
 $(document).ready(function () {
     parseParam();
@@ -76,6 +77,8 @@ function initializeApp() {
 }
 
 function loadPage() {
+    current_index = 0;
+    choose_result = { love: [], nope: [] };
     $(".loading_page").fadeOut();
     $(".tinder").fadeIn();
     if (!localStorage["dont_hint"] || localStorage["dont_hint"] == "false") {
@@ -135,7 +138,6 @@ function fetch_restaurant() {
                 restaurants = data.restaurants
                 total_restaurant = restaurants.length
                 restaurants.forEach(i => renderCard(i))
-                load_done = true
                 main()
             } else {
                 Swal.fire({
@@ -269,7 +271,6 @@ function main() {
             if (!cards.length) return false
 
             var card = cards[0]
-
             card.classList.add("removed")
 
             if (love) {
@@ -285,16 +286,19 @@ function main() {
             event.preventDefault()
         }
     }
+    if (firstLoad) {
+        var nopeListener = createButtonListener(false)
+        var loveListener = createButtonListener(true)
 
-    var nopeListener = createButtonListener(false)
-    var loveListener = createButtonListener(true)
-
-    nope.addEventListener("click", nopeListener)
-    love.addEventListener("click", loveListener)
+        nope.addEventListener("click", nopeListener)
+        love.addEventListener("click", loveListener)
+    }
 }
 
 function love_restaurant() {
-    choose_result["love"].push(current_index)
+    const restaurantID = restaurants[current_index]["place_id"]
+    localStorage[restaurantID] = restaurants[current_index]["name"]
+    choose_result["love"].push(restaurantID)
     current_index += 1
     if (current_index == total_restaurant) {
         save_results()
@@ -302,7 +306,9 @@ function love_restaurant() {
 }
 
 function not_love_restaurant() {
-    choose_result["hate"].push(current_index)
+    const restaurantID = restaurants[current_index]["place_id"]
+    localStorage[restaurantID] = restaurants[current_index]["name"]
+    choose_result["nope"].push(restaurantID)
     current_index += 1
     if (current_index == total_restaurant) {
         save_results()
@@ -310,22 +316,58 @@ function not_love_restaurant() {
 }
 
 function save_results() {
-    const sendData = {
-        pull_id,
-        user_id,
-        choose_result,
+    firstLoad = false;
+    let loveRestaurants = [];
+    let nopeRestaurants = [];
+    for (i in choose_result["love"]) {
+        restaurantName = localStorage[choose_result["love"][i]]
+        loveRestaurants.push(restaurantName)
     }
-    const requestOptions = {
-        method: 'POST',
-        header: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sendData),
-        mode: 'same-origin'
-    };
-    const requestURL = "/api/vote/save/restaurant"
-    fetch(requestURL, requestOptions)
-        .then(response => response.json())
-        .then((data) => {
-            if (data.status == "success") {
+    for (i in choose_result["nope"]) {
+        restaurantName = localStorage[choose_result["nope"][i]]
+        nopeRestaurants.push(restaurantName)
+    }
+    let checkText = `
+    <p style="color:green; text-align: left;">喜歡：${loveRestaurants}</p>
+    <p style="color:red; text-align: left;">不喜歡：${nopeRestaurants}</p>
+    `
+
+    Swal.fire({
+        icon: "question",
+        title: "請確認投票選擇",
+        html: checkText,
+        confirmButtonText: "確認送出",
+        showCancelButton: true,
+        cancelButtonText: "重新選擇",
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+            const sendData = {
+                pull_id,
+                user_id,
+                choose_result,
+            };
+            const requestOptions = {
+                method: 'POST',
+                header: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(sendData),
+                mode: 'same-origin'
+            };
+            const requestURL = "/api/vote/save/restaurant";
+            return fetch(requestURL, requestOptions)
+                .then(response => {
+                    return response.json()
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.showValidationMessage(
+                        "無法連接伺服器，請稍後再試！"
+                    )
+                })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (result.value.status == "success") {
                 fetchVoteDate();
             } else {
                 Swal.fire({
@@ -335,16 +377,10 @@ function save_results() {
                     confirmButtonText: "確認",
                 })
             }
-        })
-        .catch((error) => {
-            Swal.fire({
-                icon: "error",
-                title: "很抱歉！",
-                text: "無法連接伺服器，請稍後再試！",
-                confirmButtonText: "確認",
-            })
-            console.log(error)
-        });
+        } else {
+            loadPage();
+        }
+    })
 }
 
 function fetchVoteDate() {

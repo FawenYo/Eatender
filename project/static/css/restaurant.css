@@ -21,6 +21,13 @@ body {
   background-color: white;
 }
 
+.loading_context {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
 #schedular {
   display: none;
   top: 10px;
