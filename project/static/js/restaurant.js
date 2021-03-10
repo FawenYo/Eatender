@@ -333,9 +333,19 @@ function save_results() {
         restaurantName = localStorage[choose_result["nope"][i]]
         nopeRestaurants.push(restaurantName)
     }
+    let LoveText = ""
+    let NopeText = ""
+    for (i in loveRestaurants) {
+        temp = `<li class="checkLoveText">${loveRestaurants[i]}</li>`
+        LoveText += temp
+    }
+    for (i in nopeRestaurants) {
+        temp = `<li class="checkNopeText">${nopeRestaurants[i]}</li>`
+        NopeText += temp
+    }
     let checkText = `
-    <p style="color:green; text-align: left;">喜歡：${loveRestaurants}</p>
-    <p style="color:red; text-align: left;">不喜歡：${nopeRestaurants}</p>
+    <p style="color:green; text-align: left;">喜歡：${LoveText}</p>
+    <p style="color:red; text-align: left;">不喜歡：${NopeText}</p>
     `
 
     Swal.fire({

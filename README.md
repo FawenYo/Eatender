@@ -1,6 +1,6 @@
 # EATender
 
-[![demo image](https://i.imgur.com/3OPL9mf.png)](https://eatender.site/)
+[![demo image](https://i.imgur.com/rLDVykO.png)](https://eatender.site/)
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@
 ### Backend
 
 In response to the class requirements, we use Python (3.8.6) as our backend programming language.  
-We use it for almost all important feature in our project, such as LINE bot handling, Google Maps API connection, vote sytem, and WEB server creating (We use FastAPI as web framework, for its asynchronous feature allows us to have a better response speed)  
+We use it for almost all important features in our project, such as LINE Bot handling, Google Maps API connection, vote sytem, and WEB server creating (Here we use FastAPI as web framework, for its asynchronous feature allows us to have a better response speed)  
 As for WSGI, we use Gunicorn with uvicorn workclass as our solution.
 
 ### Frontend
@@ -43,7 +43,7 @@ In addition to the above, we also use Docker as a tool for program deployment, N
 
 ## Installation
 
-**Attention !!! FastAPI hasn't support on Windows yet, you might need to run in WSL or Linux / Mac**
+:exclamation: Attention! FastAPI hasn't support on Windows yet, you might need to run in WSL or Linux / Mac
 
 Make sure you have already installed git tools and clone our repo to devices.
 
