@@ -120,7 +120,7 @@ def handle_message(event):
                 ## 測試投票
                 elif user_message == "測試投票":
                     contents = flex_template.share_vote(pull_id="example")
-                    message = FlexSendMessage(alt_text="使用教學", contents=contents)
+                    message = FlexSendMessage(alt_text="一起來吃飯吧！", contents=contents)
 
                 elif user_message == "測試投票結果":
                     pull_id = "example"

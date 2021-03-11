@@ -11,7 +11,7 @@
                     {
                         "type": "image",
                         "url": "https://i.ibb.co/y09hjt2/LOGO5.png",
-                        "size": "full",
+                        "size": "4xl",
                         "aspectMode": "cover",
                         "aspectRatio": "20:12",
                         "position": "relative"
@@ -43,7 +43,7 @@
             },
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                     {
                         "type": "box",
@@ -51,17 +51,38 @@
                         "contents": [
                             {
                                 "type": "text",
-                                "text": "Step 1. 左滑右滑來挑選餐廳",
-                                "color": "#666666",
+                                "text": "step 1",
                                 "size": "sm",
-                                "flex": 2
+                                "gravity": "center",
+                                "weight": "bold",
+                                "margin": "none"
                             }
                         ],
-                        "offsetTop": "sm",
-                        "borderWidth": "bold",
-                        "spacing": "sm",
-                        "flex": 2,
-                        "offsetBottom": "lg"
+                        "alignItems": "flex-start",
+                        "flex": 0
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "filler"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [],
+                                "borderColor": "#EF454D",
+                                "borderWidth": "2px",
+                                "width": "12px",
+                                "height": "12px",
+                                "cornerRadius": "30px"
+                            },
+                            {
+                                "type": "filler"
+                            }
+                        ],
+                        "width": "12px"
                     },
                     {
                         "type": "box",
@@ -69,42 +90,247 @@
                         "contents": [
                             {
                                 "type": "text",
-                                "text": "Step 2. 選擇聚餐時間",
-                                "flex": 2,
-                                "size": "sm",
-                                "color": "#666666",
-                                "contents": []
+                                "text": "左滑右滑來挑選餐廳",
+                                "align": "start"
                             }
-                        ],
-                        "borderWidth": "bold",
-                        "spacing": "sm",
-                        "offsetBottom": "lg",
-                        "offsetTop": "sm",
-                        "position": "relative",
-                        "flex": 2
-                    },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": "Step 3. 投票完成，等待投票結果",
-                                "flex": 2,
-                                "size": "sm",
-                                "color": "#666666",
-                                "contents": []
-                            }
-                        ],
-                        "borderWidth": "bold",
-                        "spacing": "sm",
-                        "offsetBottom": "lg",
-                        "offsetTop": "sm",
-                        "position": "relative",
-                        "flex": 2
+                        ]
                     }
                 ],
-                "spacing": "sm"
+                "spacing": "lg",
+                "margin": "md"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "filler"
+                            }
+                        ],
+                        "alignItems": "flex-start",
+                        "flex": 0,
+                        "width": "41px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "filler"
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [],
+                                        "backgroundColor": "#B7B7B7",
+                                        "width": "2px"
+                                    },
+                                    {
+                                        "type": "filler"
+                                    }
+                                ],
+                                "flex": 1
+                            }
+                        ],
+                        "width": "12px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "filler",
+                                "flex": 1
+                            }
+                        ],
+                        "width": "180px",
+                        "height": "25px"
+                    }
+                ],
+                "spacing": "lg",
+                "margin": "none"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "step 2",
+                                "size": "sm",
+                                "gravity": "center",
+                                "weight": "bold",
+                                "margin": "none"
+                            }
+                        ],
+                        "alignItems": "flex-start",
+                        "flex": 0
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "filler"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [],
+                                "borderColor": "#EF454D",
+                                "borderWidth": "2px",
+                                "width": "12px",
+                                "height": "12px",
+                                "cornerRadius": "30px"
+                            },
+                            {
+                                "type": "filler"
+                            }
+                        ],
+                        "width": "12px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "選擇聚餐時間",
+                                "align": "start"
+                            }
+                        ]
+                    }
+                ],
+                "spacing": "lg",
+                "margin": "none"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "filler"
+                            }
+                        ],
+                        "alignItems": "flex-start",
+                        "flex": 0,
+                        "width": "41px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "filler"
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [],
+                                        "backgroundColor": "#B7B7B7",
+                                        "width": "2px"
+                                    },
+                                    {
+                                        "type": "filler"
+                                    }
+                                ],
+                                "flex": 1
+                            }
+                        ],
+                        "width": "12px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "filler"
+                            }
+                        ],
+                        "width": "180px",
+                        "height": "25px"
+                    }
+                ],
+                "spacing": "lg",
+                "margin": "none"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "step 3",
+                                "size": "sm",
+                                "gravity": "center",
+                                "weight": "bold",
+                                "margin": "none"
+                            }
+                        ],
+                        "alignItems": "flex-start",
+                        "flex": 0
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "filler"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [],
+                                "borderColor": "#EF454D",
+                                "borderWidth": "2px",
+                                "width": "12px",
+                                "height": "12px",
+                                "cornerRadius": "30px"
+                            },
+                            {
+                                "type": "filler"
+                            }
+                        ],
+                        "width": "12px"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "投票完成，等待投票結果",
+                                "align": "center"
+                            }
+                        ]
+                    }
+                ],
+                "spacing": "lg",
+                "margin": "none"
             }
         ]
     },
@@ -140,24 +366,48 @@
                 "layout": "vertical",
                 "contents": [
                     {
+                        "type": "text",
+                        "text": "OR",
+                        "weight": "bold",
+                        "align": "center",
+                        "margin": "md"
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
                         "type": "button",
                         "action": {
                             "type": "uri",
                             "label": "分享投票",
                             "uri": "http://example.com/"
                         },
-                        "color": "#000000"
+                        "color": "#fdbe29",
+                        "margin": "none",
+                        "style": "primary"
+                    },
+                    {
+                        "type": "separator",
+                        "color": "#B7B7B7",
+                        "margin": "md"
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "立即查看結果",
+                            "uri": "http://example.com/"
+                        },
+                        "color": "#fdbe29",
+                        "style": "primary",
+                        "margin": "md"
                     }
                 ],
-                "backgroundColor": "#fdbe29",
-                "cornerRadius": "100px",
-                "alignItems": "center",
-                "justifyContent": "space-evenly",
-                "position": "relative",
-                "width": "200px",
-                "height": "50px",
-                "offsetStart": "40px",
-                "margin": "10px"
+                "height": "40px",
+                "margin": "md"
             }
         ]
     }

@@ -37,9 +37,12 @@ def share_vote(pull_id: str) -> dict:
     contents["footer"]["contents"][0]["contents"][0]["action"][
         "uri"
     ] = f"https://liff.line.me/1655422218-8n1PlOw1?pull_id={pull_id}"
-    contents["footer"]["contents"][1]["contents"][0]["action"][
+    contents["footer"]["contents"][2]["contents"][0]["action"][
         "uri"
     ] = f"https://liff.line.me/1655422218-O3KRZNpK?pull_id={pull_id}&target=vote"
+    contents["footer"]["contents"][2]["contents"][2]["action"][
+        "uri"
+    ] = f"https://liff.line.me/1655422218-KOeZvV1e?pull_id={pull_id}"
     return contents
 
 
