@@ -387,7 +387,8 @@
                         },
                         "color": "#fdbe29",
                         "margin": "none",
-                        "style": "primary"
+                        "style": "primary",
+                        "height": "sm"
                     },
                     {
                         "type": "separator",
@@ -403,11 +404,12 @@
                         },
                         "color": "#fdbe29",
                         "style": "primary",
-                        "margin": "md"
+                        "margin": "md",
+                        "height": "sm"
                     }
                 ],
-                "height": "40px",
-                "margin": "md"
+                "margin": "md",
+                "paddingBottom": "10px"
             }
         ]
     }
