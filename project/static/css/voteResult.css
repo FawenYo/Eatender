@@ -1,0 +1,63 @@
+body {
+    font-family: sans-serif;
+}
+
+#type-category-tool {
+    padding: 10px 0;
+}
+#type-category-tool .type {
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#type-category-tool .best-filter.active {
+    color: #fff;
+    background-color: #009688;
+}
+#type-category-tool .best-filter {
+    color: #009688;
+    border: 2px solid #009688;
+    border-radius: 5rem;
+}
+
+#type-category-tool .restaurant-filter.active {
+    color: #fff;
+    background-color: #FF6B39;
+}
+
+#type-category-tool .restaurant-filter {
+    color: #FF6B39;
+    border: 2px solid #FF6B39;
+    border-radius: 5rem;
+}
+
+#type-category-tool .date-filter.active {
+    color: #fff;
+    background-color: #FF5657;
+}
+
+#type-category-tool .date-filter {
+    color: #FF5657;
+    border: 2px solid #FF5657;
+    border-radius: 5rem;
+}
+
+.vote-title {
+    margin-top: 5%;
+    text-align: center;
+    font-size: 32px;
+}
+
+.chart-container {
+    margin: auto;
+}
+
+.result-text {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    text-align: center;
+}

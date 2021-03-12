@@ -1,0 +1,51 @@
+{
+    "type": "bubble",
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "image",
+                "url": "https://img.onl/qZkjv",
+                "size": "full",
+                "offsetTop": "40px",
+                "aspectMode": "fit",
+                "position": "relative"
+            },
+            {
+                "type": "text",
+                "text": "還想看更多餐廳嗎?",
+                "style": "normal",
+                "weight": "bold",
+                "offsetStart": "65px",
+                "size": "md",
+                "offsetTop": "35px"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "postback",
+                            "label": "查看更多",
+                            "data": "more_||_user_lat,user_lng_||_keyword_||_next_page"
+                        },
+                        "position": "relative",
+                        "color": "#296ae8"
+                    }
+                ],
+                "width": "200px",
+                "backgroundColor": "#fdbe29",
+                "height": "50px",
+                "cornerRadius": "100px",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "position": "relative",
+                "offsetTop": "45px",
+                "offsetStart": "30px"
+            }
+        ]
+    }
+}

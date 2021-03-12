@@ -1,18 +1,34 @@
 import os
 
 import uvicorn
+from api.urls import api
+from cron import cron
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from line.urls import line_app
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from API.router import api
 from cron import cron
 from line.handler import line_app
 from view import view
-from vote.view import vote
+from vote.urls import vote
+from weather.urls import weather
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 templates = Jinja2Templates(directory="templates")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -24,6 +40,8 @@ app.include_router(line_app)
 app.include_router(api)
 # Vote System
 app.include_router(vote)
+# Weather
+app.include_router(weather)
 # Cron Job
 app.include_router(cron)
 

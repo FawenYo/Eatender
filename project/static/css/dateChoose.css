@@ -1,0 +1,74 @@
+.vote-name {
+    text-align: center;
+    margin-top: 5%;
+    font-weight: bold;
+    color: #3d1718;
+}
+
+.date-table {
+    margin-top: 25px;
+}
+
+.date-info {
+    position: relative;
+    height: 100px;
+    background-color: white;
+    margin: 5px;
+    border-radius: 0.7rem;
+}
+
+.date-info>div {
+    font-weight: bold;
+    text-align: center;
+}
+
+.date-title {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    height: 50px;
+    width: calc(100% - 15px - 75px);
+    text-align: left !important;
+}
+
+.date-info>div>span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.date-choose {
+    margin: 0;
+    position: relative;
+    top: 40px;
+}
+
+.ok-icon {
+    color: lightgray;
+    font-size: 28px;
+}
+
+.unsure-icon {
+    color: lightgray;
+    font-size: 28px;
+}
+
+.cancel-icon {
+    color: lightgray;
+    font-size: 28px;
+}
+
+.submit {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.submit-btn {
+    border-radius: 5rem;
+    background-color: #4DABF5 !important;
+    border-color: #4DABF5 !important;
+}
+
+.icon-text {
+    margin-bottom: 0px;
+}

@@ -2,17 +2,88 @@
   color: orange;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
 body {
-  background: #CCFBFE;
-  background-color: #CCFBFE !important;
+  background: linear-gradient(135deg, #efb95d 0%, #ffa 100%);
   overflow: hidden;
-  font-family: sans-serif;
+}
+
+.loading_page {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+
+.loading_context {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+#schedular {
+  display: none;
+  top: 10px;
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.hint_box {
+  background-color: rgba(0,0,0,0.6);
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  position: absolute;
+}
+
+.left_hint {
+  height: 75vh;
+  width: 50%;
+  float: left;
+}
+
+.right_hint {
+  height: 75vh;
+  width: 50%;
+  float: right;
+}
+
+.hint_content {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height: 100%;
+  text-align: center;
+  color:white;
+}
+
+.left_content {
+  display: none !important;
+  animation: right_slidein 1s;
+}
+
+.right_content {
+  display: none !important;
+  animation: left_slidein 1s;
+}
+
+.button_hint {
+  text-align: center;
+  display: none;
+}
+
+.hint_confirm {
+  margin-top: 10px;
+  width: 40%;
+  border-radius: 5rem;
 }
 
 .tinder {
@@ -23,7 +94,7 @@ body {
   flex-direction: column;
   position: relative;
   opacity: 0;
-  transition: opacity 0.1s ease-in-out;
+  transition: all .3s ease-in;
 }
 
 .loaded.tinder {
@@ -76,7 +147,6 @@ body {
   max-width: 400px;
   height: 70vh;
   background: #FFFFFF;
-  padding-bottom: 40px;
   border-radius: 8px;
   overflow: hidden;
   position: absolute;
@@ -126,4 +196,72 @@ body {
 
 .fa-times {
   color: #CDD6DD;
+}
+
+.load-wraper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(211, 211, 211);
+  z-index: 44;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.activity {
+  position: absolute;
+  left: -45%;
+  height: 100%;
+  width: 45%;
+  background-image: linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
+  background-image: -moz-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
+  background-image: -webkit-linear-gradient(to left, rgba(251, 251, 251, .05), rgba(251, 251, 251, .3), rgba(251, 251, 251, .6), rgba(251, 251, 251, .3), rgba(251, 251, 251, .05));
+  animation: loading 1s infinite;
+  z-index: 45;
+}
+
+.checkLoveText {
+  color: green;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.checkNopeText {
+  color: red;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@keyframes loading {
+  0% {
+    left: -45%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes right_slidein {
+  from {
+    margin-right: -50%;
+  }
+
+  to {
+    margin-right: 0%;
+  }
+}
+
+@keyframes left_slidein {
+  from {
+    margin-left: -50%;
+  }
+
+  to {
+    margin-left: 0%;
+  }
 }

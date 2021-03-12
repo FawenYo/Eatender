@@ -1,16 +1,23 @@
 version: "3.7"
 
 services:
+  redis:
+    image: "redis:alpine"
+    environment:
+      - TZ=Asia/Taipei
   project:
+    restart: always
     build: ./project
-    container_name: eatender
+    container_name: project
     expose:
       - 8001
+    volumes:
+      - ./project:/app
     environment:
       - TZ=Asia/Taipei
   nginx:
     build: ./nginx
-    container_name: eatender_nginx
+    container_name: nginx
     # restart: always
     ports:
       - "80:80"

@@ -7,46 +7,22 @@ sys.path.append(".")
 from config import db
 
 
-def new_user(user_id: str, display_name: str):
-    """LINE Bot - New User
-
-    Args:
-        user_id (str): LINE User ID
-        display_name (str): LINE User Name
-    """
-    now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
-    data = {
-        "user_id": user_id,
-        "display_name": display_name,
-        "add_time": now,
-        "favorite": [],
-        "vote": [],
-        "notify": {"status": False, "token": ""},
-    }
-    db.user.insert_one(data)
-
-
-def delete_user(user_id: str):
-    """LINE Bot - Delete User
-
-    Args:
-        user_id (str): LINE User ID
-    """
-    db.user.delete_one({"user_id": user_id})
-
-
-def record_user_location(user_id: str, lat: float, lng: float):
+def record_user_search(user_id: str, lat: float, lng: float, search: str):
     """LINE Bot - Record user
 
     Args:
         user_id (str): LINE User ID
         lat (float): Location latitude
         lng (float): Location longitude
+        search (str): Search Texts
     """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
+    if search == "":
+        search = "隨便"
     data = {
         "user_id": user_id,
         "location": [lat, lng],
+        "search": search,
         "time": now,
     }
     db.history.insert_one(data)
@@ -56,7 +32,7 @@ def add_restaurant(restaurant: object, keyword: str):
     """New restaurant
 
     Args:
-        restaurant (object): Restaurant data (food/restaurant.py)
+        restaurant (object): Restaurant data (food/model.py)
         keyword (str): Restaurant category
     """
     now = datetime.now(tz=pytz.timezone("Asia/Taipei"))
@@ -114,3 +90,6 @@ def create_vote(
             "participants": {},
         }
         db.vote_pull.insert_one(data)
+        user_data = db.user.find_one({"user_id": creator})
+        user_data["vote"] = []
+        db.user.update_one({"user_id": creator}, {"$set": user_data})

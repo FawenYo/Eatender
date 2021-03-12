@@ -1,0 +1,147 @@
+{
+    "type": "bubble",
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "text",
+                "text": "投票名稱",
+                "weight": "bold",
+                "color": "#F26013",
+                "size": "md"
+            },
+            {
+                "type": "text",
+                "text": "example",
+                "weight": "bold",
+                "size": "xxl",
+                "margin": "md",
+                "color": "#000000",
+                "align": "center"
+            },
+            {
+                "type": "text",
+                "text": "共0人參與投票",
+                "size": "xs",
+                "color": "#82827B",
+                "wrap": true,
+                "align": "end",
+                "weight": "bold"
+            },
+            {
+                "type": "separator",
+                "margin": "xxl",
+                "color": "#000000"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "投票結果",
+                        "color": "#F26013",
+                        "size": "md",
+                        "weight": "bold"
+                    }
+                ],
+                "spacing": "none",
+                "margin": "xl"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": []
+            },
+            {
+                "type": "separator",
+                "margin": "xxl",
+                "color": "#000000"
+            },
+            {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "與會人",
+                        "color": "#F26013",
+                        "size": "md",
+                        "weight": "bold"
+                    }
+                ],
+                "spacing": "none",
+                "margin": "xl"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [],
+                "alignItems": "center"
+            },
+            {
+                "type": "separator",
+                "margin": "xl",
+                "color": "#000000"
+            }
+        ],
+        "backgroundColor": "#ffffff"
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "查看投票結果",
+                            "uri": "http://example.com/"
+                        },
+                        "color": "#000000",
+                        "style": "link"
+                    }
+                ],
+                "width": "200px",
+                "alignItems": "center",
+                "height": "50px",
+                "cornerRadius": "100px",
+                "backgroundColor": "#fdbe29"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "uri",
+                            "label": "分享投票結果",
+                            "uri": "http://example.com/"
+                        },
+                        "color": "#000000",
+                        "style": "link"
+                    }
+                ],
+                "width": "200px",
+                "alignItems": "center",
+                "height": "50px",
+                "cornerRadius": "100px",
+                "backgroundColor": "#fdbe29",
+                "margin": "15px"
+            }
+        ],
+        "alignItems": "center",
+        "margin": "xl"
+    },
+    "styles": {
+        "footer": {
+            "separator": true
+        }
+    }
+}

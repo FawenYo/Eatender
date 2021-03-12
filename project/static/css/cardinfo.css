@@ -1,0 +1,104 @@
+@import url(https://fonts.googleapis.com/css?family=Work+Sans:400,200,700,500);
+
+
+.restaurant-image {
+    background-size: cover;
+    height: 70%;
+    background-position: right;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.restaurant-name {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    color: #fff;
+    font-size: 27px;
+    font-size: 1.7rem;
+    font-weight: 200;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: inherit;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    padding-right: 35px;
+    padding-left: 35px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.7);
+    height: 40px;
+    z-index: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
+.restaurant-info {
+    height: 17%;
+}
+
+.address {
+    padding-left: 25px;
+    padding-right: 25px;
+    box-sizing: border-box;
+    font-weight: 300;
+    padding-top: 28px;
+    text-align: center;
+}
+
+.detail-info {
+    width: 100%;
+    height: 13%;
+    padding-bottom: 15px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    box-sizing: border-box;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.lg {
+    font-size: 28px;
+    font-size: 1.8rem;
+}
+
+.sm {
+    font-size: 13px;
+    font-size: 1.2rem;
+}
+
+.detail-info-elm {
+    color: #999;
+    border-right: 1px solid #eee;
+    width: 33.3333%;
+    text-align: center;
+    font-weight: 300;
+}
+
+.detail-info-elm:last-child {
+    border-right: none;
+}
+
+.main-window {
+    background: #fff;
+    height: 100%;
+    box-shadow: 0 3px 6px rgba(126, 101, 101, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    width: 100%;
+    position: relative;
+    z-index: 20;
+    -webkit-transition: all .3s ease-in;
+    transition: all .3s ease-in;
+    padding-bottom: 25px;
+}

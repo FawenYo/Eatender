@@ -1,13 +1,13 @@
-from datetime import datetime
-
+import config
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
+from dateutil import parser
 from fastapi import APIRouter
+from line import flex_template
 from linebot import LineBotApi
 from linebot.models import *
-
-import config
-from vote.main import gettime_attendant
+from munch import munchify
+from vote.urls import show_result
 
 cron = APIRouter()
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -16,25 +16,24 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 # Load cron jobs from database
 @cron.get("/init")
 async def init_cron():
-    all_votes = config.db.vote_pull.find({})
+    all_votes = config.db.vote.find({})
     for each_vote in all_votes:
-        set_cronjob(
-            event_id=each_vote["_id"],
+        vote_cronjob(
+            pull_id=each_vote["_id"],
             creator=each_vote["creator"],
-            vote_end=each_vote["end_date"],
-            vote_link=each_vote["vote_link"],
+            due_date=each_vote["due_date"],
         )
     return "Init done"
 
 
-# Set up cron jobs
-def set_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str):
+# Set up vote cron jobs
+def vote_cronjob(pull_id: str, creator: str, due_date: str):
     scheduler = BackgroundScheduler()
     scheduler.add_job(
-        show_result,
+        send_result,
         "date",
-        args=[event_id, creator, vote_link],
-        run_date=vote_end,
+        args=[pull_id, creator],
+        run_date=parser.parse(due_date),
         timezone=pytz.timezone("Asia/Taipei"),
     )
     scheduler.start()
@@ -42,11 +41,27 @@ def set_cronjob(event_id: str, creator: str, vote_end: datetime, vote_link: str)
 
 
 # Push vote result via LINE Noitfy
-def show_result(event_id: str, creator: str, vote_link: str):
-    user_data = config.db.user.find_one({"user_id": creator})
-    access_token = user_data["notify"]["token"]
-    message = gettime_attendant(event_id=event_id, url=vote_link)
-    response = config.lotify_client.send_message(
-        access_token=access_token, message=message
-    )
-    return response
+def send_result(pull_id: str, creator: str):
+    vote_info = show_result(pull_id=pull_id)
+
+    vote_name = vote_info["vote_name"]
+    best = vote_info["best"]
+    users = vote_info["users"]
+    total_user_count = vote_info["total_user_count"]
+
+    restaurants = []
+    for each in best:
+        i = munchify(each)
+        if i.restaurant not in restaurants:
+            restaurants.append(i.restaurant)
+    message = [
+        flex_template.vote_result(
+            pull_id=pull_id,
+            vote_name=vote_name,
+            best=best,
+            users=users,
+            total_user_count=total_user_count,
+        ),
+        flex_template.show_restaurant(restaurants=restaurants),
+    ]
+    line_bot_api.push_message(creator, message)

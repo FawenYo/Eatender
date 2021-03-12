@@ -1,5 +1,4 @@
 import re
-import sys
 from datetime import datetime, timedelta
 
 import requests
@@ -32,24 +31,26 @@ class Weather:
         # 空氣品質
         self.aqi: int = 0
 
-    def fetch_data(self, lat, lng):
+    def fetch_data(self, latitude: float, longitude: float):
         """抓取天氣資料
 
         Args:
-            lat (float): 緯度
-            lng (float): 經度
+            latitude (float): 緯度
+            longitude (float): 經度
 
         Data Source:
             app.wemega.tw: "天氣即時預報" App
         """
-        response = requests.get(f"https://app.wmega.tw/v1/all/{lat}/{lng}").json()
+        response = requests.get(
+            f"https://app.wmega.tw/v1/all/{latitude}/{longitude}"
+        ).json()
         return self.parse_data(data=response)
 
     def parse_data(self, data):
-        """解析資料
+        """處理回傳資訊
 
         Args:
-            data (JSON): 天氣資料內容
+            data (json): 天氣資訊
         """
         self.location_name = data["now"]["name"]
         self.wind_direction = data["now"]["wdir"]
@@ -59,19 +60,19 @@ class Weather:
         self.humidity = data["now"]["humd"]
         self.rain = data["now"]["h24r"]
         self.uvi = data["now"]["uviValue"]
-        self.max_temperature = data["now"]["maxT"]
-        self.min_temperature = data["now"]["minT"]
+        self.max_temperature = data["nowBackups"]["temp"]["todayMaxT"]
+        self.min_temperature = data["nowBackups"]["temp"]["todayMinT"]
         self.wx = data["now"]["wx"]
         self.aqi = data["aqi"]["content"]["aqiValue"]
 
-    def customized_category(self, lat, lng) -> dict:
+    def customized_category(self, latitude, longitude) -> dict:
         """依照天氣、日期，動態的新增類別
 
         Args:
-            lat (float): 緯度
-            lng (float): 經度
+            latitude (float): 緯度
+            longitude (float): 經度
         """
-        self.fetch_data(lat=lat, lng=lng)
+        self.fetch_data(latitude=latitude, longitude=longitude)
 
         category_reference = {
             "好冷，想來點...": "火鍋",

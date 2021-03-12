@@ -7,8 +7,8 @@ bind = f"0.0.0.0:{port}"
 profile = os.getenv("profile", "production")
 if profile == "production":
     loglevel = "info"
-# development
 else:
+    # Development
     loglevel = "debug"
 
 workers = 4

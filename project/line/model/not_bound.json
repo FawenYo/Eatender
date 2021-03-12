@@ -1,0 +1,45 @@
+{
+    "type": "bubble",
+    "hero": {
+        "type": "image",
+        "url": "https://i.imgur.com/l2Yipv5.png",
+        "size": "full",
+        "aspectRatio": "2:1",
+        "aspectMode": "fit"
+    },
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "text",
+                "text": "歐嗚！",
+                "weight": "bold",
+                "size": "xxl",
+                "align": "center",
+                "color": "#FF0000"
+            },
+            {
+                "type": "text",
+                "text": "尚未綁定 LINE Notify，請先前往綁定！",
+                "wrap": true,
+                "align": "center"
+            }
+        ]
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "button",
+                "action": {
+                    "type": "uri",
+                    "label": "綁定 LINE Notify",
+                    "uri": "https://example.com/notify/?uid=example"
+                },
+                "style": "primary"
+            }
+        ]
+    }
+}

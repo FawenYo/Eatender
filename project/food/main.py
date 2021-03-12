@@ -1,3 +1,4 @@
+import json
 import random
 import re
 import string
@@ -5,79 +6,49 @@ import sys
 import threading
 from datetime import datetime, timedelta
 
-from .google_maps.info import GM_Restaurant
+from .google_maps.info import GoogleMaps
 from .ifoodie.ifoodie import Ifoodie
 
 sys.path.append(".")
-from bson.son import SON
-from pymongo import GEOSPHERE
+import config
+import MongoDB.operation as database
 
 import config
 import MongoDB.operation as database
 
 
-class Nearby_restaurant:
-    def __init__(self, latitude, longitude, keyword="", page_token=""):
+class RestaurantInfo:
+    def __init__(
+        self,
+        latitude: float = 0.0,
+        longitude: float = 0.0,
+        keyword: str = "",
+        page_token: str = "",
+    ):
+        """Initial restaurant info object
+
+        Args:
+            latitude (float, optional): restaurant's latitude. Defaults to 0.0.
+            longitude (float, optional): restaurant's longitude. Defaults to 0.0.
+            keyword (str, optional): category keyword. Defaults to "".
+            page_token (str, optional): Google Map's page token. Defaults to "".
+        """
         self.restaurants = []
         self.next_page = ""
         self.latitude = latitude
         self.longitude = longitude
         self.keyword = keyword
         self.page_token = page_token
-        self.get_info()
 
-    def get_info(self):
-        # Get nearby restaurants
+    def search(self, query: str):
+        """搜尋特定餐廳資訊
+
+        Args:
+            query (str): 餐廳名稱
+        """
         threads = []
-        self.get_google_maps_data()
+        self.google_maps_search(query=query)
         self.get_ifoodie_data()
-        # Load from database
-        """ result = []
-        config.db.restaurant.create_index([("loc", GEOSPHERE)])
-        query = {
-            "loc": {
-                "$near": SON(
-                    [
-                        (
-                            "$geometry",
-                            SON(
-                                [
-                                    ("type", "Point"),
-                                    ("coordinates", [self.longitude, self.latitude]),
-                                ]
-                            ),
-                        ),
-                        ("$maxDistance", 1000),
-                    ]
-                )
-            },
-            "category": self.keyword,
-        }
-        for each in config.db.restaurant.find(query):
-            result.append(each)
-        if len(result) >= 5:
-            print("load from db.")
-            for each in result:
-                restaurant = Restaurant(
-                    place_id=each["place_id"],
-                    name=each["name"],
-                    photo_url=each["photo_url"],
-                    open_now=find_operating_status(
-                        data=each["operating_time"]["weekday_text"]
-                    ),
-                    operating_time=each["operating_time"],
-                    location=each["location"],
-                    address=each["address"],
-                    rating=each["rating"],
-                    website=each["website"],
-                    google_url=each["google_url"],
-                    phone_number=each["phone_number"],
-                    reviews=each["reviews"],
-                )
-                self.restaurants.append(restaurant)
-        else:
-            self.get_google_maps_data()
-            self.get_ifoodie_data() """
         # Add to MongoDB
         for restaurant in self.restaurants:
             thread = threading.Thread(
@@ -87,11 +58,47 @@ class Nearby_restaurant:
         for thread in threads:
             thread.start()
 
-        # Updating Silently
-        thread = threading.Thread(target=self.silent_update)
-        thread.start()
+    def nearby(self):
+        # Get nearby restaurants
+        threads = []
+        self.google_maps_nearby()
+        self.get_ifoodie_data()
 
-    def get_google_maps_data(self, complete_mode=False):
+        # Add to MongoDB
+        for restaurant in self.restaurants:
+            thread = threading.Thread(
+                target=database.add_restaurant, args=(restaurant, self.keyword)
+            )
+            threads.append(thread)
+        for thread in threads:
+            thread.start()
+
+    def google_maps_search(self, query: str):
+        """Get Google Maps specific restaurant data
+
+        Args:
+            query (str): Restaurant name
+        """
+        restaurants = GoogleMaps()
+        restaurants.search_info(query=query)
+        self.next_page = restaurants.next_page
+        if self.next_page:
+            token_table = config.db.page_token.find_one({})
+            if self.next_page not in token_table["data"].values():
+                token_key = "".join(
+                    random.choice(string.ascii_letters + string.digits)
+                    for x in range(10)
+                )
+                token_table["data"][token_key] = self.next_page
+                config.db.page_token.update_one({}, {"$set": token_table})
+                self.next_page = token_key
+            else:
+                for key, value in token_table["data"].items():
+                    if value == self.next_page:
+                        self.next_page = key
+        self.restaurants = restaurants.restaurants
+
+    def google_maps_nearby(self, complete_mode=False):
         """Get Google Maps nearby restaurants data
 
         Args:
@@ -102,7 +109,7 @@ class Nearby_restaurant:
             index = 0
         else:
             page_token, index = self.page_token.split("[|]")
-        restaurants = GM_Restaurant(
+        restaurants = GoogleMaps(
             latitude=self.latitude,
             longitude=self.longitude,
             keyword=self.keyword,
@@ -110,6 +117,7 @@ class Nearby_restaurant:
             page_token=page_token,
             index=int(index),
         )
+        restaurants.nearby_info(page_token=page_token)
         if not complete_mode:
             self.next_page = restaurants.next_page
             if self.next_page:
@@ -136,21 +144,18 @@ class Nearby_restaurant:
         Args:
             restaurants (object, optional): Restaurants data. Defaults to object.
             complete_mode (bool, optional): Set it to True to get complete data. Defaults to False.
-
-        Returns:
-            [type]: [description]
         """
         threads = []
         if not complete_mode:
             for restaurant in self.restaurants:
-                config.restaurants[restaurant.place_id] = restaurant.__dict__
+                config.cache.set(restaurant.place_id, json.dumps(restaurant.__dict__))
                 thread = threading.Thread(
                     target=self.multi_threading_ifoodie, args=(restaurant,)
                 )
                 threads.append(thread)
         else:
             for restaurant in restaurants.restaurants:
-                config.restaurants[restaurant.place_id] = restaurant.__dict__
+                config.cache.set(restaurant.place_id, json.dumps(restaurant.__dict__))
                 thread = threading.Thread(
                     target=self.multi_threading_ifoodie, args=(restaurant,)
                 )
@@ -172,33 +177,15 @@ class Nearby_restaurant:
         try:
             data = Ifoodie(
                 restaurant_name=restaurant.name,
-                latitude=self.latitude,
-                longitude=self.longitude,
+                latitude=float(restaurant.location["lat"]),
+                longitude=float(restaurant.location["lng"]),
             )
             restaurant.ifoodie_url = data.restaurant_url
-            restaurant.price = int(data.info["均消價位"])
-            restaurant.reviews += data.comments
+            restaurant.price = data.price
         except ValueError:
             pass
         except IndexError:
             pass
-
-    def silent_update(self):
-        threads = []
-        # Google Maps
-        restaurants = self.get_google_maps_data(complete_mode=True)
-        restaurants = self.get_ifoodie_data(complete_mode=True, restaurants=restaurants)
-        # Add to MongoDB
-        for restaurant in restaurants.restaurants:
-            thread = threading.Thread(
-                target=database.add_restaurant, args=(restaurant, self.keyword)
-            )
-            threads.append(thread)
-        for thread in threads:
-            thread.start()
-        for thread in threads:
-            thread.join()
-        print("Silent update done.")
 
 
 # 店家營業狀態
