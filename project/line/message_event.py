@@ -113,6 +113,9 @@ def handle_message(event):
                     restaurants = []
                     for each in random_restaurants:
                         restaurants.append(each["place_id"])
+                    user_data = config.db.user.find_one({"user_id": user_id})
+                    user_data["vote"] = restaurants
+                    config.db.user.update_one({"user_id": user_id}, {"$set": user_data})
                     message = [
                         flex_template.show_vote_pull(restaurants=restaurants),
                         flex_template.create_vote(user_id="example"),
