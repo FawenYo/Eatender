@@ -304,9 +304,9 @@ def show_restaurant(
         rating = each.rating
         price = each.price
         address = each.address
-        if "open_now" in each:
+        try:
             open_now = each.open_now
-        else:
+        except:
             open_now = find_operating_status(data=each.operating_time.weekday_text)
         phone_number = each.phone_number
         lat = each.location["lat"]

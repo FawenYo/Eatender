@@ -60,8 +60,8 @@ class Weather:
         self.humidity = data["now"]["humd"]
         self.rain = data["now"]["h24r"]
         self.uvi = data["now"]["uviValue"]
-        self.max_temperature = data["now"]["maxT"]
-        self.min_temperature = data["now"]["minT"]
+        self.max_temperature = data["nowBackups"]["temp"]["todayMaxT"]
+        self.min_temperature = data["nowBackups"]["temp"]["todayMinT"]
         self.wx = data["now"]["wx"]
         self.aqi = data["aqi"]["content"]["aqiValue"]
 
