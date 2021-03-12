@@ -157,7 +157,7 @@ const todayDate = new Date();
 var defaultDueDate = {
   year: todayDate.getFullYear(),
   month: todayDate.getMonth() + 1,
-  day: todayDate.getDay()
+  day: todayDate.getDate()
 }
 
 /* Parts to improve */
