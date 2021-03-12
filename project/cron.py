@@ -7,6 +7,7 @@ from line import flex_template
 from linebot import LineBotApi
 from linebot.models import *
 from vote.urls import show_result
+from munch import munchify
 
 cron = APIRouter()
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
@@ -48,11 +49,19 @@ def send_result(pull_id: str, creator: str):
     users = vote_info["users"]
     total_user_count = vote_info["total_user_count"]
 
-    message = flex_template.vote_result(
-        pull_id=pull_id,
-        vote_name=vote_name,
-        best=best,
-        users=users,
-        total_user_count=total_user_count,
-    )
+    restaurants = []
+    for each in best:
+        i = munchify(each)
+        if i.restaurant not in restaurants:
+            restaurants.append(i.restaurant)
+    message = [
+        flex_template.vote_result(
+            pull_id=pull_id,
+            vote_name=vote_name,
+            best=best,
+            users=users,
+            total_user_count=total_user_count,
+        ),
+        flex_template.show_restaurant(restaurants=restaurants),
+    ]
     line_bot_api.push_message(creator, message)

@@ -6,6 +6,7 @@ import sentry_sdk
 from bs4 import BeautifulSoup
 from linebot import LineBotApi
 from linebot.models import *
+from munch import munchify
 
 from . import flex_template
 
@@ -131,13 +132,21 @@ def handle_message(event):
                     users = vote_info["users"]
                     total_user_count = vote_info["total_user_count"]
 
-                    message = flex_template.vote_result(
-                        pull_id=pull_id,
-                        vote_name=vote_name,
-                        best=best,
-                        users=users,
-                        total_user_count=total_user_count,
-                    )
+                    restaurants = []
+                    for each in best:
+                        i = munchify(each)
+                        if i.restaurant not in restaurants:
+                            restaurants.append(i.restaurant)
+                    message = [
+                        flex_template.vote_result(
+                            pull_id=pull_id,
+                            vote_name=vote_name,
+                            best=best,
+                            users=users,
+                            total_user_count=total_user_count,
+                        ),
+                        flex_template.show_restaurant(restaurants=restaurants),
+                    ]
                 # 客服
                 elif user_message == "客服":
                     message = TextSendMessage(text="客服連結\nhttps://lin.ee/DsogwtP")
