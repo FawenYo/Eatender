@@ -6,8 +6,8 @@ from fastapi import APIRouter
 from line import flex_template
 from linebot import LineBotApi
 from linebot.models import *
-from vote.urls import show_result
 from munch import munchify
+from vote.urls import show_result
 
 cron = APIRouter()
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
