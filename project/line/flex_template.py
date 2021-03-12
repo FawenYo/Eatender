@@ -325,6 +325,7 @@ def show_restaurant(
             phone_number=phone_number,
             lat=lat,
             lng=lng,
+            web=web,
         )
         show_list.append(card)
     contents = {
@@ -515,6 +516,7 @@ def restaurant_card_info(
     phone_number: str,
     lat: float,
     lng: float,
+    web: bool = False,
 ) -> dict:
     """卡片模板 - 附近餐廳資訊
 
@@ -532,6 +534,7 @@ def restaurant_card_info(
         phone_number (str): 餐廳電話
         lat (float): 使用者緯度
         lng (float): 使用者經度
+        web (float, optional): 網頁分享. Defaults to False.
 
     Returns:
         dict: Flex Message 卡片模板
@@ -541,48 +544,84 @@ def restaurant_card_info(
         price = "未知"
     comments = keywords_template(keywords=keywords)
     operate_status, operate_color = operate_status_template(open_now=open_now)
-
-    with open("line/model/restaurant_card_info.json") as json_file:
-        card = json.load(json_file)
-    card["header"]["contents"][0]["contents"][0]["url"] = photo_url
-    card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
-    card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
-    card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
-    card["body"]["contents"][1]["contents"] = star_list + [
-        {
-            "type": "text",
-            "text": str(rating),
-            "size": "sm",
-            "color": "#999999",
-            "margin": "sm",
-            "flex": 0,
-        },
-    ]
-    card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
-    card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
-    card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
-    detail = [
-        {
-            "type": "text",
-            "text": "評論",
-            "size": "sm",
-            "color": "#999999",
-            "flex": 0,
-        }
-    ]
-    detail.extend(comments)
-    card["body"]["contents"][3]["contents"] = detail
-    card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
-    card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
-    card["footer"]["contents"][0]["contents"][0]["action"][
-        "uri"
-    ] = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking"
-    card["footer"]["contents"][0]["contents"][1]["action"][
-        "data"
-    ] = f"favorite_||_{place_id}"
-    card["footer"]["contents"][1]["contents"][0]["action"][
-        "data"
-    ] = f"vote_||_{place_id}"
+    if not web:
+        with open("line/model/restaurant_card_info.json") as json_file:
+            card = json.load(json_file)
+        card["header"]["contents"][0]["contents"][0]["url"] = photo_url
+        card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
+        card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
+        card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
+        card["body"]["contents"][1]["contents"] = star_list + [
+            {
+                "type": "text",
+                "text": str(rating),
+                "size": "sm",
+                "color": "#999999",
+                "margin": "sm",
+                "flex": 0,
+            },
+        ]
+        card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
+        card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
+        card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
+        detail = [
+            {
+                "type": "text",
+                "text": "評論",
+                "size": "sm",
+                "color": "#999999",
+                "flex": 0,
+            }
+        ]
+        detail.extend(comments)
+        card["body"]["contents"][3]["contents"] = detail
+        card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
+        card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
+        card["footer"]["contents"][0]["contents"][0]["action"][
+            "uri"
+        ] = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking"
+        card["footer"]["contents"][0]["contents"][1]["action"][
+            "data"
+        ] = f"favorite_||_{place_id}"
+        card["footer"]["contents"][1]["contents"][0]["action"][
+            "data"
+        ] = f"vote_||_{place_id}"
+    else:
+        with open("line/model/web_restaurant_card.json") as json_file:
+            card = json.load(json_file)
+        card["header"]["contents"][0]["contents"][0]["url"] = photo_url
+        card["header"]["contents"][0]["contents"][1]["contents"] = [operate_status]
+        card["header"]["contents"][0]["contents"][1]["backgroundColor"] = operate_color
+        card["body"]["contents"][0]["contents"][0]["text"] = restaurant_name
+        card["body"]["contents"][1]["contents"] = star_list + [
+            {
+                "type": "text",
+                "text": str(rating),
+                "size": "sm",
+                "color": "#999999",
+                "margin": "sm",
+                "flex": 0,
+            },
+        ]
+        card["body"]["contents"][2]["contents"][0]["text"] = f"${price}"
+        card["body"]["contents"][2]["contents"][1]["action"]["uri"] = website
+        card["body"]["contents"][2]["contents"][2]["action"]["uri"] = ifoodie_url
+        detail = [
+            {
+                "type": "text",
+                "text": "評論",
+                "size": "sm",
+                "color": "#999999",
+                "flex": 0,
+            }
+        ]
+        detail.extend(comments)
+        card["body"]["contents"][3]["contents"] = detail
+        card["body"]["contents"][4]["contents"][0]["contents"][1]["text"] = address
+        card["body"]["contents"][4]["contents"][1]["contents"][1]["text"] = phone_number
+        card["footer"]["contents"][0]["contents"][0]["action"][
+            "uri"
+        ] = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}&travelmode=walking"
     return card
 
 

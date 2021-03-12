@@ -174,7 +174,6 @@ async def liff_share(pull_id: str, target: str) -> JSONResponse:
             i = munchify(each)
             if i.restaurant not in restaurants:
                 restaurants.append(i.restaurant)
-        # TODO: Carousel 訊息問題
         message = [
             {
                 "type": "flex",
@@ -185,6 +184,13 @@ async def liff_share(pull_id: str, target: str) -> JSONResponse:
                     best=best,
                     users=users,
                     total_user_count=total_user_count,
+                ),
+            },
+            {
+                "type": "flex",
+                "altText": "餐廳資訊",
+                "contents": flex_template.show_restaurant(
+                    restaurants=restaurants, web=True
                 ),
             },
         ]
