@@ -83,34 +83,36 @@ function sendShare() {
         .then(response => response.json())
         .then((data) => {
             if (data.status == "success") {
-                const result = liff.shareTargetPicker([
-                    {
-                        type: "flex",
-                        altText: "一起來吃飯吧！",
-                        contents: data.data,
-                    },
-                ])
-                if (result) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "成功！",
-                        text: "訊息已送出至聊天室囉～",
-                        confirmButtonText: "確認",
-                    }).then((result) => {
-                        liff.closeWindow();
+                liff.shareTargetPicker(data.data)
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "成功！",
+                            text: "訊息已送出至聊天室囉～",
+                            confirmButtonText: "確認",
+                        }).then((result) => {
+                            liff.closeWindow();
+                        })
                     })
-                } else {
-                    const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split(".")
+                    .catch((error) => {
+                        console.log(error)
+                        Swal.fire({
+                            icon: "error",
+                            title: "很抱歉！",
+                            text: "發生錯誤！",
+                            confirmButtonText: "確認",
+                        })
+                        const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split(".")
 
-                    if (minorVer === undefined) {
-                        console.log("ShareTargetPicker was canceled in external browser")
-                        return
-                    }
+                        if (minorVer === undefined) {
+                            console.log("ShareTargetPicker was canceled in external browser")
+                            return
+                        }
 
-                    if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
-                        alert("ShareTargetPicker was canceled in LINE app")
-                    }
-                }
+                        if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
+                            alert("ShareTargetPicker was canceled in LINE app")
+                        }
+                    })
             } else {
                 Swal.fire({
                     icon: "error",

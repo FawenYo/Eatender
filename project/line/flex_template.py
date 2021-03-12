@@ -278,6 +278,7 @@ def show_restaurant(
     user_longitude: float = 0.0,
     keyword: str = "",
     next_page: str = "",
+    web: bool = False,
 ) -> FlexSendMessage:
     """附近餐廳列表
 
@@ -287,6 +288,7 @@ def show_restaurant(
         user_longitude (float, optional): 使用者經度. Defaults to 0.0.
         keyword (str, optional): 餐廳關鍵字. Defaults to "".
         next_page (str, optional): 更多餐廳 token. Defaults to "".
+        web(bool, optional): 網頁分享. Defaults to False.
 
     Returns:
         FlexSendMessage: 餐廳資訊列表
@@ -337,6 +339,8 @@ def show_restaurant(
             next_page=next_page,
         )
         contents["contents"].append(more)
+    if web:
+        return contents
     message = FlexSendMessage(alt_text="餐廳資訊列表", contents=contents)
     return message
 
@@ -579,9 +583,6 @@ def restaurant_card_info(
     card["footer"]["contents"][1]["contents"][0]["action"][
         "data"
     ] = f"vote_||_{place_id}"
-    print(len(card["body"]["contents"][3]["contents"]))
-    with open("test.json", "w") as f:
-        json.dump(card, f)
     return card
 
 

@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
+from munch import munchify
 
 from . import flex_template, message_event, postback_event, user_event
 
@@ -153,7 +154,13 @@ async def liff_share(pull_id: str, target: str) -> JSONResponse:
         JSONResponse: Flex Message資料
     """
     if target == "vote":
-        message = flex_template.share_vote(pull_id=pull_id)
+        message = [
+            {
+                "type": "flex",
+                "altText": "一起來吃飯吧！",
+                "contents": flex_template.share_vote(pull_id=pull_id),
+            }
+        ]
     else:
         vote_info = show_result(pull_id=pull_id)
 
@@ -162,11 +169,29 @@ async def liff_share(pull_id: str, target: str) -> JSONResponse:
         users = vote_info["users"]
         total_user_count = vote_info["total_user_count"]
 
-        message = flex_template.share_result(
-            pull_id=pull_id,
-            vote_name=vote_name,
-            best=best,
-            users=users,
-            total_user_count=total_user_count,
-        )
-    return JSONResponse(content={"status": "success", "data": message})
+        restaurants = []
+        for each in best:
+            i = munchify(each)
+            if i.restaurant not in restaurants:
+                restaurants.append(i.restaurant)
+        # TODO: Carousel 訊息問題
+        message = [
+            {
+                "type": "flex",
+                "altText": "一起來吃飯吧！",
+                "contents": flex_template.share_result(
+                    pull_id=pull_id,
+                    vote_name=vote_name,
+                    best=best,
+                    users=users,
+                    total_user_count=total_user_count,
+                ),
+            },
+        ]
+
+    return JSONResponse(
+        content={
+            "status": "success",
+            "data": message,
+        }
+    )
