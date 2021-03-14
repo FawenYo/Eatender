@@ -48,6 +48,21 @@ body :-ms-input-placeholder {
   color: white;
   font-weight: 300;
 }
+
+.loading_page {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+
+.loading_context {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  color: #000;
+}
+
 .wrapper {
   background: #50a3a2;
   background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);

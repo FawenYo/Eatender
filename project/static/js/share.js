@@ -51,7 +51,8 @@ function initializeApp() {
     } else {
         liff.getProfile()
             .then(profile => {
-                console.log("LINE logged in!")
+                $(".loading_page").fadeOut();
+                $(".wrapper").fadeIn();
             })
             .catch(err => {
                 console.log(err);
