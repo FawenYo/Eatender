@@ -4,6 +4,7 @@
 
 ## Table of Contents
 
+* **[Project Status](#project-status)**
 * **[Technical Detail](#technical-detail)**
   * [Backend](#backend)
   * [Frontend](#frontend)
@@ -15,6 +16,11 @@
 * **[License](#license)**
 
 ----
+
+## Project Status
+
+Thanks to the team members for their help, we finally won the first place and the best popularity award in the coding 101 competition!
+However, the end of the competition is also a new start. The project will continue to be developed, and everyone is welcome to help!
 
 ## Technical Detail
 
