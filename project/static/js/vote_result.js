@@ -1,24 +1,9 @@
-let chartOption = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        xAxes: [{
-            ticks: {
-                beginAtZero: true
-            }
-        }],
-    }
-}
-let best_label = [];
-let best_data = [];
-let restaurant_label = [];
-let restaurant_data = [];
-let date_label = [];
-let date_data = [];
 let most_best = [];
 let most_restaurants = [];
 let most_dates = [];
 let filter_type = "best-filter";
+let vote_data;
+let user_count = 0;
 
 $(document).ready(() => {
     const query_url = new URL(window.location.href)
@@ -52,30 +37,22 @@ function changeChart(filter) {
     $("#result-text").empty()
     $("#result-text").append(`<h4>最多人選擇：</h4>`)
     if (filter == "best-filter") {
-        document.getElementById("bestChart").setAttribute("style", "display: block;")
-        document.getElementById("restaurantChart").setAttribute("style", "display: none;")
-        document.getElementById("dateChart").setAttribute("style", "display: none;")
         for (each in most_best) {
             data = `<li style="text-align: left;">${most_best[each]}</li>`
             $("#result-text").append(data)
         }
     } else if (filter == "restaurant-filter") {
-        document.getElementById("bestChart").setAttribute("style", "display: none;")
-        document.getElementById("restaurantChart").setAttribute("style", "display: block;")
-        document.getElementById("dateChart").setAttribute("style", "display: none;")
         for (each in most_restaurants) {
             data = `<li style="text-align: left;">${most_restaurants[each]}</li>`
             $("#result-text").append(data)
         }
     } else {
-        document.getElementById("bestChart").setAttribute("style", "display: none;")
-        document.getElementById("restaurantChart").setAttribute("style", "display: none;")
-        document.getElementById("dateChart").setAttribute("style", "display: block;")
         for (each in most_dates) {
             data = `<li style="text-align: left;">${most_dates[each]}</li>`
             $("#result-text").append(data)
         }
     }
+    renderChart(filter_type)
 }
 
 function fetchData() {
@@ -96,19 +73,9 @@ function fetchData() {
 
                 document.getElementById("vote-title").innerHTML = data.data.vote_name;
 
-                for (var i in data.data.best) {
-                    best_label.push(i)
-                    best_data.push(data.data.best[i])
-                }
-                for (var i in data.data.restaurants) {
-                    restaurant_label.push(i)
-                    restaurant_data.push(data.data.restaurants[i])
-                }
-                for (var i in data.data.dates) {
-                    date_label.push(i)
-                    date_data.push(data.data.dates[i])
-                }
-                renderChart()
+                vote_data = data.data
+                user_count = data.data.total_users
+                renderChart(filter_type)
                 changeChart(filter_type)
             } else {
                 Swal.fire({
@@ -130,56 +97,64 @@ function fetchData() {
         });
 }
 
-function renderChart() {
-    let best_ctx = document.getElementById('bestCanvas').getContext('2d');
-    let restaurant_ctx = document.getElementById('restaurantCanvas').getContext('2d');
-    let date_ctx = document.getElementById('dateCanvas').getContext('2d');
-    let best_chart = new Chart(best_ctx, {
-        // The type of chart we want to create
-        type: 'horizontalBar',
-        // The data for our dataset
-        data: {
-            labels: best_label,
-            datasets: [{
-                label: '投票可行人數',
-                data: best_data,
-                backgroundColor: palette('tol-rainbow', best_data.length).map((hex) => {
-                    return '#' + hex;
-                })
-            }]
-        },
-        options: chartOption
-    });
-    let restaurant_chart = new Chart(restaurant_ctx, {
-        // The type of chart we want to create
-        type: 'horizontalBar',
-        // The data for our dataset
-        data: {
-            labels: restaurant_label,
-            datasets: [{
-                label: '投票可行人數',
-                data: restaurant_data,
-                backgroundColor: palette('tol-rainbow', restaurant_data.length).map((hex) => {
-                    return '#' + hex;
-                })
-            }]
-        },
-        options: chartOption
-    });
-    let date_chart = new Chart(date_ctx, {
-        // The type of chart we want to create
-        type: 'horizontalBar',
-        // The data for our dataset
-        data: {
-            labels: date_label,
-            datasets: [{
-                label: '投票可行人數',
-                data: date_data,
-                backgroundColor: palette('tol-rainbow', date_data.length).map((hex) => {
-                    return '#' + hex;
-                })
-            }]
-        },
-        options: chartOption
-    });
+function renderChart(filter) {
+    let detail = "";
+    $("#Chart").empty()
+    if (filter == "best-filter") {
+        for (i in vote_data.best) {
+            const voteInfo = i
+            const infoCount = vote_data.best[i]
+            const percent = infoCount / user_count
+            const temp = `
+                <div class="progressBar">
+                    <h4>${voteInfo} (${infoCount}人)</h4>
+                    <div class="progressBarContainer">
+                        <div class="progressBarValue" style="width: ${percent * 100}%; background: #f5ba1b;"></div>
+                    </div>
+                </div>
+            `
+            detail += temp
+        }
+    } else if (filter == "restaurant-filter") {
+        for (i in vote_data.restaurants) {
+            const voteInfo = i
+            const infoCount = vote_data.restaurants[i]
+            const percent = infoCount / user_count
+            const temp = `
+                <div class="progressBar">
+                    <h4>${voteInfo} (${infoCount}人)</h4>
+                    <div class="progressBarContainer">
+                        <div class="progressBarValue" style="width: ${percent * 100}%; background: #f5ba1b;"></div>
+                    </div>
+                </div>
+            `
+            detail += temp
+        }
+    } else {
+        for (i in vote_data.dates) {
+            const voteInfo = i
+            const infoCount = vote_data.dates[i]
+            const percent = infoCount / user_count
+            const temp = `
+                <div class="progressBar">
+                    <h4>${voteInfo} (${infoCount}人)</h4>
+                    <div class="progressBarContainer">
+                        <div class="progressBarValue" style="width: ${percent * 100}%; background: #f5ba1b;"></div>
+                    </div>
+                </div>
+            `
+            detail += temp
+        }
+    }
+
+    const data = `
+            <div class="chart-container" id="chart-container">
+                <div class="row">
+                    <div class="eight columns">
+                        ${detail}
+                    </div>
+                </div>
+            </div>
+        `
+    $("#Chart").append(data)
 }

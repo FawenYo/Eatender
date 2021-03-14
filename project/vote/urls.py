@@ -348,6 +348,7 @@ async def api_vote_get_result(pull_id: str) -> JSONResponse:
     vote_data = find_vote_result(pull_id=pull_id)
     result_data = {
         "vote_name": "",
+        "total_users": 0,
         "best": {},
         "restaurants": {},
         "dates": {},
@@ -357,6 +358,7 @@ async def api_vote_get_result(pull_id: str) -> JSONResponse:
     }
     if vote_data:
         result_data["vote_name"] = vote_data["data"]["info"]["vote_name"]
+        result_data["total_users"] = len(vote_data["data"]["info"]["result"]["user"])
         sorted_best = vote_data["data"]["sorted_best"]
         sorted_restaurants = vote_data["data"]["sorted_restaurants"]
         sorted_dates = vote_data["data"]["sorted_dates"]

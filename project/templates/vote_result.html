@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/voteResult.css">
+    <link rel="stylesheet" href="../static/css/about.css">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
     <script>
@@ -49,26 +50,10 @@
         </div>
         <div id="chartWrapper" class="container">
             <h3 id="vote-title" class="vote-title">投票名稱</h3>
-            <div id="bestChart" class="best">
-                <h3>綜合</h3>
-                <div class="chart-container">
-                    <canvas id="bestCanvas" class="table" style="min-height:60vh"></canvas>
-                </div>
-            </div>
-            <div id="restaurantChart" class="restaurant">
-                <h3>餐廳</h3>
-                <div class="chart-container">
-                    <canvas id="restaurantCanvas" class="table" style="min-height:60vh"></canvas>
-                </div>
-            </div>
-            <div id="dateChart" class="date">
-                <h3>日期</h3>
-                <div class="chart-container">
-                    <canvas id="dateCanvas" class="table" style="min-height:60vh"></canvas>
-                </div>
+            <div id="Chart">
             </div>
         </div>
-        <div id="result-text" class="result-text">
+        <div id="result-text" class="result-text container">
             <p id="result-info">最多人選擇</p>
         </div>
     </div>

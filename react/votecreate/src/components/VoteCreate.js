@@ -482,7 +482,7 @@ export default function VoteCreate() {
         }
       }
       function checkDueDate() {
-        if (!PreservedFormValues.dueDate) {
+        if (!PreservedFormValues.dueDate || PreservedFormValues.dueDate.includes("null")) {
           validation = false;
           Swal.fire({
             icon: "error",

@@ -52,6 +52,7 @@ function initializeApp() {
         liff.getProfile()
             .then(profile => {
                 $(".loading_page").fadeOut();
+                document.getElementById("loading_page").setAttribute("style", "display: none;")
                 $(".wrapper").fadeIn();
             })
             .catch(err => {
