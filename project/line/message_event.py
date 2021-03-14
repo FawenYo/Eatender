@@ -169,6 +169,12 @@ def handle_message(event):
                         query = parse_google_maps_url(url=google_maps_url)
                         if query:
                             message = search_info(query=query)
+                        else:
+                            can_reply = False
+                            message = None
+                    else:
+                        can_reply = False
+                        message = None
                 else:
                     # 面對單一使用者
                     if event.source.type == "user":

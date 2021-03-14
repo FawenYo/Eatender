@@ -117,7 +117,7 @@ def handle_postback(event):
                     restaurant_data = json.loads(config.cache.get(place_id))
                 if place_id not in user["vote"]:
                     user["vote"].append(place_id)
-                    config.db.user.update_one({"user_id": user_id}, {"$set": user})
+                    config.db.user.update_one({"_id": user["_id"]}, {"$set": user})
                     message = TextSendMessage(text=f"已將{restaurant_data['name']}加入投票池！")
                 else:
                     message = TextSendMessage(text=f"餐廳已經在投票池內囉！")

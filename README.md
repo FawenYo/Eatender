@@ -74,7 +74,7 @@ We use Debian/Ubuntu as example here.
     sudo chmod +x /usr/local/bin/docker-compose
     ```
 
-#### Steps Using Local Environment
+#### Steps
 
 1. First we have to create our own environment variables.
     We use Vim as text editor here.

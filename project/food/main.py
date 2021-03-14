@@ -13,9 +13,6 @@ sys.path.append(".")
 import config
 import MongoDB.operation as database
 
-import config
-import MongoDB.operation as database
-
 
 class RestaurantInfo:
     def __init__(

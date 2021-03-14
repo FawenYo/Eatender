@@ -64,4 +64,8 @@ def send_result(pull_id: str, creator: str):
         ),
         flex_template.show_restaurant(restaurants=restaurants),
     ]
-    line_bot_api.push_message(creator, message)
+    try:
+        line_bot_api.push_message(creator, message)
+    except:
+        message = TextSendMessage(text=f"結果訊息內容過長，請至 {config.SITE_NAME}view/result 查看")
+        line_bot_api.push_message(creator, message)

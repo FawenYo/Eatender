@@ -308,22 +308,25 @@ async def vote_date_save(param: SaveVoteDate) -> JSONResponse:
         pull_data["result"]["user"][user_id]["dates"] = available_date
 
         for each_date in available_date:
-            # 日期
-            if user_id not in pull_data["result"]["dates"][each_date]:
-                pull_data["result"]["dates"][each_date].append(user_id)
+            if available_date[each_date] == "ok":
+                # 日期
+                if user_id not in pull_data["result"]["dates"][each_date]:
+                    pull_data["result"]["dates"][each_date].append(user_id)
 
-            # 綜合
-            date_string, day_text, session = each_date.split(" ")
-            for each_restaurant in pull_data["result"]["user"][user_id]["restaurants"]:
-                if (
-                    user_id
-                    not in pull_data["result"]["best"][
-                        f"{date_string} {day_text} + {session} @ {each_restaurant}"
-                    ]
-                ):
-                    pull_data["result"]["best"][
-                        f"{date_string} {day_text} + {session} @ {each_restaurant}"
-                    ].append(user_id)
+                # 綜合
+                date_string, day_text, session = each_date.split(" ")
+                for each_restaurant in pull_data["result"]["user"][user_id][
+                    "restaurants"
+                ]:
+                    if (
+                        user_id
+                        not in pull_data["result"]["best"][
+                            f"{date_string} {day_text} + {session} @ {each_restaurant}"
+                        ]
+                    ):
+                        pull_data["result"]["best"][
+                            f"{date_string} {day_text} + {session} @ {each_restaurant}"
+                        ].append(user_id)
 
         config.db.vote.update_one({"_id": pull_id}, {"$set": pull_data})
         message = {"status": "success", "message": "已成功儲存投票內容！"}
