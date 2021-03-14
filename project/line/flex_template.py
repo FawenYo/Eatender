@@ -479,7 +479,7 @@ def vote_result(
 
 
 # 店家營業狀態
-def find_operating_status(data):
+def find_operating_status(data, date_text: str = "", session: str = ""):
     now = datetime.now()
     today_date = now.strftime("%Y:%m:%d")
     time = now.strftime("%H:%M")

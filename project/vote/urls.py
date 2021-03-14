@@ -19,6 +19,7 @@ from .model import *
 sys.path.append(".")
 import config
 import cron
+from line.flex_template import find_operating_status
 
 vote = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -485,7 +486,13 @@ def show_result(pull_id: str) -> dict:
         info_date, info_rid = date_info.split(" @ ")
         each_date, each_session = info_date.split(" + ")
         restaurant = json.loads(config.cache.get(info_rid))
+        date_text = each_date.split("（")[1][0]
 
+        open_now = find_operating_status(
+            data=restaurant["operating_time"]["weekday_text"],
+            date_text=date_text,
+            session=each_session,
+        )
         best_template = {
             "date": each_date,
             "session": each_session,
