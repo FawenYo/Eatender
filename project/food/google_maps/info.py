@@ -1,3 +1,4 @@
+import json
 import sys
 import threading
 
@@ -130,7 +131,7 @@ class GoogleMaps:
         else:
             open_now = place["opening_hours"]["open_now"]
 
-        data = config.db.restaurant.find_one({"place_id": place_id})
+        data = json.loads(config.cache.get(place_id))
         # 資料已存在於資料庫 (避免浪費使用 Google Maps Token)
         if data:
             self.load_from_database(place_id=place_id, open_now=open_now, data=data)
