@@ -478,28 +478,69 @@ def vote_result(
     return message
 
 
-# 店家營業狀態
 def find_operating_status(data, date_text: str = "", session: str = ""):
+    """判斷店家營業狀態
+
+    Args:
+        data (list): Google上的餐廳營業資訊
+        date_text (str): 中文的星期幾 ex. 一、二、三
+        session (str): 時段 ex. 早餐、午餐、下午茶、晚餐、宵夜
+
+    Returns:
+        bool: 是否營業
+    """
     now = datetime.now()
-    today_date = now.strftime("%Y:%m:%d")
     time = now.strftime("%H:%M")
+    try:
+        if not date_text and not session:
+            today_date = now.strftime("%Y:%m:%d")
+            date_open = data[now.weekday()].split(",")
+            for each in today_open:
+                if "休息" in each:
+                    return False
+                if "24 小時營業" in each:
+                    return False
+                temp = re.findall(r"\d{1,2}\:\d{1,2}", each)
+                start = datetime.strptime(f"{today_date}:{temp[0]}", "%Y:%m:%d:%H:%M")
+                current = datetime.strptime(f"{today_date}:{time}", "%Y:%m:%d:%H:%M")
+                end = datetime.strptime(f"{today_date}:{temp[1]}", "%Y:%m:%d:%H:%M")
+                if int(temp[0][0:2]) > int(temp[1][0:2]):
+                    end += timedelta(days=1)
 
-    today_open = data[now.weekday()].split(",")
-    for each in today_open:
-        if "休息" in each:
+                if start <= current <= end:
+                    return True
             return False
-        if "24 小時營業" in each:
-            return False
-        temp = re.findall(r"\d{1,2}\:\d{1,2}", each)
-        start = datetime.strptime(f"{today_date}:{temp[0]}", "%Y:%m:%d:%H:%M")
-        current = datetime.strptime(f"{today_date}:{time}", "%Y:%m:%d:%H:%M")
-        end = datetime.strptime(f"{today_date}:{temp[1]}", "%Y:%m:%d:%H:%M")
-        if int(temp[0][0:2]) > int(temp[1][0:2]):
-            end += timedelta(days=1)
+        else:
+            week_list = ["一", "二", "三", "四", "五", "六", "日"]
+            if date_text in week_list:
+                date_text = week_list.index(date_text)
 
-        if start <= current <= end:
-            return True
-    return False
+            session_reference = {
+                "早餐": "09:00",
+                "午餐": "12:00",
+                "下午茶": "15:00",
+                "晚餐": "19:00",
+                "宵夜": "22:00",
+            }
+
+            date_open = data[date_text].split(",")
+            for each in date_open:
+                if "休息" in each:
+                    return False
+                if "24 小時營業" in each:
+                    return False
+                temp = re.findall(r"\d{1,2}\:\d{1,2}", each)
+                start = datetime.strptime(f"{temp[0]}", "%H:%M")
+                current = datetime.strptime(f"{session_reference[session]}", "%H:%M")
+                end = datetime.strptime(f"{temp[1]}", "%H:%M")
+                if int(temp[0][0:2]) > int(temp[1][0:2]):
+                    end += timedelta(days=1)
+                if start <= current <= end:
+                    return True
+            return False
+    except:
+        print("error when finding operation time")
+        return False
 
 
 def restaurant_card_info(
