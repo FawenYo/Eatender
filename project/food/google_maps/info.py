@@ -131,11 +131,11 @@ class GoogleMaps:
         else:
             open_now = place["opening_hours"]["open_now"]
 
-        data = json.loads(config.cache.get(place_id))
         # 資料已存在於資料庫 (避免浪費使用 Google Maps Token)
-        if data:
+        try:
+            data = json.loads(config.cache.get(place_id))
             self.load_from_database(place_id=place_id, open_now=open_now, data=data)
-        else:
+        except TypeError:
             self.load_from_google(place_id=place_id, open_now=open_now, place=place)
 
     def place_detail(self, place_id: str):
