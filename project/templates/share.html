@@ -7,7 +7,7 @@
     <meta property="og:title" content="EATender" />
     <meta property="og:description" content="加LINE約吃飯，感情不會散" />
     <meta property="og:type" content="product" />
-    <meta property="og:url" content="https://eatender.site/" />
+    <meta property="og:url" content="https://eatender.herokuapp.com/" />
     <meta property="og:image" content="./static/images/logo.png" />
     <meta name="HandheldFriendly" content="true">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -22,7 +22,10 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'G-8XVRR4RQHN');
@@ -30,20 +33,20 @@
 </head>
 
 <body>
-    <div class="loading_page" id=loading_page">
-        <div class="loading_context">
-            <h1 style="font-size: xxx-large;">載入中，請稍候...</h1>
+    <div class="loading_page" id=loading_page ">
+        <div class="loading_context ">
+            <h1 style="font-size: xxx-large; ">載入中，請稍候...</h1>
         </div>
     </div>
-    <div class="wrapper">
-        <div class="container">
-            <img src="./static/images/logo.png" />
-            <h1 style="text-align: center;">分享給朋友</h1>
-            <div class="form">
-                <button type="submit" id="btnShare" onclick="sendShare()">分享</button>
+    <div class="wrapper ">
+        <div class="container ">
+            <img src="./static/images/logo.png " />
+            <h1 style="text-align: center; ">分享給朋友</h1>
+            <div class="form ">
+                <button type="submit " id="btnShare " onclick="sendShare() ">分享</button>
             </div>
         </div>
-        <ul class="bg-bubbles">
+        <ul class="bg-bubbles ">
             <li></li>
             <li></li>
             <li></li>
@@ -57,10 +60,10 @@
         </ul>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script src="./static/js/share.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js "></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10 "></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js "></script>
+    <script src="./static/js/share.js "></script>
 </body>
 
 </html>

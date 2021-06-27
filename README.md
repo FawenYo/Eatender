@@ -1,6 +1,6 @@
 # EATender
 
-[![demo image](https://i.imgur.com/ZjkAoOF.png)](https://eatender.site/)
+[![demo image](https://i.imgur.com/ZjkAoOF.png)](https://eatender.herokuapp.com/)
 
 ## Table of Contents
 

@@ -2,95 +2,98 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-	<title>EATender</title>
-	<meta property="og:title" content="EATender" />
-	<meta property="og:description" content="加LINE約吃飯，感情不會散" />
-	<meta property="og:type" content="product" />
-	<meta property="og:url" content="https://eatender.site.com/" />
-	<meta property="og:image" content="./static/images/logo.png" />
-	<meta name="HandheldFriendly" content="true">
-	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-	<link rel="shortcut icon" href="./static/images/logo.png">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>EATender</title>
+    <meta property="og:title" content="EATender" />
+    <meta property="og:description" content="加LINE約吃飯，感情不會散" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="https://eatender.herokuapp.com/" />
+    <meta property="og:image" content="./static/images/logo.png" />
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="shortcut icon" href="./static/images/logo.png">
 
-	<!-- Loading Page Content-->
-	<script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script>
-	<link rel="stylesheet" href="./static/css/big-counter.css">
+    <!-- Loading Page Content-->
+    <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script>
+    <link rel="stylesheet" href="./static/css/big-counter.css">
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/css/lobibox.min.css">
-	<link rel="stylesheet" href="./static/css/restaurant.css">
-	<link rel="stylesheet" href="./static/css/cardinfo.css">
-	<link rel="stylesheet" href="./static/css/dateChoose.css">
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/css/lobibox.min.css">
+    <link rel="stylesheet" href="./static/css/restaurant.css">
+    <link rel="stylesheet" href="./static/css/cardinfo.css">
+    <link rel="stylesheet" href="./static/css/dateChoose.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8XVRR4RQHN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-		gtag('config', 'G-8XVRR4RQHN');
-	</script>
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-8XVRR4RQHN');
+    </script>
 </head>
 
 <body>
-	<div class="loading_page">
-		<div class="loading_context">
-			<h1 style="font-size: xxx-large;">載入中，請稍候...</h1>
-		</div>
-	</div>
-	<div class="tinder">
-		<div class="hint_box" id="hint_box" style="display: none;">
-			<div class="left_hint">
-				<div class="hint_content">
-					<i class="left_content fas fa-arrow-left fa-10x" id="left_content">
+    <div class="loading_page">
+        <div class="loading_context">
+            <h1 style="font-size: xxx-large;">載入中，請稍候...</h1>
+        </div>
+    </div>
+    <div class="tinder">
+        <div class="hint_box" id="hint_box" style="display: none;">
+            <div class="left_hint">
+                <div class="hint_content">
+                    <i class="left_content fas fa-arrow-left fa-10x" id="left_content">
 						<h2>向左滑動不喜歡</h2>
 					</i>
-				</div>
-			</div>
-			<div class="right_hint">
-				<div class="hint_content">
-					<i class="right_content fas fa-arrow-right fa-10x" id="right_content">
+                </div>
+            </div>
+            <div class="right_hint">
+                <div class="hint_content">
+                    <i class="right_content fas fa-arrow-right fa-10x" id="right_content">
 						<h2>向右滑動喜歡</h2>
 					</i>
-				</div>
-			</div>
-			<div class="button_hint" id="button_hint">
-				<button type="button" class="hint_confirm btn btn-primary" onclick="hideHint()">開始投票</button>
-			</div>
-		</div>
-		<div class="tinder--status"><i class="fas fa-times"></i> <i class="fas fa-heart"></i></div>
+                </div>
+            </div>
+            <div class="button_hint" id="button_hint">
+                <button type="button" class="hint_confirm btn btn-primary" onclick="hideHint()">開始投票</button>
+            </div>
+        </div>
+        <div class="tinder--status"><i class="fas fa-times"></i> <i class="fas fa-heart"></i></div>
 
-		<div id="cardWrapper" class="tinder--cards">
-			<div class='tinder--card'>
-				<div class="load-wraper">
-					<div class="activity"></div>
-				</div>
-			</div>
-		</div>
+        <div id="cardWrapper" class="tinder--cards">
+            <div class='tinder--card'>
+                <div class="load-wraper">
+                    <div class="activity"></div>
+                </div>
+            </div>
+        </div>
 
-		<div class="tinder--buttons"><button id="nope"><i class="fa fa-times"></i></button> <button id="love"><i
+        <div class="tinder--buttons"><button id="nope"><i class="fa fa-times"></i></button> <button id="love"><i
 					class="fa fa-heart"></i></button></div>
-	</div>
+    </div>
 
-	<div class="date-select-schedular" id="schedular">
-		<h1 class="vote-name" id="voteTitle">投票名稱</h1>
-		<div class="container date-table" id="dateTable">
-			<h3>選擇時間</h3>
-		</div>
-		<div class="container d-grid gap-2 submit">
-			<button class="btn btn-primary submit-btn" type="button" onclick="submitButton()">確認</button>
-		</div>
-	</div>
+    <div class="date-select-schedular" id="schedular">
+        <h1 class="vote-name" id="voteTitle">投票名稱</h1>
+        <div class="container date-table" id="dateTable">
+            <h3>選擇時間</h3>
+        </div>
+        <div class="container d-grid gap-2 submit">
+            <button class="btn btn-primary submit-btn" type="button" onclick="submitButton()">確認</button>
+        </div>
+    </div>
 
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-	<script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-	<script src="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/js/lobibox.min.js"></script>
-	<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-	<script type="text/javascript" src="./static/js/restaurant.js"></script>
-	<script type="text/javascript" src="./static/js/dateChoose.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/df0b05341f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lobibox@1.2.7/dist/js/lobibox.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script type="text/javascript" src="./static/js/restaurant.js"></script>
+    <script type="text/javascript" src="./static/js/dateChoose.js"></script>
 </body>
 
 </html>
