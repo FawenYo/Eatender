@@ -36,7 +36,6 @@ lotify_client = Client(
     client_secret=LINE_NOTIFY_CLIENT_SECRET,
     redirect_uri=LINE_NOTIFY_REDIRECT_URL,
 )
-AUTHORS_NOTIFY_TOKEN = os.environ.get("AUTHORS_NOTIFY_TOKEN").split(" ")
 
 # Google Maps API
 GOOGLE_MAPS_APIKEY = os.environ.get("GOOGLE_MAPS_APIKEY")
@@ -63,9 +62,12 @@ db = client.db
 # Redis
 if run_env == "docker":
     redis_host = "redis"
+    cache = redis.Redis(host=redis_host, port=6379)
 else:
-    redis_host = "127.0.0.1"
-cache = redis.Redis(host=redis_host, port=6379)
+    redis_host = os.environ.get("REDIS_HOST")
+    redis_password = os.environ.get("REDIS_PASSWORD")
+    redis_port = os.environ.get("REDIS_PORT")
+    cache = redis.Redis(host=redis_host, password=redis_password, port=redis_port)
 
 
 def init_restaurants():
@@ -78,6 +80,3 @@ def init_restaurants():
 
 
 threading.Thread(target=init_restaurants).start()
-
-# Github repo url
-GITHUB_REPO_URL = os.environ.get("GITHUB_REPO_URL")
